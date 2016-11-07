@@ -8,16 +8,17 @@ const myftAPIURL = process.env.MY_FT_API_URL || `https://api.ft.com`;
 function getUserTopics(userId){
     debug("Topics for " + userId)
 	// return myftClient.getAllRelationship('user', userId, 'followed', 'concept');
-    return myFtClient
-			.getAllRelationship('user', userId, 'followed', 'concept')
-			.then(res => {
-                debug("Found: ", res.items)
-                return res.items
-            })
-			.catch((err) => {
-				debug('Error fetching user follows', { event: 'FETCH_USER_FOLLOWS_ERROR', msg: err });
-				return Promise.reject(err);
-			});
+    return myftClient
+		.getAllRelationship('user', userId, 'followed', 'concept')
+		.then(res => {
+			debug("Found: ", res.items)
+			return res.items
+		})
+		.catch((err) => {
+			debug('Error fetching user follows', { event: 'FETCH_USER_FOLLOWS_ERROR', msg: err });
+			return Promise.reject(err);
+		})
+	;
 }
 
 module.exports = {

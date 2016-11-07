@@ -1,23 +1,31 @@
 const fetch = require('node-fetch');
 
 const membershipAPIURL = process.env.FT_API_URL || `https://api.ft.com`;
+	
+function loginUser(credentials, token){
 
-function loginUser(credentials){
+	if(token === undefined){
+		throw 'A token was not passed for the membership API';
+	}
+	console.log(credentials);
+	console.log(`${membershipAPIURL}/login`);
 
 	return fetch(`${membershipAPIURL}/login`,{
-		body : credentials,
-		method : 'POST',
-		headers : {
-			'Content-Type' : 'application/json',
-			'X-Api-Key' : process.env.MEMBERSHIP_API_KEY
-		}
-	}).then(res => {
+			body : JSON.stringify(credentials),
+			method : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'X-API-KEY' : token
+			}
+		})
+		.then(res => {
 		
-		if(res.status !== 200 && res.status !== 400){
-			throw res;
-		}
-		return res.json();
-	})
+			if(res.status !== 200){
+				throw res;
+			}
+			return res.json();
+		})
+	;
 
 }
 

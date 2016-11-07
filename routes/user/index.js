@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/login', function(req, res, next) {
 
-	membership.login(req.body)
+	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
 			res.json(membershipResponse);
 		})
