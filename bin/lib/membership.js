@@ -21,6 +21,20 @@ function loginUser(credentials){
 
 }
 
+function getSessionFromToken(secureSessionToken){
+
+	return fetch(`${membershipAPIURL}/sessions/s/${secureSessionToken}`)
+		.then(res => {
+			if(res.status !== 200){
+				throw res;
+			}
+			return res.json();
+		}).then(data => data.uuid)
+	;
+}
+
+
 module.exports = {
-	login : loginUser
+	login : loginUser,
+	session : getSessionFromToken
 };
