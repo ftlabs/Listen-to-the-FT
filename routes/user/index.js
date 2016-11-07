@@ -7,11 +7,11 @@ const validateSession = require('../../bin/lib/validate-session');
 const debug = require('debug')('listen-to-the-FT:routes:user')
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.end();
 });
 
-router.post('/login', function(req, res, next) {
+router.post('/login', function(req, res) {
 
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
