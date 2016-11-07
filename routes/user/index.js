@@ -4,7 +4,9 @@ const router = express.Router();
 const membership = require('../../bin/lib/membership');
 const myft = require('../../bin/lib/myft');
 const validateSession = require('../../bin/lib/validate-session');
-const debug = require('debug')('listen-to-the-FT:routes:user')
+const concordence = require('../../bin/lib/concordence');
+const debug = require('debug')('listen-to-the-FT:routes:user');
+
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -25,7 +27,7 @@ router.post('/login', function(req, res) {
 	;
 });
 
-router.use(validateSession);
+/*router.use(validateSession);
 
 router.get('/topics', function(req, res) {
 
@@ -37,10 +39,44 @@ router.get('/topics', function(req, res) {
 				.then(result => {
 					res.send(result)
 				})
+			;
 
 		})
 		.catch(err => {
 			res.json(err);		
+		})
+	;
+
+});*/
+
+router.get('/topics/:userid', function(req, res){
+
+	const userUUID = req.params.userid;
+
+	myft.topics(userUUID)
+		.then(result => {
+			//res.json(result);
+
+			const tmeIDsToTopicUUID = result.map(item => {
+
+				return concordence.tmeToUUID(item.uuid)
+					.then(uuid => {
+						console.log(uuid);
+						item.uuid = uuid;
+						return item;
+					})
+				;
+
+			});
+
+			Promise.all(tmeIDsToTopicUUID)
+				.then(results => {
+					res.json({
+						topics : results
+					})
+				})
+			;
+
 		})
 	;
 

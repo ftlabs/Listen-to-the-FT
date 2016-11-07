@@ -3,7 +3,6 @@ const debug = require('debug')('listen-to-the-FT:bin:lib:myft')
 
 const myftAPIURL = process.env.MY_FT_API_URL || `https://api.ft.com`;
 
-
 function getUserTopics(userId){
     debug("Topics for " + userId)
     return myftClient
