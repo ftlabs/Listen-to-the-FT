@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+require('isomorphic-fetch');
 const dotenv = require('dotenv').config();
 const app = require('../app');
 const debug = require('debug')('listen-to-the-FT:server');
