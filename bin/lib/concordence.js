@@ -8,6 +8,14 @@ function convertTMEIDToCanonicalUUID(TME){
 	console.log(reqURL);
 
 	return fetch(reqURL)
+		.then(res => {
+			if(res.status !== 200){
+				throw res.status;
+			} else {
+				return res;
+			}
+
+		})
 		.then(res => res.json())
 		.then(result => {
 			return extractUUID(result.concordances[0].concept.id);

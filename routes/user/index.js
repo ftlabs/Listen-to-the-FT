@@ -27,7 +27,7 @@ router.post('/login', function(req, res) {
 	;
 });
 
-/*router.use(validateSession);
+// router.use(validateSession);
 
 router.get('/topics', function(req, res) {
 
@@ -37,7 +37,35 @@ router.get('/topics', function(req, res) {
 
 			myft.topics(userUUID)
 				.then(result => {
-					res.send(result)
+
+					const tmeIDsToTopicUUID = result.map(item => {
+
+						return concordence.tmeToUUID(item.uuid)
+							.then(uuid => {
+								console.log(uuid);
+								item.uuid = uuid;
+								return item;
+							})
+							.catch(err => {
+								debug(err);
+								item.uuid = false;
+								return item;
+							})
+						;
+
+					});
+
+					Promise.all(tmeIDsToTopicUUID)
+						.then(results => {
+
+							const topicsWithUUIDs = results.filter(result => { return result.uuid; });
+
+							res.json({
+								topics : topicsWithUUIDs
+							})
+						})
+					;
+
 				})
 			;
 
@@ -47,38 +75,14 @@ router.get('/topics', function(req, res) {
 		})
 	;
 
-});*/
+});
 
-router.get('/topics/:userid', function(req, res){
+router.get('/topics/:userID', function(req, res){
 
-	const userUUID = req.params.userid;
+	const userUUID = req.params.userID;
 
-	myft.topics(userUUID)
-		.then(result => {
-			//res.json(result);
+	
 
-			const tmeIDsToTopicUUID = result.map(item => {
-
-				return concordence.tmeToUUID(item.uuid)
-					.then(uuid => {
-						console.log(uuid);
-						item.uuid = uuid;
-						return item;
-					})
-				;
-
-			});
-
-			Promise.all(tmeIDsToTopicUUID)
-				.then(results => {
-					res.json({
-						topics : results
-					})
-				})
-			;
-
-		})
-	;
 
 });
 
