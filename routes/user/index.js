@@ -26,7 +26,6 @@ router.post('/login', function(req, res, next) {
 router.get('/topics', function(req, res, next) {
 	var userSession = undefined;
 	var isSecure = false;
-	debug(req.headers)
 
 	if(req.headers.secureSessionToken){
 		userSession = req.headers.secureSessionToken;
@@ -46,29 +45,21 @@ router.get('/topics', function(req, res, next) {
 	}
 
 	if(userSession === undefined){
-		throw "No user session can be found"
+		res.status(400)
+		res.set('Content-Type', 'application/json');
+		res.send('{"error": "403", "message": "No session id was provided"}')
 	}
 
 	membership.validateSession(userSession, isSecure)
-	.then(response => {
-		debug(response)
+	.then(userUUID => {
+		debug("Valid session for " + userUUID)
+
+		myft.topics(userUUID)
+			.then(result => {
+				res.send(result)
+			})
+
 	})
-
-
-
-
-	myft.topics(req.params.userid)
-		.then(result => {
-			console.log('Result', result);
-			// console.log(res.json())
-			// res.send(result.json());
-			res.status(316)
-		})
-		.catch(err => {
-			console.log('Error getting topics:', err)
-			res.status(503);
-		})
-		res.end()
 });
 router.get('/test', function(req, res, next) {
 	res.send('Test')
