@@ -27,7 +27,7 @@ router.post('/login', function(req, res) {
 	;
 });
 
-// router.use(validateSession);
+router.use(validateSession);
 
 router.get('/topics', function(req, res) {
 
@@ -74,15 +74,6 @@ router.get('/topics', function(req, res) {
 			res.json(err);		
 		})
 	;
-
-});
-
-router.get('/topics/:userID', function(req, res){
-
-	const userUUID = req.params.userID;
-
-	
-
 
 });
 
