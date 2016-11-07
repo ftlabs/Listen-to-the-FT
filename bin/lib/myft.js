@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const myftClient = require('next-myft-client')
 const debug = require('debug')('listen-to-the-FT:bin:lib:myft')
 
@@ -11,7 +10,6 @@ function getUserTopics(userId){
     return myftClient
 		.getAllRelationship('user', userId, 'followed', 'concept')
 		.then(res => {
-			debug("Found: ", res.items)
 			return res.items
 		})
 		.catch((err) => {
