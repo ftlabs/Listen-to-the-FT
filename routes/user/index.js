@@ -29,6 +29,17 @@ router.use(validateSession);
 
 router.get('/topics', function(req, res) {
 
+	membership.validateSession(res.locals.userSession, res.locals.isSecure)
+	.then(userUUID => {
+		debug("Valid session for " + userUUID)
+
+		myft.topics(userUUID)
+			.then(result => {
+				res.send(result)
+			})
+
+	})
+
 });
 
 module.exports = router;

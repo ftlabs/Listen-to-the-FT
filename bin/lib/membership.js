@@ -28,6 +28,8 @@ function loginUser(credentials, token) {
 
 function validateSessionFromToken(sessionToken, isSecure) {
 
+	debug(sessionToken, isSecure);
+
 	var urlSecure = ""
 	if (isSecure) {
 		urlSecure = "s/"

@@ -28,11 +28,10 @@ module.exports = function(req, res, next){
 
 	if(res.locals.userSession === undefined){
 		// throw "No user session can be found"
-		res.status(401);
+		res.status(400);
 		res.json({
-			status : 'error',
-			reason : 'UNAUTHORISED',
-			message : 'No user session can be found'
+			'error': '403',
+			'message': 'No session id was provided'
 		});
 	} else {
 		next();

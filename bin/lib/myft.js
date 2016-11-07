@@ -6,7 +6,6 @@ const myftAPIURL = process.env.MY_FT_API_URL || `https://api.ft.com`;
 
 function getUserTopics(userId){
     debug("Topics for " + userId)
-	// return myftClient.getAllRelationship('user', userId, 'followed', 'concept');
     return myftClient
 		.getAllRelationship('user', userId, 'followed', 'concept')
 		.then(res => {
