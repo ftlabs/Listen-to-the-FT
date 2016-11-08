@@ -31,48 +31,42 @@ router.use(validateSession);
 
 router.get('/topics', function(req, res) {
 
-	membership.validateSession(res.locals.userSession, res.locals.isSecure)
-		.then(userUUID => {
-			debug("Valid session for " + userUUID)
+	debug("Valid session for " + res.locals.userUUID);
 
-			myft.topics(userUUID)
-				.then(result => {
+	myft.topics(res.locals.userUUID)
+		.then(result => {
 
-					const tmeIDsToTopicUUID = result.map(item => {
+			const tmeIDsToTopicUUID = result.map(item => {
 
-						return concordence.tmeToUUID(item.uuid)
-							.then(uuid => {
-								console.log(uuid);
-								item.uuid = uuid;
-								return item;
-							})
-							.catch(err => {
-								debug(err);
-								item.uuid = false;
-								return item;
-							})
-						;
+				return concordence.tmeToUUID(item.uuid)
+					.then(uuid => {
+						console.log(uuid);
+						item.uuid = uuid;
+						return item;
+					})
+					.catch(err => {
+						debug(err);
+						item.uuid = false;
+						return item;
+					})
+				;
 
-					});
+			})
+		;
 
-					Promise.all(tmeIDsToTopicUUID)
-						.then(results => {
+		Promise.all(tmeIDsToTopicUUID)
+			.then(results => {
 
-							const topicsWithUUIDs = results.filter(result => { return result.uuid; });
+				const topicsWithUUIDs = results.filter(result => { return result.uuid; });
 
-							res.json({
-								topics : topicsWithUUIDs
-							})
-						})
-					;
-
+				res.json({
+					topics : topicsWithUUIDs
 				})
-			;
+			})
+		;
 
 		})
-		.catch(err => {
-			res.json(err);		
-		})
+		
 	;
 
 });
