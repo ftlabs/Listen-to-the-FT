@@ -1,0 +1,50 @@
+body, html{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #333333;
+  color: white;
+  font-family: MetricWeb, sans-serif;
+}
+
+header{
+  background: #FFF1E0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft-masthead?url=fticon%253Abrand-ft-masthead&source=url-builder&fit=cover&format=auto&quality=medium');
+  background-size: auto 30%;
+  background-repeat: no-repeat;
+  background-position: 50%
+}
+
+#player{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #fff1e0;
+  border-top: 1px solid white;
+}
+
+#player #progress{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 5px;
+  padding: 1px 0;
+  background: #942f4d;
+  box-sizing: border-box;
+}
+
+#player #progress #progressBar{
+  width: 20px;
+  height: 100%;
+  box-sizing: border-box;
+  background: white;
+}
