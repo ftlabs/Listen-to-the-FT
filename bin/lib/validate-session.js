@@ -1,4 +1,5 @@
 const debug = require('debug')('bin:lib:validate-session');
+const checkWithMembership = require('./membership').validateSession;
 
 module.exports = function(req, res, next){
 
@@ -34,7 +35,21 @@ module.exports = function(req, res, next){
 			'message': 'No session id was provided'
 		});
 	} else {
-		next();
+
+		checkWithMembership(res.locals.userSession, res.locals.isSecure)
+			.then(UUID => {
+				res.locals.userUUID = UUID;
+				next();
+			})
+			.catch(err => {
+				res.status(401);
+				res.json({
+					'error' : '401',
+					'message' : 'Invalid token'
+				});
+			})
+		;
+
 	}
 
 };

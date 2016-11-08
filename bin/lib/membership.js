@@ -34,10 +34,8 @@ function validateSessionFromToken(sessionToken, isSecure) {
 		throw 'A token was not defined for the Membership Session API'
 	}
 
-	var urlSecure = ""
-	if (isSecure) {
-		urlSecure = "s/"
-	}
+	const urlSecure = isSecure ? 's/' : '';
+
 	return fetch(`${membershipAPIURL}/sessions/${urlSecure}${sessionToken}`, {
 		headers : {
 			'X-API-KEY' : process.env.MEMBERSHIP_SESSION_API_KEY
