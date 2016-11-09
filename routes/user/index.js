@@ -15,12 +15,20 @@ router.get('/', function(req, res) {
 
 router.post('/login', function(req, res) {
 
+	debug(req.body);
+
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
 			debug(membershipResponse)
-			res.send(membershipResponse)
+			
+			debug(req.cookies);
+			res.cookie('ftlabs_listen', membershipResponse.sessionToken);
+			res.cookie('ftlabs_listen_s', membershipResponse.secureSessionToken);
+
+			res.send(membershipResponse);
 		})
 		.catch(err => {
+			debug(err);
 			res.status(503);
 			res.end();
 		})

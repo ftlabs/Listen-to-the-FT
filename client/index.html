@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Listen to the FT</title>
-		<link rel="stylesheet" href="https://build.origami.ft.com/v2/bundles/css?modules=o-fonts@^2.1.3" />
+		<link rel="stylesheet" href="https://build.origami.ft.com/v2/bundles/css?modules=o-fonts@^2.1.3,o-forms@^3.2.2" />
 		<link rel="stylesheet" href="/styles.css" type="text/css" />
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
 	</head>
@@ -10,8 +10,16 @@
 
 		<header></header>
 		
-		<div class="viewport">
-		
+		<div class="viewport" id="login">
+			
+			<form data-purpose="login" method="POST" action="/user/login" class="o-forms">
+				<label for="email">Email</label>
+				<input type="text" name="email" placeholder="email" class="o-forms__text" />
+				<label for="password">Password</label>
+				<input type="password" name="password" placeholder="password" class="o-forms__text"/>
+				<input type="checkbox" name="rememberMe" />
+				<button type="submit">Login</button>
+			</form>
 		
 		</div>
 
