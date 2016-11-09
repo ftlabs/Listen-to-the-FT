@@ -17,13 +17,16 @@ router.post('/login', function(req, res) {
 
 	debug(req.body);
 
+	debug(req.cookies);
+
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
 			debug(membershipResponse)
 			
-			debug(req.cookies);
-			res.cookie('ftlabs_listen', membershipResponse.sessionToken);
-			res.cookie('ftlabs_listen_s', membershipResponse.secureSessionToken);
+			const cookieOptions = { maxAge: 900000, httpOnly : false };
+
+			res.cookie('ftlabsSession', membershipResponse.sessionToken, cookieOptions);
+			res.cookie('ftlabsSession_s', membershipResponse.secureSessionToken, cookieOptions);
 
 			res.send(membershipResponse);
 		})
@@ -43,7 +46,7 @@ router.get('/topics', function(req, res) {
 
 	myft.topics(res.locals.userUUID)
 		.then(result => {
-
+			debug(result);
 			const tmeIDsToTopicUUID = result.map(item => {
 
 				return concordence.tmeToUUID(item.uuid)
@@ -53,7 +56,7 @@ router.get('/topics', function(req, res) {
 						return item;
 					})
 					.catch(err => {
-						debug(err);
+						debug("err", err);
 						item.uuid = false;
 						return item;
 					})
@@ -64,7 +67,7 @@ router.get('/topics', function(req, res) {
 
 		Promise.all(tmeIDsToTopicUUID)
 			.then(results => {
-
+		
 				const topicsWithUUIDs = results.filter(result => { return result.uuid; });
 
 				res.json({

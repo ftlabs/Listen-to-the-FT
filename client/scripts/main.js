@@ -2,18 +2,69 @@ var __listen_to_the_ft = (function(){
 
 	'use strict';
 
+	var views = {
+		login : document.querySelector('.view#login')
+	};
+
+	var components = {
+		player : document.querySelector('.component#player')	
+	};
+
 	function prevent(e){
 		e.stopImmediatePropagation();
 		e.preventDefault();
 	}
 
-	function submitForm(form){
+	function getTopicsForUser(){
+		return fetch('/user/topics', {credentials : 'include'})
+			.then(res => {
+				if(res.status !== 200){
+					console.log(res);
+					throw "Could not get user topics"
+				}
+				return res;
+			})
+			.then(res => res.json())
+		;
+	}
 
-		var destination = form.action;
+	function checkLoginStatus(){
+
+		var cookies = document.cookie.split('; ');
+		var kvp = {};
+		cookies.forEach(cookie => {
+			var cookieSplit = cookie.split('=');
+			kvp[cookieSplit[0]] = cookieSplit[1];	
+		});
+		
+		return kvp.ftlabsSession || kvp.ftlabsSecureSession;
 
 	}
 
-	document.querySelector('form[data-purpose="login"]').addEventListener('submit', function(e){
+	function login(creds){
+
+		return fetch('/user/login', {
+				body : JSON.stringify(creds),
+				method : "POST",
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				credentials : 'include'
+			})
+			.then(res => {
+				if(res.status !== 200){
+					throw "Login unsuccessful";
+				} else {
+					return res;
+				}
+			})
+			.then(res => res.json())
+		;
+
+	}
+
+
+	views.login.querySelector('form').addEventListener('submit', function(e){
 
 		prevent(e);
 
@@ -25,16 +76,17 @@ var __listen_to_the_ft = (function(){
 
 		loginBody.rememberMe = loginBody.rememberMe === 'on';
 
-		fetch(this.action, {
-				body : JSON.stringify(loginBody),
-				method : "POST",
-				headers : {
-					'Content-Type' : 'application/json'
-				}
-			})
-			.then(res => res.json())
+		login(loginBody)
 			.then(result => {
-				console.log(result);
+				views.login.dataset.visible = "false";
+				getTopicsForUser()
+					.then(data => {
+						console.log(data);
+					})
+					.catch(err => {
+						console.log(err);
+					})
+				;
 			})
 			.catch(err => {
 				console.error(err);
@@ -42,6 +94,20 @@ var __listen_to_the_ft = (function(){
 		;
 
 	}, false);
+
+	if(checkLoginStatus()){
+		views.login.dataset.visible = "false";
+
+		getTopicsForUser()
+			.then(data => {
+				console.log(data);
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		;
+
+	}
 
 	console.log('Script loaded');
 
