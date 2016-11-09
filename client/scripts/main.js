@@ -16,14 +16,14 @@ var __listen_to_the_ft = (function(){
 		e.preventDefault();
 	}
 
-	function getAudioForTopic(topicUUID){
+	function getAudioForTopic(topicUUIDs){
 
-		console.log(topicUUID);
+		console.log(topicUUIDs);
 
-		return fetch(`/audio?topics=${topicUUID}`,{credentials : 'include'})
+		return fetch(`/audio?topics=${topicUUIDs}`,{credentials : 'include'})
 			.then(res => {
 				if(res.status !== 200){
-					throw `Could not get items for topic ${topicUUID}`;
+					throw `Could not get items for topic ${topicUUIDs}`;
 				}
 				return res;
 			})
@@ -42,6 +42,44 @@ var __listen_to_the_ft = (function(){
 				return res;
 			})
 			.then(res => res.json())
+		;
+	}
+
+	function getTopicsForUserWithAudio(){
+		return getTopicsForUser()
+			.then(data => {
+				console.log(data);
+				const UUIDs = data.topics.map(topic => {return topic.uuid}).join();
+				return getAudioForTopic(UUIDs)
+					.then(allAudio => {
+
+						const topicsWithAudioCount = {};
+
+						allAudio.forEach(a => {
+						
+							UUIDs.split(',').forEach(uuid => {
+						
+								const uuidIdx = a.hasTopicIDs.indexOf(uuid);
+								if(uuidIdx > -1){
+									const topicUUID = a.hasTopicIDs[uuidIdx];
+									if(topicsWithAudioCount[topicUUID] !== undefined){
+										topicsWithAudioCount[topicUUID] += 1;
+									} else {
+										topicsWithAudioCount[topicUUID] = 1;
+									}
+								}
+	
+							});
+
+						});
+
+						console.log(topicsWithAudioCount);
+
+						return topicsWithAudioCount;
+
+					})
+				;
+			})
 		;
 	}
 
@@ -154,7 +192,7 @@ var __listen_to_the_ft = (function(){
 	if(checkLoginStatus()){
 		views.login.dataset.visible = "false";
 
-		getTopicsForUser()
+		/*getTopicsForUser()
 			.then(data => generateListView(data.topics))
 			.then(fragment => {
 				console.log(fragment);
@@ -165,7 +203,9 @@ var __listen_to_the_ft = (function(){
 			.catch(err => {
 				console.log(err);
 			})
-		;
+		;*/
+
+		getTopicsForUserWithAudio();
 
 	}
 
