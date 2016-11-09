@@ -3,7 +3,8 @@ var __listen_to_the_ft = (function(){
 	'use strict';
 
 	var views = {
-		login : document.querySelector('.view#login')
+		login : document.querySelector('.view#login'),
+		topics : document.querySelector('.view#topics')
 	};
 
 	var components = {
@@ -13,6 +14,22 @@ var __listen_to_the_ft = (function(){
 	function prevent(e){
 		e.stopImmediatePropagation();
 		e.preventDefault();
+	}
+
+	function getAudioForTopic(topicUUID){
+
+		console.log(topicUUID);
+
+		return fetch(`/audio?topics=${topicUUID}`,{credentials : 'include'})
+			.then(res => {
+				if(res.status !== 200){
+					throw `Could not get items for topic ${topicUUID}`;
+				}
+				return res;
+			})
+			.then(res => res.json())
+		;
+
 	}
 
 	function getTopicsForUser(){
@@ -38,6 +55,45 @@ var __listen_to_the_ft = (function(){
 		});
 		
 		return kvp.ftlabsSession || kvp.ftlabsSecureSession;
+
+	}
+
+	function generateListView(items, type){
+
+		console.log(items);
+
+		var docFrag = document.createDocumentFragment();
+		const olEl = document.createElement('ol');
+
+		if(!type){
+
+			items.forEach(item => {
+
+				var li = document.createElement('li');
+				li.textContent = item.name;
+				li.dataset.uuid = item.uuid;
+
+				li.addEventListener('click', function(){
+					getAudioForTopic(this.dataset.uuid)
+						.then(audioItems => {
+							console.log(audioItems)
+						})
+					;
+				}, false);
+
+				olEl.appendChild(li);
+
+			});			
+
+		}
+
+		/*if(!type){
+			return `<ol> ${items.map(item => { return `<li>${item.name}</li>` }).join('') } </ol>`;
+		}*/
+
+		docFrag.appendChild(olEl);
+
+		return docFrag;
 
 	}
 
@@ -99,8 +155,12 @@ var __listen_to_the_ft = (function(){
 		views.login.dataset.visible = "false";
 
 		getTopicsForUser()
-			.then(data => {
-				console.log(data);
+			.then(data => generateListView(data.topics))
+			.then(fragment => {
+				console.log(fragment);
+				views.topics.dataset.visible = "true";
+				views.topics.innerHTML = "";
+				views.topics.appendChild(fragment);
 			})
 			.catch(err => {
 				console.log(err);

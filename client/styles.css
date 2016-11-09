@@ -35,6 +35,10 @@ header{
   flex-direction: column;
 }
 
+.view.full-width{
+  padding: 55px 0 50px;
+}
+
 form{
   display: flex;
   width: 100%;
@@ -74,4 +78,22 @@ form input[type="text"], form input[type="password"]{
   height: 100%;
   box-sizing: border-box;
   background: white;
+}
+
+.view ol{
+  max-height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.view ol li{
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #999999;
+  padding: 0 1em;
 }

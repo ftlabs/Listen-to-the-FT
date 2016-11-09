@@ -39,13 +39,20 @@ function getTopics(req, res){
 							const annotations = content.annotations;
 							content.id = content.id.replace('http://www.ft.com/thing/','');
 
-							debug(topicUUIDs, annotations);
-
 							const isValidTopic = annotations.some(annotation => {
 								return topicUUIDs.indexOf(annotation.id.replace('http://api.ft.com/things/','')) > -1;
 							});
 
-							debug(isValidTopic);
+							const validTopicIDs = [];
+
+							topicUUIDs.forEach(uuid => {
+
+								annotations.forEach(annotation => {
+									console.log('\t', annotation.id);
+									if(annotation.id.indexOf(uuid) > -1){ validTopicIDs.push(uuid) };
+								});
+
+							});
 							
 							if(isValidTopic){
 
@@ -55,7 +62,8 @@ function getTopics(req, res){
 									standfirst : content.standfirst,
 									byline : content.byline,
 									webUrl : content.webUrl,
-									audioUrl : generatePublicS3URL(content.id)
+									audioUrl : generatePublicS3URL(content.id),
+									hasTopicIDs : validTopicIDs
 								});
 							}
 							else{
