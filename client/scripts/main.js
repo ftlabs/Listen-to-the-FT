@@ -2,6 +2,57 @@ var __listen_to_the_ft = (function(){
 
 	'use strict';
 
+	var viewstack = (function(){
+
+		var stack = [];
+
+		function addViewToStack(view){
+
+
+			if(stack.length > 0){
+				stack[ stack.length - 1 ].dataset.visible = "false";
+			}
+
+			stack.push(view);
+
+			if(stack.length > 1){
+				components.back.dataset.visible = "true";
+			}
+
+			view.dataset.visible = "true";
+
+		}
+
+		function removeLastViewFromStack(){
+
+			if(stack.length > 1){
+				var lastView = stack.pop();
+				
+				lastView.dataset.visible = "false";
+				if(stack.length > 0){
+					stack[ stack.length - 1 ].dataset.visible = "true";
+				}
+
+				if(stack.length <= 1){
+					components.back.dataset.visible = "false";
+				}
+
+			}
+
+		}
+
+		function clearStack(){
+			stack = [];
+		}
+
+		return {
+			push : addViewToStack,
+			pop : removeLastViewFromStack,
+			clear : clearStack
+		};
+
+	}());
+
 	var views = {
 		login : document.querySelector('.view#login'),
 		topics : document.querySelector('.view#topics'),
@@ -9,7 +60,9 @@ var __listen_to_the_ft = (function(){
 	};
 
 	var components = {
-		player : document.querySelector('.component#player')	
+		player : document.querySelector('.component#player'),
+		loading : document.querySelector('.component#loading'),
+		back : document.querySelector('.component#back')
 	};
 
 	function prevent(e){
@@ -31,9 +84,10 @@ var __listen_to_the_ft = (function(){
 	function getAudioForTopic(topicUUIDs){
 
 		console.log(topicUUIDs);
-
+		components.loading.dataset.visible = 'true';
 		return fetch(`/audio?topics=${topicUUIDs}`,{credentials : 'include'})
 			.then(res => {
+				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
 					throw `Could not get items for topic ${topicUUIDs}`;
 				}
@@ -45,8 +99,10 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function getTopicsForUser(){
+		components.loading.dataset.visible = 'true';
 		return fetch('/user/topics', {credentials : 'include'})
 			.then(res => {
+				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
 					console.log(res);
 					throw "Could not get user topics"
@@ -58,6 +114,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function getTopicsForUserWithAudio(){
+		components.loading.dataset.visible = 'true';
 		return getTopicsForUser()
 			.then(data => {
 				console.log(data);
@@ -82,7 +139,7 @@ var __listen_to_the_ft = (function(){
 							});
 
 						});
-
+						components.loading.dataset.visible = 'false';
 						return data.topics;
 
 					})
@@ -105,6 +162,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function generateFirstView(){
+
 		getTopicsForUserWithAudio()
 			.then(topics => {
 				return topics.filter(topic => {
@@ -116,7 +174,9 @@ var __listen_to_the_ft = (function(){
 				console.log(HTML);
 				views.topics.innerHTML = "";
 				views.topics.appendChild(HTML);
-				views.topics.dataset.visible = "true";
+				// views.topics.dataset.visible = "true";
+				viewstack.push(views.topics);
+
 			})
 		;
 	}
@@ -140,10 +200,11 @@ var __listen_to_the_ft = (function(){
 					getAudioForTopic(this.dataset.uuid)
 						.then(audioItems => generateListView(audioItems, "audioItems"))
 						.then(HTML => {
-							views.topics.dataset.visible = "false";
+							// views.topics.dataset.visible = "false";
 							views.audioItems.innerHTML = "";
 							views.audioItems.appendChild(HTML);
-							views.audioItems.dataset.visible = "true";
+							// views.audioItems.dataset.visible = "true";
+							viewstack.push(views.audioItems);
 						})
 					;
 				}, false);
@@ -179,6 +240,8 @@ var __listen_to_the_ft = (function(){
 				li.dataset.audioURL = item.audioUrl;
 
 				li.addEventListener('click', function(){
+					document.title = item.title;
+					components.player.setAttribute('title', item.title);
 					playAudio(this.dataset.audioURL);
 				}, false);
 
@@ -195,7 +258,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function login(creds){
-
+		components.loading.dataset.visible = "true";
 		return fetch('/user/login', {
 				body : JSON.stringify(creds),
 				method : "POST",
@@ -208,6 +271,7 @@ var __listen_to_the_ft = (function(){
 				if(res.status !== 200){
 					throw "Login unsuccessful";
 				} else {
+					components.loading.dataset.visible = "false";
 					return res;
 				}
 			})
@@ -242,12 +306,15 @@ var __listen_to_the_ft = (function(){
 	}, false);
 
 	if(checkLoginStatus()){
-		views.login.dataset.visible = "false";
-
 		generateFirstView();
-
+		views.login.dataset.visible = "false";
 	}
 
+	components.back.addEventListener('click', function(){
+		viewstack.pop();
+	}, false);
+
 	console.log('Script loaded');
+	components.loading.dataset.visible = "false";
 
 }());

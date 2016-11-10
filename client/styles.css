@@ -26,6 +26,16 @@ header{
   background-position: 50%
 }
 
+.component#back{
+  width: 20px;
+  height: 100%;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-left?url=fticon%253Aarrow-left&source=ftlabs-listen-to-the-ft&fit=cover&format=auto&quality=medium');
+  background-size: 100% auto;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  margin-left: 1em;
+}
+
 .view{
   width:100%;
   padding: 55px 1em 50px;
@@ -39,34 +49,45 @@ header{
   padding: 55px 0 50px;
 }
 
+.view#login{
+  display: flex;
+  align-items: center;
+}
+
 form{
   display: flex;
   width: 100%;
   justify-content: center;
-  align-items: center;
   flex-direction: column;
+  padding: 1em;
 }
 
 form input[type="text"], form input[type="password"]{
-  width:90%;
-  margin: 1em;
+  width:100%;
   font-size: 1em;
+  margin-bottom: 1em;
+}
+
+form label{
+  color: white !important;
 }
 
 #player{
   position: fixed;
   bottom: 0;
   left: 0;
+  padding-bottom: 1em;
   width: 100%;
-  height: auto;
+  padding-top: 1em;
   background: #fff1e0;
 }
 
-#player audio{
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  display: block;
+#loading{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -22px;
+  margin-top: -22px;
 }
 
 .view ol{

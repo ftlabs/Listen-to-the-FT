@@ -1,0 +1,11 @@
+audio::-webkit-media-controls-panel{
+	background: #fff1e0;
+}
+
+audio::-webkit-media-controls-volume-slider{
+	background: #27757b;
+}
+
+audio::-webkit-media-controls-volume-slider-container{
+	background: #2bbbbf;
+}
