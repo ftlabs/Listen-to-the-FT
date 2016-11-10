@@ -58,26 +58,15 @@ form input[type="text"], form input[type="password"]{
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60px;
+  height: auto;
   background: #fff1e0;
-  border-top: 1px solid white;
 }
 
-#player #progress{
-  position: absolute;
-  top: 0;
+#player audio{
   width: 100%;
-  height: 5px;
-  padding: 1px 0;
-  background: #942f4d;
-  box-sizing: border-box;
-}
-
-#player #progress #progressBar{
-  width: 20px;
-  height: 100%;
-  box-sizing: border-box;
-  background: white;
+  margin: 0;
+  padding: 0;
+  display: block;
 }
 
 .view ol{
@@ -96,4 +85,36 @@ form input[type="text"], form input[type="password"]{
   align-items: center;
   border-bottom: 1px solid #999999;
   padding: 0 1em;
+}
+
+.view#audioItems {
+  padding-left: 0;
+}
+
+.view#audioItems .hasListened{
+  width: 20px;
+  height: 100%;
+}
+
+.view#audioItems .textContainer{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.view#audioItems .textContainer a{
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.view#audioItems .textContainer span{
+  color: #d3d3d3;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

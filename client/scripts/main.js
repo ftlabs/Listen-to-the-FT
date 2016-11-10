@@ -4,7 +4,8 @@ var __listen_to_the_ft = (function(){
 
 	var views = {
 		login : document.querySelector('.view#login'),
-		topics : document.querySelector('.view#topics')
+		topics : document.querySelector('.view#topics'),
+		audioItems : document.querySelector('.view#audioItems')
 	};
 
 	var components = {
@@ -14,6 +15,17 @@ var __listen_to_the_ft = (function(){
 	function prevent(e){
 		e.stopImmediatePropagation();
 		e.preventDefault();
+	}
+
+	function playAudio(src){
+		console.log(src);
+		
+		const audioElement = document.querySelector('audio');
+		audioElement.src = src;
+
+		components.player.dataset.visible = "true";
+		audioElement.play();
+
 	}
 
 	function getAudioForTopic(topicUUIDs){
@@ -56,26 +68,22 @@ var __listen_to_the_ft = (function(){
 						const topicsWithAudioCount = {};
 
 						allAudio.forEach(a => {
-						
-							UUIDs.split(',').forEach(uuid => {
-						
+
+							data.topics.forEach(topic => {
+
+								topic.articles = [];
+								const uuid = topic.uuid;
 								const uuidIdx = a.hasTopicIDs.indexOf(uuid);
 								if(uuidIdx > -1){
 									const topicUUID = a.hasTopicIDs[uuidIdx];
-									if(topicsWithAudioCount[topicUUID] !== undefined){
-										topicsWithAudioCount[topicUUID] += 1;
-									} else {
-										topicsWithAudioCount[topicUUID] = 1;
-									}
+									topic.articles.push(a);
 								}
 	
 							});
 
 						});
 
-						console.log(topicsWithAudioCount);
-
-						return topicsWithAudioCount;
+						return data.topics;
 
 					})
 				;
@@ -96,6 +104,23 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	function generateFirstView(){
+		getTopicsForUserWithAudio()
+			.then(topics => {
+				return topics.filter(topic => {
+					return topic.articles.length > 0;
+				});
+			})
+			.then(filteredTopics => generateListView( filteredTopics ))
+			.then(HTML => {
+				console.log(HTML);
+				views.topics.innerHTML = "";
+				views.topics.appendChild(HTML);
+				views.topics.dataset.visible = "true";
+			})
+		;
+	}
+
 	function generateListView(items, type){
 
 		console.log(items);
@@ -113,21 +138,55 @@ var __listen_to_the_ft = (function(){
 
 				li.addEventListener('click', function(){
 					getAudioForTopic(this.dataset.uuid)
-						.then(audioItems => {
-							console.log(audioItems)
+						.then(audioItems => generateListView(audioItems, "audioItems"))
+						.then(HTML => {
+							views.topics.dataset.visible = "false";
+							views.audioItems.innerHTML = "";
+							views.audioItems.appendChild(HTML);
+							views.audioItems.dataset.visible = "true";
 						})
 					;
 				}, false);
 
 				olEl.appendChild(li);
 
-			});			
+			});
+
+		} else if(type === "audioItems"){
+			// debugger;
+			items.forEach(item => {
+
+				var li = document.createElement('li');
+				var hasBeenListenedTo = document.createElement('div');
+				var textContainer = document.createElement('div');
+				var headline = document.createElement('a');
+				var byline = document.createElement('span')
+				
+				hasBeenListenedTo.setAttribute('class', 'hasListened');
+				textContainer.setAttribute('class', 'textContainer');
+
+				headline.textContent = item.title;
+				byline.textContent = item.byline;
+
+				li.appendChild(hasBeenListenedTo);
+
+				textContainer.appendChild(headline);
+				textContainer.appendChild(byline);
+
+				li.appendChild(textContainer);
+
+				li.dataset.uuid = item.uuid;
+				li.dataset.audioURL = item.audioUrl;
+
+				li.addEventListener('click', function(){
+					playAudio(this.dataset.audioURL);
+				}, false);
+
+				olEl.appendChild(li);
+
+			});
 
 		}
-
-		/*if(!type){
-			return `<ol> ${items.map(item => { return `<li>${item.name}</li>` }).join('') } </ol>`;
-		}*/
 
 		docFrag.appendChild(olEl);
 
@@ -164,7 +223,7 @@ var __listen_to_the_ft = (function(){
 
 		var loginBody = {};
 
-		this.querySelectorAll('input:not([type="button"])').forEach(element => {
+		Array.from(this.querySelectorAll('input:not([type="button"])')).forEach(element => {
 			loginBody[element.name] = element.value;
 		});
 
@@ -173,14 +232,7 @@ var __listen_to_the_ft = (function(){
 		login(loginBody)
 			.then(result => {
 				views.login.dataset.visible = "false";
-				getTopicsForUser()
-					.then(data => {
-						console.log(data);
-					})
-					.catch(err => {
-						console.log(err);
-					})
-				;
+				generateFirstView();
 			})
 			.catch(err => {
 				console.error(err);
@@ -192,20 +244,7 @@ var __listen_to_the_ft = (function(){
 	if(checkLoginStatus()){
 		views.login.dataset.visible = "false";
 
-		/*getTopicsForUser()
-			.then(data => generateListView(data.topics))
-			.then(fragment => {
-				console.log(fragment);
-				views.topics.dataset.visible = "true";
-				views.topics.innerHTML = "";
-				views.topics.appendChild(fragment);
-			})
-			.catch(err => {
-				console.log(err);
-			})
-		;*/
-
-		getTopicsForUserWithAudio();
+		generateFirstView();
 
 	}
 
