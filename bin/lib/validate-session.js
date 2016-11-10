@@ -49,12 +49,12 @@ module.exports = function(req, res, next){
 
 		checkWithMembership(res.locals.userSession, res.locals.isSecure)
 			.then(UUID => {
-				debug("LOL", UUID);
+				debug(UUID);
 				res.locals.userUUID = UUID;
 				next();
 			})
 			.catch(err => {
-				debug("ROFL", err);
+				debug(err);
 				res.status(401);
 				res.json({
 					'error' : '401',
