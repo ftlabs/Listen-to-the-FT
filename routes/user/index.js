@@ -19,6 +19,7 @@ router.post('/login', function(req, res) {
 	debug(req.body);
 
 	debug(req.cookies);
+	req.body.rememberMe = "true";
 
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
