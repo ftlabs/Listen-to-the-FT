@@ -1,3 +1,4 @@
+const debug = require('debug')('bin:lib:concordence');
 const extractUUID = require('./extract-uuid');
 const canonicalAPIRoot = process.env.CANONICAL_API_URL || `https://api.ft.com/concordances`;
 
@@ -5,7 +6,7 @@ function convertTMEIDToCanonicalUUID(TME){
 
 	const reqURL = `${canonicalAPIRoot}?authority=http://api.ft.com/system/FT-TME&identifierValue=${TME}&apiKey=${process.env.CAPI_KEY}`;
 
-	console.log(reqURL);
+	debug(reqURL);
 
 	return fetch(reqURL)
 		.then(res => {

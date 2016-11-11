@@ -21,7 +21,7 @@ function getTopics(req, res){
 		return;
 	}
 
-	const topicUUIDs = req.query.topics.split(',') ;
+	const topicUUIDs = req.query.topics.split(',');
 
 	extractUUID(process.env.AUDIO_ARTICLES_THING_ID)
 		.then(audioUUID => {
@@ -48,7 +48,7 @@ function getTopics(req, res){
 							topicUUIDs.forEach(uuid => {
 
 								annotations.forEach(annotation => {
-									console.log('\t', annotation.id);
+									debug('\t', annotation.id);
 									if(annotation.id.indexOf(uuid) > -1){ validTopicIDs.push(uuid) };
 								});
 
