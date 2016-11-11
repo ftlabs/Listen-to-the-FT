@@ -8,12 +8,23 @@ module.exports = function(req, res, next){
 	const secureSessionToken = req.get('secureSessionToken');
 	const sessionToken = req.get('sessionToken')
 
+	const ftlabsSessionToken = req.cookies['ftlabsSession'];
+	const ftlabsSecureSessionToken = req.cookies['ftlabsSession_s'];
+
 	if(secureSessionToken){
 		res.locals.userSession = secureSessionToken;
 		res.locals.isSecure = true;
 	}
 	else if(sessionToken){
 		res.locals.userSession = sessionToken;
+		res.locals.isSecure = false;
+	}
+	else if(ftlabsSecureSessionToken){
+		res.locals.userSession = ftlabsSecureSessionToken;
+		res.locals.isSecure = true;
+	}
+	else if(ftlabsSessionToken){
+		res.locals.userSession = ftlabsSessionToken;
 		res.locals.isSecure = false;
 	}
 	else if(req.cookies['FTSession_s']){
@@ -25,7 +36,7 @@ module.exports = function(req, res, next){
 		res.locals.isSecure = false;
 	}
 
-	debug(secureSessionToken);
+	debug(res.locals.userSession, res.locals.isSecure);
 
 	if(res.locals.userSession === undefined){
 		// throw "No user session can be found"
@@ -38,10 +49,12 @@ module.exports = function(req, res, next){
 
 		checkWithMembership(res.locals.userSession, res.locals.isSecure)
 			.then(UUID => {
+				debug(UUID);
 				res.locals.userUUID = UUID;
 				next();
 			})
 			.catch(err => {
+				debug(err);
 				res.status(401);
 				res.json({
 					'error' : '401',

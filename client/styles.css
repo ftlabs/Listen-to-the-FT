@@ -1,0 +1,149 @@
+*[data-visible="false"]{
+  display: none !important;
+}
+
+body, html{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #333333;
+  color: white;
+  font-family: MetricWeb, sans-serif;
+  overflow: hidden;
+}
+
+header{
+  background: #FFF1E0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft-masthead?url=fticon%253Abrand-ft-masthead&source=ftlabs-listen-to-the-ft&fit=cover&format=auto&quality=medium');
+  background-size: auto 30%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  z-index: 50;
+}
+
+.component#back{
+  width: 20px;
+  height: 100%;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-left?url=fticon%253Aarrow-left&source=ftlabs-listen-to-the-ft&fit=cover&format=auto&quality=medium');
+  background-size: 100% auto;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  margin-left: 1em;
+}
+
+.view{
+  width:100%;
+  padding: 55px 1em 50px;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+}
+
+.view[data-visible="true"]{
+  /*transform: translateX(0);*/
+}
+
+.view.full-width{
+  padding: 55px 0 50px;
+}
+
+.view#login{
+  display: flex;
+  align-items: center;
+  transform: translateX(0);
+}
+
+form{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1em;
+}
+
+form input[type="text"], form input[type="password"]{
+  width:100%;
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+form label{
+  color: white !important;
+}
+
+#player{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding-bottom: 1em;
+  width: 100%;
+  padding-top: 1em;
+  background: #fff1e0;
+}
+
+#loading{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -22px;
+  margin-top: -22px;
+}
+
+.view ol{
+  max-height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.view ol li{
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #999999;
+  padding: 0 1em;
+}
+
+.view#audioItems {
+  padding-left: 0;
+}
+
+.view#audioItems .hasListened{
+  width: 20px;
+  height: 100%;
+}
+
+.view#audioItems .textContainer{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.view#audioItems .textContainer a{
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.view#audioItems .textContainer span{
+  color: #d3d3d3;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
