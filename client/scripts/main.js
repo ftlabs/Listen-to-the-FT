@@ -20,6 +20,7 @@ var __listen_to_the_ft = (function(){
 			}
 
 			view.dataset.visible = "true";
+			view.dataset.animate = "in-right";
 
 		}
 
@@ -28,7 +29,7 @@ var __listen_to_the_ft = (function(){
 			if(stack.length > 1){
 				var lastView = stack.pop();
 				
-				lastView.dataset.visible = "false";
+				// lastView.dataset.visible = "false";
 				if(stack.length > 0){
 					stack[ stack.length - 1 ].dataset.visible = "true";
 				}
@@ -308,6 +309,8 @@ var __listen_to_the_ft = (function(){
 	if(checkLoginStatus()){
 		generateFirstView();
 		views.login.dataset.visible = "false";
+	} else {
+		views.login.dataset.visible = "true";
 	}
 
 	components.back.addEventListener('click', function(){

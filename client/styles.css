@@ -11,6 +11,7 @@ body, html{
   background: #333333;
   color: white;
   font-family: MetricWeb, sans-serif;
+  overflow: hidden;
 }
 
 header{
@@ -23,7 +24,8 @@ header{
   background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft-masthead?url=fticon%253Abrand-ft-masthead&source=ftlabs-listen-to-the-ft&fit=cover&format=auto&quality=medium');
   background-size: auto 30%;
   background-repeat: no-repeat;
-  background-position: 50%
+  background-position: 50%;
+  z-index: 50;
 }
 
 .component#back{
@@ -43,6 +45,11 @@ header{
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transform: translateX(100%);
+}
+
+.view[data-visible="true"]{
+  /*transform: translateX(0);*/
 }
 
 .view.full-width{
@@ -52,6 +59,7 @@ header{
 .view#login{
   display: flex;
   align-items: center;
+  transform: translateX(0);
 }
 
 form{
