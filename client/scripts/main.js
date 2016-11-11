@@ -363,6 +363,11 @@ var __listen_to_the_ft = (function(){
 		viewstack.pop();
 	}, false);
 
+	components.player.addEventListener('ended', function(){
+		console.log('Audio finished');
+		this.dataset.active = "false";
+	}, false);
+
 	console.log('Script loaded');
 	components.loading.dataset.visible = "false";
 
