@@ -27,7 +27,7 @@
 			
 			<form data-purpose="login" method="POST" action="/user/login" class="o-forms">
 				<label class="o-forms__label" for="email">Email</label>
-				<input type="text" name="email" placeholder="email" class="o-forms__text" />
+				<input type="email" name="email" placeholder="email" class="o-forms__text" />
 				<label class="o-forms__label" for="password">Password</label>
 				<input type="password" name="password" placeholder="password" class="o-forms__text"/>
 				<label class="o-forms__label" for="rememberMe">Remember?</label>	
@@ -49,6 +49,14 @@
 
 		<div id="loading" class="component" data-visible="true">
 			<div class="o-loading o-loading--light o-loading--large"></div>
+		</div>
+
+		<div id="popup" class="component" data-visible="false">
+			<div id="message">
+				<h3>Message</h3>
+				<p>This hasn't gone the way we were hoping...</p>
+				<button>close</button>
+			</div>
 		</div>
 
 		<script src="//origami-build.ft.com/v2/bundles/js?modules=o-loading%401.0.0-beta.1%3A%2Fdemos%2Fsrc%2Faccessible.js%2Co-techdocs%40%5E4.0.0" defer async></script>

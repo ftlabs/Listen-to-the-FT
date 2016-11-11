@@ -2,6 +2,19 @@ var __listen_to_the_ft = (function(){
 
 	'use strict';
 
+	var views = {
+		login : document.querySelector('.view#login'),
+		topics : document.querySelector('.view#topics'),
+		audioItems : document.querySelector('.view#audioItems')
+	};
+
+	var components = {
+		player : document.querySelector('.component#player'),
+		loading : document.querySelector('.component#loading'),
+		back : document.querySelector('.component#back'),
+		overlay : document.querySelector('.component#popup')
+	};
+
 	var viewstack = (function(){
 
 		var stack = [];
@@ -54,17 +67,43 @@ var __listen_to_the_ft = (function(){
 
 	}());
 
-	var views = {
-		login : document.querySelector('.view#login'),
-		topics : document.querySelector('.view#topics'),
-		audioItems : document.querySelector('.view#audioItems')
-	};
+	var overlay = (function(){
 
-	var components = {
-		player : document.querySelector('.component#player'),
-		loading : document.querySelector('.component#loading'),
-		back : document.querySelector('.component#back')
-	};
+		var overlayElement = components.overlay;
+
+		function setOverlayMessage(title, message, buttonText){
+			
+			if(title){
+				overlayElement.querySelector('h3').textContent = title;
+			}
+
+			if(message){
+				overlayElement.querySelector('p').textContent = message;
+			}
+
+			if(buttonText){
+				overlayElement.querySelector('button').textContent = buttonText;
+			}
+
+		}
+		
+		function showOverlay(){
+			overlayElement.dataset.visible = "true";
+		}
+
+		function hideOverlay(){
+			overlayElement.dataset.visible = "false";
+		}
+
+		overlayElement.querySelector('button').addEventListener('click', hideOverlay, false);
+
+		return {
+			set : setOverlayMessage,
+			show : showOverlay,
+			hide : hideOverlay
+		};
+
+	}());
 
 	function prevent(e){
 		e.stopImmediatePropagation();
@@ -74,11 +113,10 @@ var __listen_to_the_ft = (function(){
 	function playAudio(src){
 		console.log(src);
 		
-		const audioElement = document.querySelector('audio');
-		audioElement.src = src;
+		components.player.src = src;
 
 		components.player.dataset.active = "true";
-		audioElement.play();
+		components.player.play();
 
 	}
 
@@ -270,6 +308,7 @@ var __listen_to_the_ft = (function(){
 			})
 			.then(res => {
 				if(res.status !== 200){
+					components.loading.dataset.visible = "false";
 					throw "Login unsuccessful";
 				} else {
 					components.loading.dataset.visible = "false";
@@ -300,7 +339,14 @@ var __listen_to_the_ft = (function(){
 				generateFirstView();
 			})
 			.catch(err => {
-				console.error(err);
+				// console.error(err);
+				overlay.set(
+					"Login Failed", 
+					"The credentials passed were not valid.",
+					"OK"
+				);
+
+				overlay.show();
 			})
 		;
 
