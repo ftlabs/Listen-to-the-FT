@@ -88,6 +88,8 @@ form label{
   width: 100%;
   padding-top: 1em;
   background: #fff1e0;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(100%);
 }
 
 #loading{

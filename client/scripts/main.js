@@ -77,7 +77,7 @@ var __listen_to_the_ft = (function(){
 		const audioElement = document.querySelector('audio');
 		audioElement.src = src;
 
-		components.player.dataset.visible = "true";
+		components.player.dataset.active = "true";
 		audioElement.play();
 
 	}
