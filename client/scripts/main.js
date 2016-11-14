@@ -19,8 +19,8 @@ var __listen_to_the_ft = (function(){
 	var viewstack = (function(){
 
 		var stack = [];
-
 		function addViewToStack(view){
+
 			if(stack.length > 0){
 				stack[ stack.length - 1 ].dataset.animate = 'out-left';
 			}
@@ -297,7 +297,6 @@ var __listen_to_the_ft = (function(){
 
 					playBtn.addEventListener('click', function(e){
 						prevent(e);
-						document.title = item.title;
 						playAudio(this.dataset.audiourl);
 					}, false);
 
