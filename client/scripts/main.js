@@ -146,7 +146,7 @@ var __listen_to_the_ft = (function(){
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
 					console.log(res);
-					throw 'Could not get user topics'
+					throw 'Could not get user topics';
 				}
 				return res;
 			})
@@ -205,7 +205,7 @@ var __listen_to_the_ft = (function(){
 	function generateFirstView(){
 
 		getAudioForTopic('8a086a54-ea48-3a52-bd3c-5821430c2132')
-			.then(items => generateListView( items, 'audioItems'))
+			.then(items => generateListView( items, 'audioItems', 'Latest Audio Articles'))
 			.then(HTML => {
 				console.log(HTML);
 				views.audioItems.innerHTML = '';

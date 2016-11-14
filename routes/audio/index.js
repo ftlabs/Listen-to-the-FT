@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const capi = require('../../bin/lib/capi');
 const debug = require('debug')('listen-to-the-FT:routes:audio');
 
+const capi = require('../../bin/lib/capi');
 const extractUUID = require('../../bin/lib/extract-uuid');
 const generatePublicS3URL = require('../../bin/lib/get-s3-public-url');
 const validateSession = require('../../bin/lib/validate-session');
