@@ -164,10 +164,15 @@ form label{
   align-items: flex-start;
   overflow: hidden;
   transition: max-height 0.4s ease-in-out;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-down?url=fticon%253Aarrow-down&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');
+  background-repeat: no-repeat;
+  background-size: 18px;
+  background-position: 95% 1em;
 }
 
 .view#audioItems li[data-expanded="true"]{
   max-height: 100vh;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');
 }
 
 .view#audioItems .hasListened{

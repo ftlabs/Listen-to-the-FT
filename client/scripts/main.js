@@ -204,19 +204,14 @@ var __listen_to_the_ft = (function(){
 
 	function generateFirstView(){
 
-		getTopicsForUserWithAudio()
-			.then(topics => {
-				return topics.filter(topic => {
-					return topic.articles.length > 0;
-				});
-			})
-			.then(filteredTopics => generateListView( filteredTopics ))
+		getAudioForTopic('8a086a54-ea48-3a52-bd3c-5821430c2132')
+			.then(items => generateListView( items, 'audioItems'))
 			.then(HTML => {
 				console.log(HTML);
-				views.topics.innerHTML = '';
-				views.topics.appendChild(HTML);
+				views.audioItems.innerHTML = '';
+				views.audioItems.appendChild(HTML);
 				// views.topics.dataset.visible = 'true';
-				viewstack.push(views.topics);
+				viewstack.push(views.audioItems);
 
 			})
 		;
