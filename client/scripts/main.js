@@ -13,7 +13,9 @@ var __listen_to_the_ft = (function(){
 		player : document.querySelector('.component#player'),
 		loading : document.querySelector('.component#loading'),
 		back : document.querySelector('.component#back'),
-		overlay : document.querySelector('.component#popup')
+		overlay : document.querySelector('.component#popup'),
+		menu : document.querySelector('.component#menu'),
+		drawer : document.querySelector('.component#drawer')
 	};
 
 	var viewstack = (function(){
@@ -122,10 +124,14 @@ var __listen_to_the_ft = (function(){
 
 	}
 
-	function getAudioForTopic(topicUUIDs){
+	function getAudioForTopic(topicUUIDs, inBackground){
 
 		console.log(topicUUIDs);
-		components.loading.dataset.visible = 'true';
+
+		if(!inBackground){
+			components.loading.dataset.visible = 'true';
+		}
+
 		return fetch(`/audio?topics=${topicUUIDs}`,{credentials : 'include'})
 			.then(res => {
 				components.loading.dataset.visible = 'false';
@@ -154,13 +160,17 @@ var __listen_to_the_ft = (function(){
 		;
 	}
 
-	function getTopicsForUserWithAudio(){
-		components.loading.dataset.visible = 'true';
+	function getTopicsForUserWithAudio(inBackground){
+
+		if(!inBackground){
+			components.loading.dataset.visible = 'true';
+		}
+
 		return getTopicsForUser()
 			.then(data => {
 				console.log(data);
 				const UUIDs = data.topics.map(topic => {return topic.uuid}).join();
-				return getAudioForTopic(UUIDs)
+				return getAudioForTopic(UUIDs, inBackground)
 					.then(allAudio => {
 
 						const topicsWithAudioCount = {};
@@ -180,7 +190,11 @@ var __listen_to_the_ft = (function(){
 							});
 
 						});
-						components.loading.dataset.visible = 'false';
+
+						if(!inBackground){
+							components.loading.dataset.visible = 'false';
+						}
+
 						return data.topics;
 
 					})
@@ -215,6 +229,44 @@ var __listen_to_the_ft = (function(){
 
 			})
 		;
+
+		getTopicsForUserWithAudio(true)
+			.then(topics => {
+				return topics.filter(topic => {
+					return topic.articles.length > 0;
+				});
+			})
+			.then(filteredTopics => generateMenu( filteredTopics ))
+			.then(HTML => {
+
+				components.drawer.appendChild(HTML);
+
+			})
+		;
+
+	}
+
+	function generateMenu(sections){
+
+		console.log(sections);
+
+		var sectionFrag = document.createDocumentFragment();
+		var sectionOl = document.createElement('ol');
+
+		sections.forEach(section => {
+
+			var sectionLi = document.createElement('li');
+			sectionLi.textContent = section.name;
+
+			sectionLi.dataset.uuid = section.uuid;
+			sectionOl.appendChild(sectionLi);
+
+		});
+
+		sectionFrag.appendChild(sectionOl);
+
+		return sectionFrag;
+
 	}
 
 	function generateListView(items, type, listTitle){
@@ -403,6 +455,16 @@ var __listen_to_the_ft = (function(){
 	components.player.addEventListener('ended', function(){
 		console.log('Audio finished');
 		this.dataset.active = 'false';
+	}, false);
+
+	components.menu.addEventListener('click', function(){
+
+		if(components.drawer.dataset.opened === 'false'){
+			components.drawer.dataset.opened = 'true';
+		} else {
+			components.drawer.dataset.opened = 'false';
+		}
+
 	}, false);
 
 	console.log('Script loaded');
