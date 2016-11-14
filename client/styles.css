@@ -233,7 +233,7 @@ form label{
 }
 
 .view#audioItems li[data-expanded="true"]{
-  max-height: 100vh;
+  max-height: 30vh;
   background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');
 }
 
@@ -245,6 +245,10 @@ form label{
   border-radius: 100%;
   margin-top: 1em;
   margin-right: 1em;
+}
+
+.view#audioItems [data-played='true'] .hasListened{
+  background: transparent;
 }
 
 .view#audioItems .textContainer{

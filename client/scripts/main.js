@@ -1,7 +1,40 @@
-/* global document allow-var*/
+/* global document localStorage*/
 var __listen_to_the_ft = (function(){
 
 	'use strict';
+
+	var localData = (function(){
+		
+		var storageKey = 'ftlabs-lttFT';
+		var stored = localStorage.getItem(storageKey);
+		
+		function save(){
+			localStorage.setItem(storageKey, JSON.stringify( stored ) );
+		}
+
+		function addItemForStorage(key, value){
+			stored[key] = value;
+			save();
+		}
+
+		function readItemFromStorage(key){
+			return stored[key];
+		}
+
+
+		if(!stored){
+			stored = {};
+			save();
+		} else {
+			stored = JSON.parse(stored);
+		}
+
+		return {
+			set : addItemForStorage,
+			read : readItemFromStorage
+		};
+
+	})();
 
 	var views = {
 		login : document.querySelector('.view#login'),
@@ -114,13 +147,32 @@ var __listen_to_the_ft = (function(){
 		e.preventDefault();
 	}
 
-	function playAudio(src){
+	function hasAudioBeenPlayed(audioID){
+
+		var listenedToArticles = localData.read('playedArticles');
+
+		if(listenedToArticles === undefined){
+			localData.set('playedArticles', []);
+			return false;
+		} else {
+			return listenedToArticles.some(idsOfItemsListenedTo => { return idsOfItemsListenedTo === audioID });
+		}
+
+	}
+
+	function playAudio(src, uuid){
 		console.log(src);
 		
 		components.player.src = src;
 
 		components.player.dataset.active = 'true';
 		components.player.play();
+
+		if(uuid){
+			var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
+			playedItems.push(uuid);
+			localData.set('playedArticles', playedItems);
+		}
 
 	}
 
@@ -330,8 +382,9 @@ var __listen_to_the_ft = (function(){
 			items.forEach(item => {
 
 				var li = document.createElement('li');
-				var hasBeenListenedTo = document.createElement('div');
-				
+				var hasBeenListenedToElement = document.createElement('div');
+				var wasListenedToBefore = hasAudioBeenPlayed(item.id);
+
 				var textContainer = document.createElement('div');
 				var headline = document.createElement('a');
 				var byline = document.createElement('span');
@@ -341,7 +394,7 @@ var __listen_to_the_ft = (function(){
 				var playBtn = document.createElement('a');
 				var readBtn = document.createElement('a');
 
-				hasBeenListenedTo.setAttribute('class', 'hasListened');
+				hasBeenListenedToElement.setAttribute('class', 'hasListened');
 				textContainer.setAttribute('class', 'textContainer');
 				actionsContainer.setAttribute('class', 'actionsContainer');
 
@@ -354,11 +407,12 @@ var __listen_to_the_ft = (function(){
 
 				playBtn.dataset.audiourl = item.audioUrl;
 
-				(function(item){
+				(function(item, container){
 
 					playBtn.addEventListener('click', function(e){
 						prevent(e);
-						playAudio(this.dataset.audiourl);
+						playAudio(this.dataset.audiourl, item.id);
+						container.dataset.played = 'true';
 					}, false);
 
 					readBtn.addEventListener('click', function(e){
@@ -366,12 +420,12 @@ var __listen_to_the_ft = (function(){
 						window.open('https://ft.com/content/' + item.id);
 					}, false);
 
-				})(item);
+				})(item, li);
 
 				actionsContainer.appendChild(playBtn);
 				actionsContainer.appendChild(readBtn);
 
-				li.appendChild(hasBeenListenedTo);
+				li.appendChild(hasBeenListenedToElement);
 
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
@@ -381,6 +435,7 @@ var __listen_to_the_ft = (function(){
 				li.appendChild(textContainer);
 
 				li.dataset.uuid = item.id;
+				li.dataset.played = wasListenedToBefore;
 
 				li.addEventListener('click', function(){
 					components.player.setAttribute('title', item.title);
