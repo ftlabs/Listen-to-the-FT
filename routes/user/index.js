@@ -90,7 +90,7 @@ router.get('/topics', function(req, res) {
 						.then(res => res.json())
 						.then(data => {
 
-							debug();
+							debug(data);
 
 							if( !topicsWithUUIDs.some(topic => { return topic.uuid == '8a086a54-ea48-3a52-bd3c-5821430c2132'})  ){
 
