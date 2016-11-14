@@ -19,13 +19,16 @@ header{
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 50px;
   background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft-masthead?url=fticon%253Abrand-ft-masthead&source=ftlabs-listen-to-the-ft&fit=cover&format=auto&quality=medium');
   background-size: auto 30%;
   background-repeat: no-repeat;
   background-position: 50%;
   z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .component#back{
@@ -70,6 +73,7 @@ header{
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
+  position: absolute;
 }
 
 .view[data-visible="true"]{
@@ -127,11 +131,8 @@ form label{
 }
 
 #loading{
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-left: -22px;
-  margin-top: -22px;
+  margin-right: 1em;
+  margin-left: auto;
 }
 
 .view ol{
@@ -148,7 +149,7 @@ form label{
   height: 60px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid #676767;
   padding: 0 1em;
 }
 

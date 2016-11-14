@@ -20,10 +20,10 @@ var __listen_to_the_ft = (function(){
 		var stack = [];
 
 		function addViewToStack(view){
-
-
+			// debugger;
 			if(stack.length > 0){
-				stack[ stack.length - 1 ].dataset.visible = 'false';
+				// stack[ stack.length - 1 ].dataset.visible = 'false';
+				stack[ stack.length - 1 ].dataset.animate = "out-left";
 			}
 
 			stack.push(view);
@@ -38,18 +38,22 @@ var __listen_to_the_ft = (function(){
 		}
 
 		function removeLastViewFromStack(){
-
+			// debugger;
 			if(stack.length > 1){
 				var lastView = stack.pop();
 				
-				// lastView.dataset.visible = "false";
+
+				lastView.dataset.animate = 'out-right';
 				if(stack.length > 0){
-					stack[ stack.length - 1 ].dataset.visible = 'true';
+					var incomingView = stack[ stack.length - 1 ]; 
+					incomingView.dataset.visible = 'true';
+					incomingView.dataset.animate = 'in-left';
 				}
 
 				if(stack.length <= 1){
 					components.back.dataset.visible = 'false';
 				}
+
 
 			}
 
@@ -286,13 +290,13 @@ var __listen_to_the_ft = (function(){
 
 				li.appendChild(textContainer);
 
-				li.dataset.uuid = item.uuid;
-				li.dataset.audioURL = item.audioUrl;
+				li.dataset.uuid = item.id;
+				li.dataset.audiourl = item.audioUrl;
 
 				li.addEventListener('click', function(){
 					document.title = item.title;
 					components.player.setAttribute('title', item.title);
-					playAudio(this.dataset.audioURL);
+					playAudio(this.dataset.audiourl);
 				}, false);
 
 				olEl.appendChild(li);
