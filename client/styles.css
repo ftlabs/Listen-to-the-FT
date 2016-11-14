@@ -209,3 +209,7 @@ form label{
   line-height: 1.4em;
   margin-bottom: 0.5em;
 }
+
+.view#audioItems .actionsContainer a{
+  margin-right: 1em;
+}

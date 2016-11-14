@@ -270,33 +270,60 @@ var __listen_to_the_ft = (function(){
 
 				var li = document.createElement('li');
 				var hasBeenListenedTo = document.createElement('div');
+				
 				var textContainer = document.createElement('div');
 				var headline = document.createElement('a');
 				var byline = document.createElement('span');
 				var standfirst = document.createElement('p');
 				
+				var actionsContainer = document.createElement('div');
+				var playBtn = document.createElement('a');
+				var readBtn = document.createElement('a');
+
 				hasBeenListenedTo.setAttribute('class', 'hasListened');
 				textContainer.setAttribute('class', 'textContainer');
+				actionsContainer.setAttribute('class', 'actionsContainer');
 
 				headline.textContent = item.title;
 				byline.textContent = item.byline;
 				standfirst.textContent = item.standfirst;
+
+				playBtn.textContent = 'Play';
+				readBtn.textContent = 'Read';
+
+				playBtn.dataset.audiourl = item.audioUrl;
+
+				(function(item){
+
+					playBtn.addEventListener('click', function(e){
+						prevent(e);
+						document.title = item.title;
+						playAudio(this.dataset.audiourl);
+					}, false);
+
+					readBtn.addEventListener('click', function(e){
+						prevent(e);						
+						window.open('https://ft.com/content/' + item.id);
+					}, false);
+
+				})(item);
+
+				actionsContainer.appendChild(playBtn);
+				actionsContainer.appendChild(readBtn);
 
 				li.appendChild(hasBeenListenedTo);
 
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
 				textContainer.appendChild(standfirst);
+				textContainer.appendChild(actionsContainer);
 
 				li.appendChild(textContainer);
 
 				li.dataset.uuid = item.id;
-				li.dataset.audiourl = item.audioUrl;
 
 				li.addEventListener('click', function(){
-					// document.title = item.title;
 					components.player.setAttribute('title', item.title);
-					// playAudio(this.dataset.audiourl);
 					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
 				}, false);
 
