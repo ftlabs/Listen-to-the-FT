@@ -258,7 +258,21 @@ var __listen_to_the_ft = (function(){
 			var sectionLi = document.createElement('li');
 			sectionLi.textContent = section.name;
 
+			sectionLi.dataset.topic = section.name;
 			sectionLi.dataset.uuid = section.uuid;
+
+			sectionLi.addEventListener('click', function(e){
+				prevent(e);
+				getAudioForTopic(this.dataset.uuid)
+					.then(items => generateListView(items, 'audioItems', this.dataset.topic))
+					.then(HTML => {
+						components.drawer.dataset.opened = 'false';
+						views.audioItems.innerHTML = "";
+						views.audioItems.appendChild(HTML);
+					})
+				;
+			})
+
 			sectionOl.appendChild(sectionLi);
 
 		});
