@@ -1,3 +1,4 @@
+/* global document allow-var*/
 var __listen_to_the_ft = (function(){
 
 	'use strict';
@@ -20,10 +21,8 @@ var __listen_to_the_ft = (function(){
 		var stack = [];
 
 		function addViewToStack(view){
-			// debugger;
 			if(stack.length > 0){
-				// stack[ stack.length - 1 ].dataset.visible = 'false';
-				stack[ stack.length - 1 ].dataset.animate = "out-left";
+				stack[ stack.length - 1 ].dataset.animate = 'out-left';
 			}
 
 			stack.push(view);
@@ -38,7 +37,6 @@ var __listen_to_the_ft = (function(){
 		}
 
 		function removeLastViewFromStack(){
-			// debugger;
 			if(stack.length > 1){
 				var lastView = stack.pop();
 				
@@ -119,7 +117,7 @@ var __listen_to_the_ft = (function(){
 		
 		components.player.src = src;
 
-		components.player.dataset.active = "true";
+		components.player.dataset.active = 'true';
 		components.player.play();
 
 	}
@@ -148,7 +146,7 @@ var __listen_to_the_ft = (function(){
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
 					console.log(res);
-					throw "Could not get user topics"
+					throw 'Could not get user topics'
 				}
 				return res;
 			})
@@ -215,9 +213,9 @@ var __listen_to_the_ft = (function(){
 			.then(filteredTopics => generateListView( filteredTopics ))
 			.then(HTML => {
 				console.log(HTML);
-				views.topics.innerHTML = "";
+				views.topics.innerHTML = '';
 				views.topics.appendChild(HTML);
-				// views.topics.dataset.visible = "true";
+				// views.topics.dataset.visible = 'true';
 				viewstack.push(views.topics);
 
 			})
@@ -242,9 +240,9 @@ var __listen_to_the_ft = (function(){
 
 				li.addEventListener('click', function(){
 					getAudioForTopic(this.dataset.uuid)
-						.then(audioItems => generateListView(audioItems, "audioItems", this.dataset.topic))
+						.then(audioItems => generateListView(audioItems, 'audioItems', this.dataset.topic))
 						.then(HTML => {
-							views.audioItems.innerHTML = "";
+							views.audioItems.innerHTML = '';
 							views.audioItems.appendChild(HTML);
 							viewstack.push(views.audioItems);
 						})
@@ -255,7 +253,7 @@ var __listen_to_the_ft = (function(){
 
 			});
 
-		} else if(type === "audioItems"){
+		} else if(type === 'audioItems'){
 			// debugger;
 
 			if(listTitle){
@@ -268,25 +266,27 @@ var __listen_to_the_ft = (function(){
 
 			}
 
-
 			items.forEach(item => {
 
 				var li = document.createElement('li');
 				var hasBeenListenedTo = document.createElement('div');
 				var textContainer = document.createElement('div');
 				var headline = document.createElement('a');
-				var byline = document.createElement('span')
+				var byline = document.createElement('span');
+				var standfirst = document.createElement('p');
 				
 				hasBeenListenedTo.setAttribute('class', 'hasListened');
 				textContainer.setAttribute('class', 'textContainer');
 
 				headline.textContent = item.title;
 				byline.textContent = item.byline;
+				standfirst.textContent = item.standfirst;
 
 				li.appendChild(hasBeenListenedTo);
 
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
+				textContainer.appendChild(standfirst);
 
 				li.appendChild(textContainer);
 
@@ -294,9 +294,10 @@ var __listen_to_the_ft = (function(){
 				li.dataset.audiourl = item.audioUrl;
 
 				li.addEventListener('click', function(){
-					document.title = item.title;
+					// document.title = item.title;
 					components.player.setAttribute('title', item.title);
-					playAudio(this.dataset.audiourl);
+					// playAudio(this.dataset.audiourl);
+					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
 				}, false);
 
 				olEl.appendChild(li);
@@ -312,10 +313,10 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function login(creds){
-		components.loading.dataset.visible = "true";
+		components.loading.dataset.visible = 'true';
 		return fetch('/user/login', {
 				body : JSON.stringify(creds),
-				method : "POST",
+				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/json'
 				},
@@ -323,10 +324,10 @@ var __listen_to_the_ft = (function(){
 			})
 			.then(res => {
 				if(res.status !== 200){
-					components.loading.dataset.visible = "false";
-					throw "Login unsuccessful";
+					components.loading.dataset.visible = 'false';
+					throw 'Login unsuccessful';
 				} else {
-					components.loading.dataset.visible = "false";
+					components.loading.dataset.visible = 'false';
 					return res;
 				}
 			})
@@ -350,15 +351,15 @@ var __listen_to_the_ft = (function(){
 
 		login(loginBody)
 			.then(result => {
-				views.login.dataset.visible = "false";
+				views.login.dataset.visible = 'false';
 				generateFirstView();
 			})
 			.catch(err => {
 				// console.error(err);
 				overlay.set(
-					"Login Failed", 
-					"The credentials passed were not valid.",
-					"OK"
+					'Login Failed', 
+					'The credentials passed were not valid.',
+					'OK'
 				);
 
 				overlay.show();
@@ -369,9 +370,9 @@ var __listen_to_the_ft = (function(){
 
 	if(checkLoginStatus()){
 		generateFirstView();
-		views.login.dataset.visible = "false";
+		views.login.dataset.visible = 'false';
 	} else {
-		views.login.dataset.visible = "true";
+		views.login.dataset.visible = 'true';
 	}
 
 	components.back.addEventListener('click', function(){
@@ -380,10 +381,10 @@ var __listen_to_the_ft = (function(){
 
 	components.player.addEventListener('ended', function(){
 		console.log('Audio finished');
-		this.dataset.active = "false";
+		this.dataset.active = 'false';
 	}, false);
 
 	console.log('Script loaded');
-	components.loading.dataset.visible = "false";
+	components.loading.dataset.visible = 'false';
 
 }());

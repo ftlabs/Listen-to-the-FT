@@ -21,6 +21,8 @@ router.post('/login', function(req, res) {
 	debug(req.cookies);
 	req.body.rememberMe = 'true';
 
+	debug('>>> REMEM', req.body.rememberMe);
+
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
 			debug(membershipResponse)
