@@ -1,4 +1,4 @@
-/* global document localStorage*/
+/* global document localStorage window*/
 var __listen_to_the_ft = (function(){
 
 	'use strict';

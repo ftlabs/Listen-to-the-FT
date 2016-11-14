@@ -1,0 +1,16 @@
+{
+	"name": "Listen to the FT",
+	"short_name": "FT Listen",
+	"theme_color": "#fff1e0",
+	"background_color": "#333333",
+	"display": "standalone",
+	"orientation": "portrait",
+	"scope": "/",
+	"start_url": "/?homescreen=1",
+	"icons" : [
+		{
+			"src": "assets/images/favicon.png",
+			"sizes": "300x300"
+		}
+	]
+}
