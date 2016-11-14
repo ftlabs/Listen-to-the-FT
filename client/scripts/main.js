@@ -23,17 +23,17 @@ var __listen_to_the_ft = (function(){
 
 
 			if(stack.length > 0){
-				stack[ stack.length - 1 ].dataset.visible = "false";
+				stack[ stack.length - 1 ].dataset.visible = 'false';
 			}
 
 			stack.push(view);
 
 			if(stack.length > 1){
-				components.back.dataset.visible = "true";
+				components.back.dataset.visible = 'true';
 			}
 
-			view.dataset.visible = "true";
-			view.dataset.animate = "in-right";
+			view.dataset.visible = 'true';
+			view.dataset.animate = 'in-right';
 
 		}
 
@@ -44,11 +44,11 @@ var __listen_to_the_ft = (function(){
 				
 				// lastView.dataset.visible = "false";
 				if(stack.length > 0){
-					stack[ stack.length - 1 ].dataset.visible = "true";
+					stack[ stack.length - 1 ].dataset.visible = 'true';
 				}
 
 				if(stack.length <= 1){
-					components.back.dataset.visible = "false";
+					components.back.dataset.visible = 'false';
 				}
 
 			}
@@ -88,11 +88,11 @@ var __listen_to_the_ft = (function(){
 		}
 		
 		function showOverlay(){
-			overlayElement.dataset.visible = "true";
+			overlayElement.dataset.visible = 'true';
 		}
 
 		function hideOverlay(){
-			overlayElement.dataset.visible = "false";
+			overlayElement.dataset.visible = 'false';
 		}
 
 		overlayElement.querySelector('button').addEventListener('click', hideOverlay, false);
@@ -220,7 +220,7 @@ var __listen_to_the_ft = (function(){
 		;
 	}
 
-	function generateListView(items, type){
+	function generateListView(items, type, listTitle){
 
 		console.log(items);
 
@@ -230,19 +230,18 @@ var __listen_to_the_ft = (function(){
 		if(!type){
 
 			items.forEach(item => {
-
+				console.log(item);
 				var li = document.createElement('li');
 				li.textContent = item.name;
 				li.dataset.uuid = item.uuid;
+				li.dataset.topic = item.name; 
 
 				li.addEventListener('click', function(){
 					getAudioForTopic(this.dataset.uuid)
-						.then(audioItems => generateListView(audioItems, "audioItems"))
+						.then(audioItems => generateListView(audioItems, "audioItems", this.dataset.topic))
 						.then(HTML => {
-							// views.topics.dataset.visible = "false";
 							views.audioItems.innerHTML = "";
 							views.audioItems.appendChild(HTML);
-							// views.audioItems.dataset.visible = "true";
 							viewstack.push(views.audioItems);
 						})
 					;
@@ -254,6 +253,18 @@ var __listen_to_the_ft = (function(){
 
 		} else if(type === "audioItems"){
 			// debugger;
+
+			if(listTitle){
+
+				var titleElement = document.createElement('div');
+				titleElement.setAttribute('class', 'title');
+				titleElement.textContent = listTitle;
+
+				docFrag.appendChild(titleElement);
+
+			}
+
+
 			items.forEach(item => {
 
 				var li = document.createElement('li');

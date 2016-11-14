@@ -55,7 +55,7 @@ function getTopics(req, res){
 							});
 							
 							if(isValidTopic){
-
+								debug(content);
 								return Promise.resolve({
 									id : content.id,
 									title : content.title,
@@ -63,7 +63,8 @@ function getTopics(req, res){
 									byline : content.byline,
 									webUrl : content.webUrl,
 									audioUrl : generatePublicS3URL(content.id),
-									hasTopicIDs : validTopicIDs
+									hasTopicIDs : validTopicIDs,
+									published : content.publishedDate
 								});
 							}
 							else{
