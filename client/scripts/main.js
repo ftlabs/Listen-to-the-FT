@@ -164,6 +164,7 @@ var __listen_to_the_ft = (function(){
 		console.log(src);
 		
 		components.player.src = src;
+		components.player.dataset.uuid = uuid;
 
 		components.player.dataset.active = 'true';
 		components.player.play();
@@ -382,7 +383,6 @@ var __listen_to_the_ft = (function(){
 			items.forEach(item => {
 
 				var li = document.createElement('li');
-				// var hasBeenListenedToElement = document.createElement('div');
 				var wasListenedToBefore = hasAudioBeenPlayed(item.id);
 
 				var textContainer = document.createElement('div');
@@ -396,7 +396,6 @@ var __listen_to_the_ft = (function(){
 
 				var dropDownArrow = document.createElement('span');
 
-				// hasBeenListenedToElement.setAttribute('class', 'hasListened');
 				textContainer.setAttribute('class', 'textContainer');
 				actionsContainer.setAttribute('class', 'actionsContainer');
 				dropDownArrow.setAttribute('class', 'dropDownArrow');
@@ -432,8 +431,6 @@ var __listen_to_the_ft = (function(){
 				actionsContainer.appendChild(playBtn);
 				actionsContainer.appendChild(readBtn);
 
-				// li.appendChild(hasBeenListenedToElement);
-
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
 				textContainer.appendChild(standfirst);
@@ -444,6 +441,10 @@ var __listen_to_the_ft = (function(){
 
 				li.dataset.uuid = item.id;
 				li.dataset.played = wasListenedToBefore;
+				
+				if(components.player.dataset.uuid === item.id){
+					li.classList.add('playing');
+				}
 
 				li.addEventListener('click', function(){
 					components.player.setAttribute('title', item.title);
