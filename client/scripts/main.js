@@ -402,7 +402,7 @@ var __listen_to_the_ft = (function(){
 				byline.textContent = item.byline;
 				standfirst.textContent = item.standfirst;
 
-				playBtn.textContent = 'Play';
+				playBtn.textContent = 'Listen';
 				readBtn.textContent = 'Read';
 
 				playBtn.dataset.audiourl = item.audioUrl;

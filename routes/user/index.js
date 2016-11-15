@@ -21,14 +21,15 @@ router.post('/login', function(req, res) {
 	debug(req.cookies);
 	req.body.rememberMe = 'true';
 
-	debug('>>> REMEM', req.body.rememberMe);
+	res.clearCookie('ftlabsSession');
+	res.clearCookie('ftlabsSession_s');
 
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
 			debug(membershipResponse)
 			
-			const cookieOptions = { maxAge: 900000, httpOnly : false };
-
+			const cookieOptions = { httpOnly : false, maxAge : 1000 * 60 * 60 * 24 * 7 };
+			
 			res.cookie('ftlabsSession', membershipResponse.sessionToken, cookieOptions);
 			res.cookie('ftlabsSession_s', membershipResponse.secureSessionToken, cookieOptions);
 
