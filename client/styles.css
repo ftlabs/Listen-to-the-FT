@@ -68,7 +68,7 @@ header{
 
 .view{
   width:100%;
-  padding: 50px 1em 50px;
+  padding: 50px 1em 60px;
   height: 100%;
   box-sizing: border-box;
   display: flex;
@@ -82,7 +82,8 @@ header{
 }
 
 .view.full-width{
-  padding: 50px 0 50px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .view#login{
@@ -121,14 +122,14 @@ form label{
 
 #player{
   position: fixed;
-  bottom: 0;
+  top: 100%;
   left: 0;
   padding-bottom: 1em;
   width: 100%;
   padding-top: 1em;
   background: #fff1e0;
   transition: transform 0.3s ease-in-out;
-  transform: translateY(100%);
+  transform: translateY(0%);
 }
 
 .component#loading{
@@ -226,25 +227,40 @@ form label{
   align-items: flex-start;
   overflow: hidden;
   transition: max-height 0.4s ease-in-out;
-  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-down?url=fticon%253Aarrow-down&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');
+  padding-left: 2em;
+  background-image: url(/assets/images/new_dot.png);
+  background-size: 5px;
   background-repeat: no-repeat;
-  background-size: 18px;
-  background-position: 95% 1em;
+  background-position: 0.8em 1.5em;
+}
+
+.view#audioItems li[data-played="true"]{
+  background: none;
 }
 
 .view#audioItems li[data-expanded="true"]{
   max-height: 30vh;
-  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');
 }
 
-.view#audioItems .hasListened{
-  width: 5px;
-  height: 5px;
-  align-self: flex-start;
-  background: #0088c1;
-  border-radius: 100%;
-  margin-top: 1em;
-  margin-right: 1em;
+.view#audioItems li.playing{
+  background: url('/assets/images/playing.png');
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 0.6em 1em;
+}
+
+.view#audioItems li[data-expanded="true"] span.dropDownArrow{
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');  
+}
+
+.view#audioItems span.dropDownArrow{
+  width: 20px;
+  height: 10px;
+  margin-left: auto;
+  margin-top: 0.5em;
+  background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-down?url=fticon%253Aarrow-down&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');
+  background-position: 50%;
+  background-size: 100%;
 }
 
 .view#audioItems [data-played='true'] .hasListened{
@@ -255,6 +271,7 @@ form label{
   width: 80%;
   display: flex;
   flex-direction: column;
+  margin-bottom: 0.3em;
 }
 
 .view#audioItems .textContainer a{

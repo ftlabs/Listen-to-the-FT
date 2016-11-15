@@ -382,7 +382,7 @@ var __listen_to_the_ft = (function(){
 			items.forEach(item => {
 
 				var li = document.createElement('li');
-				var hasBeenListenedToElement = document.createElement('div');
+				// var hasBeenListenedToElement = document.createElement('div');
 				var wasListenedToBefore = hasAudioBeenPlayed(item.id);
 
 				var textContainer = document.createElement('div');
@@ -394,9 +394,12 @@ var __listen_to_the_ft = (function(){
 				var playBtn = document.createElement('a');
 				var readBtn = document.createElement('a');
 
-				hasBeenListenedToElement.setAttribute('class', 'hasListened');
+				var dropDownArrow = document.createElement('span');
+
+				// hasBeenListenedToElement.setAttribute('class', 'hasListened');
 				textContainer.setAttribute('class', 'textContainer');
 				actionsContainer.setAttribute('class', 'actionsContainer');
+				dropDownArrow.setAttribute('class', 'dropDownArrow');
 
 				headline.textContent = item.title;
 				byline.textContent = item.byline;
@@ -413,6 +416,10 @@ var __listen_to_the_ft = (function(){
 						prevent(e);
 						playAudio(this.dataset.audiourl, item.id);
 						container.dataset.played = 'true';
+						document.querySelectorAll('.playing').forEach(el => {
+							el.classList.remove('playing');
+						});
+						container.classList.add('playing');
 					}, false);
 
 					readBtn.addEventListener('click', function(e){
@@ -425,7 +432,7 @@ var __listen_to_the_ft = (function(){
 				actionsContainer.appendChild(playBtn);
 				actionsContainer.appendChild(readBtn);
 
-				li.appendChild(hasBeenListenedToElement);
+				// li.appendChild(hasBeenListenedToElement);
 
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
@@ -433,6 +440,7 @@ var __listen_to_the_ft = (function(){
 				textContainer.appendChild(actionsContainer);
 
 				li.appendChild(textContainer);
+				li.appendChild(dropDownArrow);
 
 				li.dataset.uuid = item.id;
 				li.dataset.played = wasListenedToBefore;
