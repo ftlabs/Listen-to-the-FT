@@ -35,7 +35,8 @@ module.exports = function(req, res, next){
 		res.locals.userSession = req.cookies['FTSession'];
 		res.locals.isSecure = false;
 	}
-
+	
+	debug(secureSessionToken, sessionToken, ftlabsSessionToken, ftlabsSecureSessionToken);
 	debug(res.locals.userSession, res.locals.isSecure);
 
 	if(res.locals.userSession === undefined){
