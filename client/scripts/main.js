@@ -328,6 +328,7 @@ var __listen_to_the_ft = (function(){
 			.then(items => generateListView( items, 'audioItems', 'Latest Audio Articles'))
 			.then(HTML => {
 				console.log(HTML);
+				components.menu.dataset.visible = 'true';
 				views.audioItems.innerHTML = '';
 				views.audioItems.appendChild(HTML);
 				viewstack.push(views.audioItems);
