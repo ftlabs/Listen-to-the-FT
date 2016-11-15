@@ -29,7 +29,7 @@ router.post('/login', function(req, res) {
 			debug(membershipResponse)
 			
 			const cookieOptions = { httpOnly : false, maxAge : 1000 * 60 * 60 * 24 * 7 };
-			
+
 			res.cookie('ftlabsSession', membershipResponse.sessionToken, cookieOptions);
 			res.cookie('ftlabsSession_s', membershipResponse.secureSessionToken, cookieOptions);
 
