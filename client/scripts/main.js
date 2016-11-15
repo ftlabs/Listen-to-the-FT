@@ -93,6 +93,9 @@ var __listen_to_the_ft = (function(){
 		}
 
 		function clearStack(){
+			stack.forEach(view => {
+				view.dataset.visible = 'false';
+			});
 			stack = [];
 		}
 
@@ -147,6 +150,18 @@ var __listen_to_the_ft = (function(){
 		e.preventDefault();
 	}
 
+	function handleLogin(){
+		components.menu.dataset.visible = 'false';
+		components.drawer.dataset.opened = 'false';
+		viewstack.clear();
+		views.login.dataset.visible = 'true';
+
+		components.player.dataset.active = 'false';
+		components.player.pause();
+		components.player.currentTime = 0;
+
+	}
+
 	function hasAudioBeenPlayed(audioID){
 
 		var listenedToArticles = localData.read('playedArticles');
@@ -189,7 +204,17 @@ var __listen_to_the_ft = (function(){
 			.then(res => {
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
-					throw `Could not get items for topic ${topicUUIDs}`;
+
+					if(res.status === 403 || res.status === 401){
+						throw {
+							message : 'Session has expired',
+							statCode : res.status
+						};
+							
+					} else {
+						throw `Could not get items for topic ${topicUUIDs}`;
+					}
+
 				}
 				return res;
 			})
@@ -205,7 +230,17 @@ var __listen_to_the_ft = (function(){
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
 					console.log(res);
-					throw 'Could not get user topics';
+
+					if(res.status === 403 || res.status === 401){
+						throw {
+							message : 'Session has expired',
+							statCode : res.status
+						};
+							
+					} else {
+						throw 'Could not get user topics';
+					}
+
 				}
 				return res;
 			})
@@ -253,6 +288,24 @@ var __listen_to_the_ft = (function(){
 					})
 				;
 			})
+			.catch(err => {
+				
+				if(err.statCode){
+
+					if(err.statCode === 401 || err.statCode === 403){
+						// handleLogin()
+						overlay.set(
+							'Session has expired', 
+							'Please login to continue using this app.',
+							'OK'
+						);
+
+						overlay.show();
+					}
+
+				}
+
+			})
 		;
 	}
 
@@ -277,9 +330,7 @@ var __listen_to_the_ft = (function(){
 				console.log(HTML);
 				views.audioItems.innerHTML = '';
 				views.audioItems.appendChild(HTML);
-				// views.topics.dataset.visible = 'true';
 				viewstack.push(views.audioItems);
-
 			})
 		;
 
@@ -292,6 +343,7 @@ var __listen_to_the_ft = (function(){
 			.then(filteredTopics => generateMenu( filteredTopics ))
 			.then(HTML => {
 
+				components.drawer.innerHTML = "";
 				components.drawer.appendChild(HTML);
 
 			})
@@ -304,7 +356,12 @@ var __listen_to_the_ft = (function(){
 		console.log(sections);
 
 		var sectionFrag = document.createDocumentFragment();
+		var titleEl = document.createElement('div');
 		var sectionOl = document.createElement('ol');
+
+		titleEl.setAttribute('class', 'title');
+		titleEl.textContent = "My Sections";
+		sectionFrag.appendChild(titleEl);
 
 		sections.forEach(section => {
 
@@ -322,6 +379,22 @@ var __listen_to_the_ft = (function(){
 						components.drawer.dataset.opened = 'false';
 						views.audioItems.innerHTML = "";
 						views.audioItems.appendChild(HTML);
+					})
+					.catch(err => {
+						if(err.statCode){
+
+							if(err.statCode === 401 || err.statCode === 403){
+								handleLogin();
+								overlay.set(
+									'Session has expired', 
+									'Please login to continue using this app.',
+									'OK'
+								);
+
+								overlay.show();
+							}
+
+						}
 					})
 				;
 			})
@@ -441,7 +514,7 @@ var __listen_to_the_ft = (function(){
 
 				li.dataset.uuid = item.id;
 				li.dataset.played = wasListenedToBefore;
-				
+
 				if(components.player.dataset.uuid === item.id){
 					li.classList.add('playing');
 				}
@@ -503,6 +576,7 @@ var __listen_to_the_ft = (function(){
 		login(loginBody)
 			.then(result => {
 				views.login.dataset.visible = 'false';
+				components.menu.dataset.visible = 'true';
 				generateFirstView();
 			})
 			.catch(err => {

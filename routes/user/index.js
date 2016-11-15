@@ -27,7 +27,7 @@ router.post('/login', function(req, res) {
 	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
 		.then(membershipResponse => {
 			debug(membershipResponse)
-			
+						
 			const cookieOptions = { httpOnly : false, maxAge : 1000 * 60 * 60 * 24 * 7 };
 
 			res.cookie('ftlabsSession', membershipResponse.sessionToken, cookieOptions);

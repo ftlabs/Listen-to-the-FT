@@ -27,21 +27,21 @@ module.exports = function(req, res, next){
 		res.locals.userSession = ftlabsSessionToken;
 		res.locals.isSecure = false;
 	}
-	else if(req.cookies['FTSession_s']){
-		res.locals.userSession = req.cookies['FTSession_s'];
-		res.locals.isSecure = true;
-	}
-	else if (req.cookies['FTSession']){
-		res.locals.userSession = req.cookies['FTSession'];
-		res.locals.isSecure = false;
-	}
+	// else if(req.cookies['FTSession_s']){
+	// 	res.locals.userSession = req.cookies['FTSession_s'];
+	// 	res.locals.isSecure = true;
+	// }
+	// else if (req.cookies['FTSession']){
+	// 	res.locals.userSession = req.cookies['FTSession'];
+	// 	res.locals.isSecure = false;
+	// }
 	
 	debug(secureSessionToken, sessionToken, ftlabsSessionToken, ftlabsSecureSessionToken);
 	debug(res.locals.userSession, res.locals.isSecure);
 
 	if(res.locals.userSession === undefined){
 		// throw "No user session can be found"
-		res.status(400);
+		res.status(403);
 		res.json({
 			'error': '403',
 			'message': 'No session id was provided'
