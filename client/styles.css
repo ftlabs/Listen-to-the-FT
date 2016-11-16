@@ -98,6 +98,7 @@ form{
   justify-content: center;
   flex-direction: column;
   padding: 1em;
+  margin-top: 1em !important;
 }
 
 form input[type="text"], form input[type="password"]{
