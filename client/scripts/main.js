@@ -372,6 +372,9 @@ var __listen_to_the_ft = (function(){
 			sectionLi.dataset.topic = section.name;
 			sectionLi.dataset.uuid = section.uuid;
 
+			// Warm up the service worker
+			getAudioForTopic(section.uuid, true);
+
 			sectionLi.addEventListener('click', function(e){
 				prevent(e);
 				getAudioForTopic(this.dataset.uuid)
