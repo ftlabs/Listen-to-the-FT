@@ -1,8 +1,8 @@
 {
 	"name": "Listen to the FT",
 	"short_name": "Listen to the FT",
-	"theme_color": "#333333",
-	"background_color": "#fff1e0",
+	"theme_color": "#FFF1E0",
+	"background_color": "#333333",
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "/",

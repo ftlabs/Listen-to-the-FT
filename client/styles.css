@@ -98,6 +98,7 @@ form{
   justify-content: center;
   flex-direction: column;
   padding: 1em;
+  margin-top: 1em !important;
 }
 
 form input[type="text"], form input[type="password"]{
@@ -166,7 +167,7 @@ form label{
   padding: 50px 0 0;
   max-height: 50%;
   overflow-y: scroll;
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   transform: translateY(-100%);
 }
 
