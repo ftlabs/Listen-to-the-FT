@@ -150,6 +150,30 @@ var __listen_to_the_ft = (function(){
 		e.preventDefault();
 	}
 
+	function makeRequest(url, options, timeout){
+
+		timeout = timeout || 5000;
+		var success = false;
+		var tO = new Promise(function(resolve, reject){
+				setTimeout(function(){ if(!success){reject('Request timed out.');} else {resolve()} }, timeout);
+		});
+
+		return Promise.race( [ tO, fetch(url, options) ] )
+			.then(res => {
+				success = true;
+				return res;
+			})
+			.catch(err => {
+				console.log(err);
+				throw {
+					timeout : true,
+					message : err
+				};
+			})
+		;
+
+	};
+
 	function handleLogin(){
 		components.menu.dataset.visible = 'false';
 		components.drawer.dataset.opened = 'false';
@@ -159,6 +183,28 @@ var __listen_to_the_ft = (function(){
 		components.player.dataset.active = 'false';
 		components.player.pause();
 		components.player.currentTime = 0;
+
+	}
+
+	function handleTimeout(){
+
+		overlay.set(
+			'Request timeout', 
+			'The request to the server took too long, and has timed out. Please reload the app.',
+			'OK'
+		);
+		overlay.show();
+
+	}
+
+	function unknownErrorHandler(){
+
+		overlay.set(
+			'Something went wrong', 
+			'We\'re not too sure what\'s happened. You can try again, or contact FT Labs for help.',
+			'OK'
+		);
+		overlay.show();
 
 	}
 
@@ -200,7 +246,7 @@ var __listen_to_the_ft = (function(){
 			components.loading.dataset.visible = 'true';
 		}
 
-		return fetch(`/audio?topics=${topicUUIDs}`,{credentials : 'include'})
+		return makeRequest(`/audio?topics=${topicUUIDs}`,{credentials : 'include'})
 			.then(res => {
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
@@ -225,7 +271,7 @@ var __listen_to_the_ft = (function(){
 
 	function getTopicsForUser(){
 		components.loading.dataset.visible = 'true';
-		return fetch('/user/topics', {credentials : 'include'})
+		return makeRequest('/user/topics', {credentials : 'include'})
 			.then(res => {
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
@@ -245,6 +291,11 @@ var __listen_to_the_ft = (function(){
 				return res;
 			})
 			.then(res => res.json())
+			.catch(err => {
+				if(err.timeout){
+					console.log(err.message);
+				}
+			})
 		;
 	}
 
@@ -303,6 +354,8 @@ var __listen_to_the_ft = (function(){
 						overlay.show();
 					}
 
+				} else if(err.timeout){
+					handleTimeout();
 				}
 
 			})
@@ -333,6 +386,15 @@ var __listen_to_the_ft = (function(){
 				views.audioItems.appendChild(HTML);
 				viewstack.push(views.audioItems);
 			})
+			.catch(err => {
+
+				if(err.timeout){
+					handleTimeout();
+				} else {
+					unknownErrorHandler();
+				}
+
+			})
 		;
 
 		getTopicsForUserWithAudio(true)
@@ -346,6 +408,15 @@ var __listen_to_the_ft = (function(){
 
 				components.drawer.innerHTML = "";
 				components.drawer.appendChild(HTML);
+
+			})
+			.catch(err => {
+
+				if(err.timeout){
+					handleTimeout();
+				} else {
+					unknownErrorHandler();
+				}
 
 			})
 		;
@@ -542,7 +613,7 @@ var __listen_to_the_ft = (function(){
 
 	function login(creds){
 		components.loading.dataset.visible = 'true';
-		return fetch('/user/login', {
+		return makeRequest('/user/login', {
 				body : JSON.stringify(creds),
 				method : 'POST',
 				headers : {
@@ -560,6 +631,11 @@ var __listen_to_the_ft = (function(){
 				}
 			})
 			.then(res => res.json())
+			.catch(err => {
+				if(err.timeout){
+					console.log(err.message);
+				}
+			})
 		;
 
 	}
@@ -585,13 +661,17 @@ var __listen_to_the_ft = (function(){
 			})
 			.catch(err => {
 				// console.error(err);
-				overlay.set(
-					'Login Failed', 
-					'The credentials passed were not valid.',
-					'OK'
-				);
+				if(err.timeout){
+					handleTimeout();
+				} else {
+					overlay.set(
+						'Login Failed', 
+						'The credentials passed were not valid.',
+						'OK'
+					);
+					overlay.show();
+				}
 
-				overlay.show();
 			})
 		;
 
