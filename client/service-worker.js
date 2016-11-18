@@ -51,20 +51,85 @@ self.addEventListener('install', function(event) {
 
 });
 
+var routesToNotCache = ['/user/login'];
+
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.match(event.request).then(function(response) {
-        var fetchPromise = fetch(event.request).then(function(networkResponse) {
 
-			if(event.request.method === 'GET'){
-				cache.put(event.request, networkResponse.clone());
-			}
+	event.respondWith(
+		caches.open(CACHE_NAME).then(function(cache) {
+			return cache.match(event.request).then(function(response) {
+				var fetchPromise = fetch(event.request).then(function(networkResponse) {
 
-          return networkResponse;
-        })
-        return response || fetchPromise;
-      })
-    })
-  );
+				if(event.request.method === 'GET'){
+
+					var shouldCache = true;
+
+					routesToNotCache.forEach(route => {
+
+						if(shouldCache){
+
+							if(event.request.url.indexOf(route) > -1){
+								shouldCache = false;
+							}
+
+						}
+
+					});
+
+					if(shouldCache){
+						cache.put(event.request, networkResponse.clone());
+					}
+
+				}
+
+				return networkResponse;
+				});
+			return response || fetchPromise;
+			})
+		})
+	);
 });
+
+self.addEventListener('activate', function(event){
+
+	console.log('Service worker activated');
+    event.waitUntil(self.clients.claim()); // Become available to all pages
+
+}, false);
+
+self.addEventListener('message', function(event){
+	console.log('Service worker received an event', event);
+
+	if(event.data.action === 'purgeUserSpecificCache'){
+		
+		purgeURLs(event.data.info);
+
+	}
+
+});
+
+function purgeURLs(urlList){
+
+	console.log(urlList);
+
+	caches.keys({
+		ignoreSearch : true
+	}).then(function(cacheNames) {
+
+		console.log('SW cacheNames:', cacheNames);
+
+		return Promise.all(
+			cacheNames.map(function(cacheName) {
+				console.log('SW cacheName:', cacheName);
+				/*if (expectedCacheNames.indexOf(cacheName) === -1) {
+					// If this cache name isn't present in the array of "expected" cache names, then delete it.
+					console.log('Deleting out of date cache:', cacheName);
+					return caches.delete(cacheName);
+				}*/
+			})
+		);
+	})
+
+	// urlList.forEach
+
+}

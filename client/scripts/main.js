@@ -1,4 +1,4 @@
-/* global document localStorage window*/
+/* global document localStorage window navigator*/
 var __listen_to_the_ft = (function(){
 
 	'use strict';
@@ -208,6 +208,16 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	function purgeUserSpecificCache(){
+
+		if(navigator.serviceWorker){
+			navigator.serviceWorker.controller.postMessage({
+				action : 'purgeUserSpecficCache'
+			});
+		}
+	
+	}
+	
 	function hasAudioBeenPlayed(audioID){
 
 		var listenedToArticles = localData.read('playedArticles');
@@ -612,7 +622,9 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function login(creds){
+
 		components.loading.dataset.visible = 'true';
+		purgeUserSpecificCache();
 		return makeRequest('/user/login', {
 				body : JSON.stringify(creds),
 				method : 'POST',
@@ -631,11 +643,6 @@ var __listen_to_the_ft = (function(){
 				}
 			})
 			.then(res => res.json())
-			.catch(err => {
-				if(err.timeout){
-					console.log(err.message);
-				}
-			})
 		;
 
 	}
@@ -652,7 +659,7 @@ var __listen_to_the_ft = (function(){
 		});
 
 		loginBody.rememberMe = loginBody.rememberMe === 'on';
-
+		debugger;
 		login(loginBody)
 			.then(result => {
 				views.login.dataset.visible = 'false';
@@ -677,33 +684,42 @@ var __listen_to_the_ft = (function(){
 
 	}, false);
 
-	if(checkLoginStatus()){
-		generateFirstView();
-		views.login.dataset.visible = 'false';
-	} else {
-		views.login.dataset.visible = 'true';
-	}
-
-	components.back.addEventListener('click', function(){
-		viewstack.pop();
-	}, false);
-
-	components.player.addEventListener('ended', function(){
-		console.log('Audio finished');
-		this.dataset.active = 'false';
-	}, false);
-
-	components.menu.addEventListener('click', function(){
-
-		if(components.drawer.dataset.opened === 'false'){
-			components.drawer.dataset.opened = 'true';
+	function initialise(){
+		
+		if(checkLoginStatus()){
+			generateFirstView();
+			views.login.dataset.visible = 'false';
 		} else {
-			components.drawer.dataset.opened = 'false';
+			views.login.dataset.visible = 'true';
 		}
 
-	}, false);
+		components.back.addEventListener('click', function(){
+			viewstack.pop();
+		}, false);
 
-	console.log('Script loaded');
-	components.loading.dataset.visible = 'false';
+		components.player.addEventListener('ended', function(){
+			console.log('Audio finished');
+			this.dataset.active = 'false';
+		}, false);
+
+		components.menu.addEventListener('click', function(){
+
+			if(components.drawer.dataset.opened === 'false'){
+				components.drawer.dataset.opened = 'true';
+			} else {
+				components.drawer.dataset.opened = 'false';
+			}
+
+		}, false);
+
+		console.log('Script loaded');
+		components.loading.dataset.visible = 'false';
+
+	}
+
+
+	return{
+		init : initialise
+	};
 
 }());

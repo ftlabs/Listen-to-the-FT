@@ -53,6 +53,8 @@ header{
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2em;
+  box-sizing: border-box;
 }
 
 .component#popup button{
