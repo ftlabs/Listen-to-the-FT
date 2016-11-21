@@ -78,19 +78,6 @@
 					__listen_to_the_ft.init();
 					return navigator.serviceWorker.ready;
 				})
-				.then(v => {
-					console.log(v);
-
-					navigator.serviceWorker.controller.postMessage({
-						action : 'purgeUserSpecficCache',
-						info : [
-							'https://google.com',
-							'https://ft.com'
-						]
-					});
-
-
-				})
 				.catch(function(err) {
 					__listen_to_the_ft.init();					
 					console.log('ServiceWorker registration failed: ', err);

@@ -175,6 +175,7 @@ var __listen_to_the_ft = (function(){
 	};
 
 	function handleLogin(){
+		components.loading.dataset.visible = "false";
 		components.menu.dataset.visible = 'false';
 		components.drawer.dataset.opened = 'false';
 		viewstack.clear();
@@ -262,6 +263,7 @@ var __listen_to_the_ft = (function(){
 				if(res.status !== 200){
 
 					if(res.status === 403 || res.status === 401){
+						handleLogin();
 						throw {
 							message : 'Session has expired',
 							statCode : res.status
@@ -288,6 +290,7 @@ var __listen_to_the_ft = (function(){
 					console.log(res);
 
 					if(res.status === 403 || res.status === 401){
+						handleLogin();
 						throw {
 							message : 'Session has expired',
 							statCode : res.status
@@ -354,7 +357,7 @@ var __listen_to_the_ft = (function(){
 				if(err.statCode){
 
 					if(err.statCode === 401 || err.statCode === 403){
-						// handleLogin()
+						handleLogin()
 						overlay.set(
 							'Session has expired', 
 							'Please login to continue using this app.',
@@ -659,7 +662,7 @@ var __listen_to_the_ft = (function(){
 		});
 
 		loginBody.rememberMe = loginBody.rememberMe === 'on';
-		debugger;
+
 		login(loginBody)
 			.then(result => {
 				views.login.dataset.visible = 'false';
@@ -690,6 +693,7 @@ var __listen_to_the_ft = (function(){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
 		} else {
+			purgeUserSpecificCache();
 			views.login.dataset.visible = 'true';
 		}
 
