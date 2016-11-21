@@ -213,7 +213,7 @@ var __listen_to_the_ft = (function(){
 
 		if(navigator.serviceWorker){
 			navigator.serviceWorker.controller.postMessage({
-				action : 'purgeUserSpecficCache'
+				action : 'purgeUserSpecificCache'
 			});
 		}
 	
