@@ -1,4 +1,4 @@
-/* global document localStorage window*/
+/* global document localStorage window navigator*/
 var __listen_to_the_ft = (function(){
 
 	'use strict';
@@ -175,6 +175,7 @@ var __listen_to_the_ft = (function(){
 	};
 
 	function handleLogin(){
+		components.loading.dataset.visible = "false";
 		components.menu.dataset.visible = 'false';
 		components.drawer.dataset.opened = 'false';
 		viewstack.clear();
@@ -208,6 +209,16 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	function purgeUserSpecificCache(){
+
+		if(navigator.serviceWorker){
+			navigator.serviceWorker.controller.postMessage({
+				action : 'purgeUserSpecficCache'
+			});
+		}
+	
+	}
+	
 	function hasAudioBeenPlayed(audioID){
 
 		var listenedToArticles = localData.read('playedArticles');
@@ -252,6 +263,7 @@ var __listen_to_the_ft = (function(){
 				if(res.status !== 200){
 
 					if(res.status === 403 || res.status === 401){
+						handleLogin();
 						throw {
 							message : 'Session has expired',
 							statCode : res.status
@@ -278,6 +290,7 @@ var __listen_to_the_ft = (function(){
 					console.log(res);
 
 					if(res.status === 403 || res.status === 401){
+						handleLogin();
 						throw {
 							message : 'Session has expired',
 							statCode : res.status
@@ -344,7 +357,7 @@ var __listen_to_the_ft = (function(){
 				if(err.statCode){
 
 					if(err.statCode === 401 || err.statCode === 403){
-						// handleLogin()
+						handleLogin()
 						overlay.set(
 							'Session has expired', 
 							'Please login to continue using this app.',
@@ -612,7 +625,9 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function login(creds){
+
 		components.loading.dataset.visible = 'true';
+		purgeUserSpecificCache();
 		return makeRequest('/user/login', {
 				body : JSON.stringify(creds),
 				method : 'POST',
@@ -631,11 +646,6 @@ var __listen_to_the_ft = (function(){
 				}
 			})
 			.then(res => res.json())
-			.catch(err => {
-				if(err.timeout){
-					console.log(err.message);
-				}
-			})
 		;
 
 	}
@@ -677,33 +687,43 @@ var __listen_to_the_ft = (function(){
 
 	}, false);
 
-	if(checkLoginStatus()){
-		generateFirstView();
-		views.login.dataset.visible = 'false';
-	} else {
-		views.login.dataset.visible = 'true';
-	}
-
-	components.back.addEventListener('click', function(){
-		viewstack.pop();
-	}, false);
-
-	components.player.addEventListener('ended', function(){
-		console.log('Audio finished');
-		this.dataset.active = 'false';
-	}, false);
-
-	components.menu.addEventListener('click', function(){
-
-		if(components.drawer.dataset.opened === 'false'){
-			components.drawer.dataset.opened = 'true';
+	function initialise(){
+		
+		if(checkLoginStatus()){
+			generateFirstView();
+			views.login.dataset.visible = 'false';
 		} else {
-			components.drawer.dataset.opened = 'false';
+			purgeUserSpecificCache();
+			views.login.dataset.visible = 'true';
 		}
 
-	}, false);
+		components.back.addEventListener('click', function(){
+			viewstack.pop();
+		}, false);
 
-	console.log('Script loaded');
-	components.loading.dataset.visible = 'false';
+		components.player.addEventListener('ended', function(){
+			console.log('Audio finished');
+			this.dataset.active = 'false';
+		}, false);
+
+		components.menu.addEventListener('click', function(){
+
+			if(components.drawer.dataset.opened === 'false'){
+				components.drawer.dataset.opened = 'true';
+			} else {
+				components.drawer.dataset.opened = 'false';
+			}
+
+		}, false);
+
+		console.log('Script loaded');
+		components.loading.dataset.visible = 'false';
+
+	}
+
+
+	return{
+		init : initialise
+	};
 
 }());

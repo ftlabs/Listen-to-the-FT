@@ -66,12 +66,28 @@
 		<script>
 
 			if ('serviceWorker' in navigator) {
+				
+				navigator.serviceWorker.addEventListener('message', function(event) {
+					console.log(event);
+				});
+				
 				navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
 					console.log('ServiceWorker registration successful with scope: ', registration.scope);
-				}).catch(function(err) {
+				})
+				.then(function(){
+					__listen_to_the_ft.init();
+					return navigator.serviceWorker.ready;
+				})
+				.catch(function(err) {
+					__listen_to_the_ft.init();					
 					console.log('ServiceWorker registration failed: ', err);
 				});
+
+
+			} else {
+				__listen_to_the_ft.init();
 			}
+
 
 		</script>
 
