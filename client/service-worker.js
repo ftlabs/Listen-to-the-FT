@@ -90,32 +90,6 @@ self.addEventListener('message', function(event){
 
 });
 
-/*function purgeURLs(urlList){
-
-	console.log(urlList);
-
-	caches.keys({
-		ignoreSearch : true
-	}).then(function(cacheNames) {
-
-		console.log('SW cacheNames:', cacheNames);
-
-		return Promise.all(
-			cacheNames.map(function(cacheName) {
-				console.log('SW cacheName:', cacheName);
-				//if (expectedCacheNames.indexOf(cacheName) === -1) {
-				//	If this cache name isn't present in the array of "expected" cache names, then delete it.
-				//	console.log('Deleting out of date cache:', cacheName);
-				//	return caches.delete(cacheName);
-				//}
-			})
-		);
-	})
-
-	// urlList.forEach
-
-}*/
-
 function purgeURLs(event){
 	debugger;
 	event.waitUntil(
@@ -123,7 +97,7 @@ function purgeURLs(event){
 			console.log(cacheNames);
 			return Promise.all(
 				cacheNames.map(function(cacheName) {
-					
+
 					return caches.delete(cacheName);
 				
 			}) );
