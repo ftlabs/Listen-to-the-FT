@@ -504,7 +504,13 @@ var __listen_to_the_ft = (function(){
 		console.log(items);
 
 		var docFrag = document.createDocumentFragment();
+		const offlineEl = document.createElement('div');
 		const olEl = document.createElement('ol');
+
+		offlineEl.textContent = 'Offline Mode';
+		offlineEl.classList.add('offline');
+
+		docFrag.appendChild(offlineEl);
 
 		if(!type){
 
@@ -696,6 +702,7 @@ var __listen_to_the_ft = (function(){
 			views.login.dataset.visible = 'false';
 		} else {
 			purgeUserSpecificCache();
+			components.loading.dataset.visible = 'false';
 			views.login.dataset.visible = 'true';
 		}
 
