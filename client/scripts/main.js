@@ -36,6 +36,92 @@ var __listen_to_the_ft = (function(){
 
 	})();
 
+	var networkState = (function(){
+
+		var connected = true;
+		var networkPoll = undefined;
+		var networkHistory = [];
+		var MAX_NETWORK_HISTORY = 6;
+
+		function determineNetworkState(){
+
+			while(networkHistory.length > MAX_NETWORK_HISTORY){
+				networkHistory.shift();
+			}
+
+			var on = 0;
+			var off = 0;
+
+			networkHistory.forEach(state => {
+				if(state === false ){
+					off += 1;
+				} else {
+					on += 1;
+				}
+			});
+
+			if(off === networkHistory.length){
+				connected = false;
+				document.body.dataset.offline = 'true';
+			}
+
+			if(connected === false && on === networkHistory.length ){
+				connected = true;
+				document.body.dataset.offline = 'false';
+			}
+
+		}
+
+		function startNetworkInterrogation(interval){
+
+			interval = interval || 500;
+
+			(function(h){
+
+				networkPoll = setInterval(function(){
+
+					makeRequest('/__reachable')
+						.then(res => {
+							if(res.status === 200){
+								networkHistory.push(true);
+							} else {
+								networkHistory.push(false);
+							}
+
+							determineNetworkState();
+
+						})
+						.catch(err => {
+							console.log(err);
+							networkHistory.push(false);
+							determineNetworkState();
+						})
+					;
+
+				}, interval);
+
+			}(networkHistory));
+
+		}
+
+		function returnNetworkState(){
+
+			return connected;
+
+		}
+
+		function stopNetworkInterrogation(){
+			clearInterval(networkPoll);
+		}
+
+		return {
+			start : startNetworkInterrogation,
+			get : returnNetworkState,
+			stop : stopNetworkInterrogation
+		}
+
+	})();
+
 	var views = {
 		login : document.querySelector('.view#login'),
 		topics : document.querySelector('.view#topics'),
@@ -727,6 +813,8 @@ var __listen_to_the_ft = (function(){
 
 		console.log('Script loaded');
 		components.loading.dataset.visible = 'false';
+
+		networkState.start();
 
 	}
 
