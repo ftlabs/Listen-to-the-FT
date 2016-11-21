@@ -1,6 +1,6 @@
 /* global self caches*/
 
-var CACHE_NAME = "FTLABS-LttFT-V1";
+var CACHE_NAME = "FTLABS-LttFT-V2";
 var itemsToCache = [
 	'/',
 	'/index.html',
