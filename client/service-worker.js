@@ -83,7 +83,7 @@ self.addEventListener('message', function(event){
 	console.log(event.data.action, event.data.action === 'purgeUserSpecificCache');
 
 	if(event.data.action === 'purgeUserSpecificCache'){
-		console.log('Purging cache');
+		console.log('Purging cache action recieved');
 		purgeURLs(event);
 
 	}
@@ -91,7 +91,7 @@ self.addEventListener('message', function(event){
 });
 
 function purgeURLs(event){
-	debugger;
+	console.log('Purging user cache');
 	event.waitUntil(
 		caches.keys().then(function(cacheNames) {
 			console.log(cacheNames);

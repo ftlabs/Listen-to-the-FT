@@ -189,6 +189,7 @@ var __listen_to_the_ft = (function(){
 
 	function handleTimeout(){
 
+		components.loading.dataset.visible = 'false';
 		overlay.set(
 			'Request timeout', 
 			'The request to the server took too long, and has timed out. Please reload the app.',
@@ -306,6 +307,7 @@ var __listen_to_the_ft = (function(){
 			.then(res => res.json())
 			.catch(err => {
 				if(err.timeout){
+					handleTimeout();
 					console.log(err.message);
 				}
 			})
