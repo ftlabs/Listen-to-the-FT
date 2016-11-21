@@ -31,40 +31,47 @@ self.addEventListener('install', function(event) {
 
 });
 
-var routesToNotCache = ['/user/login'];
+var routesToNotCache = ['/user/login', '/__reachable'];
 
 self.addEventListener('fetch', function(event) {
 
 	event.respondWith(
 		caches.open(CACHE_NAME).then(function(cache) {
-			return cache.match(event.request).then(function(response) {
-				var fetchPromise = fetch(event.request).then(function(networkResponse) {
+			return cache.match(event.request)
+				.then(function(response) {
+					var fetchPromise = fetch(event.request)
+						.then(function(networkResponse) {
 
-				if(event.request.method === 'GET'){
+							if(event.request.method === 'GET'){
 
-					var shouldCache = true;
+								var shouldCache = true;
 
-					routesToNotCache.forEach(route => {
+								routesToNotCache.forEach(route => {
 
-						if(shouldCache){
+									if(shouldCache){
 
-							if(event.request.url.indexOf(route) > -1){
-								shouldCache = false;
+										if(event.request.url.indexOf(route) > -1){
+											shouldCache = false;
+										}
+
+									}
+
+								});
+
+								if(shouldCache){
+									cache.put(event.request, networkResponse.clone());
+								}
+
 							}
 
-						}
-
-					});
-
-					if(shouldCache){
-						cache.put(event.request, networkResponse.clone());
-					}
-
-				}
-
-				return networkResponse;
-				});
-			return response || fetchPromise;
+							return networkResponse;
+						
+						})
+					
+					;
+				
+				return response || fetchPromise;
+			
 			})
 		})
 	);
