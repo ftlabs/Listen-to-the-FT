@@ -31,7 +31,7 @@ self.addEventListener('install', function(event) {
 
 });
 
-var routesToNotCache = ['/user/login'];
+var routesToNotCache = ['/user/login', '/__reachable'];
 
 self.addEventListener('fetch', function(event) {
 
