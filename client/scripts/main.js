@@ -41,7 +41,7 @@ var __listen_to_the_ft = (function(){
 		var connected = true;
 		var networkPoll = undefined;
 		var networkHistory = [];
-		var MAX_NETWORK_HISTORY = 6;
+		var MAX_NETWORK_HISTORY = 3;
 
 		function determineNetworkState(){
 
@@ -74,7 +74,7 @@ var __listen_to_the_ft = (function(){
 
 		function startNetworkInterrogation(interval){
 
-			interval = interval || 500;
+			interval = interval || 1000;
 
 			(function(h){
 
