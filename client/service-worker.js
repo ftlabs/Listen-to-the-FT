@@ -1,6 +1,6 @@
 /* global self caches*/
 
-var CACHE_NAME = "FTLABS-LttFT-V2";
+var CACHE_NAME = 'FTLABS-LttFT-V2';
 var itemsToCache = [
 	'/',
 	'/index.html',
@@ -92,6 +92,19 @@ self.addEventListener('message', function(event){
 	if(event.data.action === 'purgeUserSpecificCache'){
 		console.log('Purging cache action recieved');
 		purgeURLs(event);
+	} 
+
+	if(event.data.action === 'checkFileAvailability'){
+
+		caches.open(CACHE_NAME).then(function(cache) {
+			var isAvailable = cache.match(event.data.info)
+				.then(Y => {
+					console.log(Y, event.data.info);
+				})
+			;
+			console.log('isAvailable', isAvailable);
+			// return isAvailable
+		})
 
 	}
 

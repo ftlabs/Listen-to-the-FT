@@ -3,6 +3,7 @@ var __listen_to_the_ft = (function(){
 
 	'use strict';
 
+	var CACHE_NAME = 'FTLABS-LttFT-V2';
 	var localData = (function(){
 		
 		var storageKey = 'ftlabs-lttFT';
@@ -299,7 +300,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function purgeUserSpecificCache(){
-		
+
 		localStorage.clear();
 		if(navigator.serviceWorker){
 
@@ -317,7 +318,28 @@ var __listen_to_the_ft = (function(){
 		}
 
 	}
-	
+
+	function checkFileAvailability(url){
+
+		if(window.caches){
+		
+			return caches.open(CACHE_NAME)
+				.then(function(cache){
+
+					return cache.match(new Request(url));
+
+				})
+				.then(result => {
+					return result !== undefined;
+				})
+			;
+		
+		} else {
+			return Promise.resolve(null);
+		}
+
+	}
+
 	function hasAudioBeenPlayed(audioID){
 
 		var listenedToArticles = localData.read('playedArticles');
@@ -679,6 +701,19 @@ var __listen_to_the_ft = (function(){
 				playBtn.dataset.audiourl = item.audioUrl;
 				downloadBtn.dataset.audiourl = item.audioUrl;
 
+				checkFileAvailability(item.audioUrl)
+					.then(available => {
+						console.log(available);
+						console.log(downloadBtn);
+
+						if(available === true){
+							downloadBtn.dataset.downloaded = 'true';
+							downloadBtn.textContent = 'Downloaded';
+						}
+
+					})
+				;
+
 				(function(item, container){
 
 					playBtn.addEventListener('click', function(e){
@@ -715,7 +750,7 @@ var __listen_to_the_ft = (function(){
 								fetch(el.dataset.audiourl, {mode : 'no-cors'})
 									.then(function(){
 										el.dataset.downloaded = 'true';
-										el.textContent = 'Downloaded';		
+										el.textContent = 'Downloaded';	
 									})
 									.catch(err => {
 										this.dataset.downloading = 'false';										

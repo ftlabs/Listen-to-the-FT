@@ -291,6 +291,10 @@ body[data-offline="true"] .offline{
   background: transparent;
 }
 
+.view#audioItems [data-unavailable='true']{
+  opacity: 0.5;
+}
+
 .view#audioItems .textContainer{
   width: 80%;
   display: flex;
