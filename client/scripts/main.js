@@ -705,6 +705,9 @@ var __listen_to_the_ft = (function(){
 				readBtn.classList.add('read');
 				downloadBtn.classList.add('download');
 
+				readBtn.setAttribute('href', 'https://ft.com/content/' + item.id);
+				readBtn.setAttribute('target', '_blank');
+
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
 
@@ -728,15 +731,10 @@ var __listen_to_the_ft = (function(){
 						prevent(e);
 						playAudio(this.dataset.audiourl, item.id);
 						container.dataset.played = 'true';
-						document.querySelectorAll('.playing').forEach(el => {
+						Array.from(document.querySelectorAll('.playing')).forEach(el => {
 							el.classList.remove('playing');
 						});
 						container.classList.add('playing');
-					}, false);
-
-					readBtn.addEventListener('click', function(e){
-						prevent(e);						
-						window.open('https://ft.com/content/' + item.id);
 					}, false);
 
 					downloadBtn.addEventListener('click', function(e){
