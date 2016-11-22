@@ -782,6 +782,7 @@ var __listen_to_the_ft = (function(){
 
 											return caches.open(CACHE_NAME)
 												.then(function(cache){
+													container.dataset.offline = 'true';
 													cache.put(el.dataset.audiourl, res);
 												})
 											;
