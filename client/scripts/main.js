@@ -769,6 +769,13 @@ var __listen_to_the_ft = (function(){
 										if(res.status === 200){
 											el.dataset.downloaded = 'true';
 											el.textContent = 'Downloaded';
+
+											return caches.open(CACHE_NAME)
+												.then(function(cache){
+													cache.put(el.dataset.audiourl, res);
+												})
+											;
+
 										} else {
 											overlay.set(
 												'Download Failed', 
@@ -783,7 +790,7 @@ var __listen_to_the_ft = (function(){
 									.catch(err => {
 										this.dataset.downloading = 'false';	
 										this.dataset.downloaded = 'false';
-										this.textContent = 'Downloading';
+										this.textContent = 'Download';
 									})
 								;
 
