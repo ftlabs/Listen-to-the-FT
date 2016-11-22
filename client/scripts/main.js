@@ -626,9 +626,13 @@ var __listen_to_the_ft = (function(){
 		var docFrag = document.createDocumentFragment();
 		const offlineEl = document.createElement('div');
 		const olEl = document.createElement('ol');
+		const iconImg = document.createElement('img');
 
 		offlineEl.textContent = 'Offline Mode';
 		offlineEl.classList.add('offline');
+
+		iconImg.setAttribute('src', 'https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft?url=fticon%253Abrand-ft&source=ftlabs-listen-to-the-ft&width=100&tint=white&fit=cover&format=auto&quality=medium');
+		iconImg.classList.add('iconImage');
 
 		docFrag.appendChild(offlineEl);
 
@@ -705,6 +709,9 @@ var __listen_to_the_ft = (function(){
 				readBtn.classList.add('read');
 				downloadBtn.classList.add('download');
 
+				readBtn.setAttribute('href', 'https://ft.com/content/' + item.id);
+				readBtn.setAttribute('target', '_blank');
+
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
 
@@ -728,15 +735,10 @@ var __listen_to_the_ft = (function(){
 						prevent(e);
 						playAudio(this.dataset.audiourl, item.id);
 						container.dataset.played = 'true';
-						document.querySelectorAll('.playing').forEach(el => {
+						Array.from(document.querySelectorAll('.playing')).forEach(el => {
 							el.classList.remove('playing');
 						});
 						container.classList.add('playing');
-					}, false);
-
-					readBtn.addEventListener('click', function(e){
-						prevent(e);						
-						window.open('https://ft.com/content/' + item.id);
 					}, false);
 
 					downloadBtn.addEventListener('click', function(e){
@@ -820,6 +822,7 @@ var __listen_to_the_ft = (function(){
 
 		}
 
+		olEl.appendChild(iconImg);
 		docFrag.appendChild(olEl);
 
 		return docFrag;

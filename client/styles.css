@@ -12,6 +12,7 @@ body, html{
   color: white;
   font-family: MetricWeb, sans-serif;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch; 
 }
 
 header{
@@ -229,7 +230,7 @@ body[data-offline="true"] .offline{
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
 }
 
 .view ol li{
@@ -240,6 +241,15 @@ body[data-offline="true"] .offline{
   padding: 0.8em 1em;
   height: auto;
   box-sizing: border-box;
+}
+
+.view ol .iconImage{
+  width: 35px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 1em;
+  opacity: 0.3;
 }
 
 .view#audioItems {
@@ -309,6 +319,7 @@ body[data-offline="true"] .offline{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
 }
 
 .view#audioItems .textContainer a[data-downloading="true"], .view#audioItems .textContainer a[data-downloaded="true"]{
