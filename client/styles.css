@@ -291,6 +291,10 @@ body[data-offline="true"] .offline{
   background: transparent;
 }
 
+.view#audioItems [data-unavailable='true']{
+  opacity: 0.5;
+}
+
 .view#audioItems .textContainer{
   width: 80%;
   display: flex;
@@ -305,6 +309,10 @@ body[data-offline="true"] .offline{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.view#audioItems .textContainer a[data-downloading="true"], .view#audioItems .textContainer a[data-downloaded="true"]{
+  color: #676767;
 }
 
 .view#audioItems .textContainer span{

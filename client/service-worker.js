@@ -1,6 +1,6 @@
 /* global self caches*/
 
-var CACHE_NAME = "FTLABS-LttFT-V2";
+var CACHE_NAME = 'FTLABS-LttFT-V2';
 var itemsToCache = [
 	'/',
 	'/index.html',
@@ -92,8 +92,7 @@ self.addEventListener('message', function(event){
 	if(event.data.action === 'purgeUserSpecificCache'){
 		console.log('Purging cache action recieved');
 		purgeURLs(event);
-
-	}
+	} 
 
 });
 

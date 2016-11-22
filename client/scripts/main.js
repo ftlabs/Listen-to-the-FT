@@ -3,6 +3,7 @@ var __listen_to_the_ft = (function(){
 
 	'use strict';
 
+	var CACHE_NAME = 'FTLABS-LttFT-V2';
 	var localData = (function(){
 		
 		var storageKey = 'ftlabs-lttFT';
@@ -268,8 +269,10 @@ var __listen_to_the_ft = (function(){
 		views.login.dataset.visible = 'true';
 
 		components.player.dataset.active = 'false';
+		components.player.dataset.uuid = '';
 		components.player.pause();
 		components.player.currentTime = 0;
+		components.player.src = '';
 
 	}
 
@@ -298,14 +301,45 @@ var __listen_to_the_ft = (function(){
 
 	function purgeUserSpecificCache(){
 
+		localStorage.clear();
 		if(navigator.serviceWorker){
-			navigator.serviceWorker.controller.postMessage({
-				action : 'purgeUserSpecificCache'
-			});
+
+			if(navigator.serviceWorker.controller !== undefined){
+				try{
+					navigator.serviceWorker.controller.postMessage({
+						action : 'purgeUserSpecificCache'
+					});
+				} catch (err){
+					console.log('Failed to purge cache', err);
+				}
+
+			}
+
 		}
-	
+
 	}
-	
+
+	function checkFileAvailability(url){
+
+		if(window.caches){
+		
+			return caches.open(CACHE_NAME)
+				.then(function(cache){
+
+					return cache.match(new Request(url));
+
+				})
+				.then(result => {
+					return result !== undefined;
+				})
+			;
+		
+		} else {
+			return Promise.resolve(null);
+		}
+
+	}
+
 	function hasAudioBeenPlayed(audioID){
 
 		var listenedToArticles = localData.read('playedArticles');
@@ -648,6 +682,7 @@ var __listen_to_the_ft = (function(){
 				var actionsContainer = document.createElement('div');
 				var playBtn = document.createElement('a');
 				var readBtn = document.createElement('a');
+				var downloadBtn = document.createElement('a');
 
 				var dropDownArrow = document.createElement('span');
 
@@ -661,8 +696,23 @@ var __listen_to_the_ft = (function(){
 
 				playBtn.textContent = 'Listen';
 				readBtn.textContent = 'Read';
+				downloadBtn.textContent = 'Download';
 
 				playBtn.dataset.audiourl = item.audioUrl;
+				downloadBtn.dataset.audiourl = item.audioUrl;
+
+				checkFileAvailability(item.audioUrl)
+					.then(available => {
+
+						if(available === true){
+							downloadBtn.dataset.downloaded = 'true';
+							downloadBtn.textContent = 'Downloaded';
+						} else if(available === null){
+							downloadBtn.dataset.visible = 'false';
+						}
+
+					})
+				;
 
 				(function(item, container){
 
@@ -681,10 +731,47 @@ var __listen_to_the_ft = (function(){
 						window.open('https://ft.com/content/' + item.id);
 					}, false);
 
+					downloadBtn.addEventListener('click', function(e){
+						prevent(e);
+
+						if(!networkState.get()){
+							overlay.set(
+								'No network connection', 
+								'Sorry, we\'re unable to download this file without an internet connection.',
+								'OK'
+							);
+							overlay.show();
+						} else if(this.dataset.downloaded === 'true' || this.dataset.downloading === 'true'){
+							return;
+						} else {
+
+							(function(el){
+
+								fetch(el.dataset.audiourl, {mode : 'no-cors'})
+									.then(function(){
+										el.dataset.downloaded = 'true';
+										el.textContent = 'Downloaded';	
+									})
+									.catch(err => {
+										this.dataset.downloading = 'false';										
+										this.dataset.downloaded = 'false';
+									})
+								;
+
+							})(this);
+
+							this.dataset.downloading = 'true';
+							this.textContent = 'Downloading...';
+						
+					}
+
+					}, false);
+
 				})(item, li);
 
 				actionsContainer.appendChild(playBtn);
 				actionsContainer.appendChild(readBtn);
+				actionsContainer.appendChild(downloadBtn);
 
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
