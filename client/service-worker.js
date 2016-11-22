@@ -94,20 +94,6 @@ self.addEventListener('message', function(event){
 		purgeURLs(event);
 	} 
 
-	if(event.data.action === 'checkFileAvailability'){
-
-		caches.open(CACHE_NAME).then(function(cache) {
-			var isAvailable = cache.match(event.data.info)
-				.then(Y => {
-					console.log(Y, event.data.info);
-				})
-			;
-			console.log('isAvailable', isAvailable);
-			// return isAvailable
-		})
-
-	}
-
 });
 
 function purgeURLs(event){

@@ -703,12 +703,12 @@ var __listen_to_the_ft = (function(){
 
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
-						console.log(available);
-						console.log(downloadBtn);
 
 						if(available === true){
 							downloadBtn.dataset.downloaded = 'true';
 							downloadBtn.textContent = 'Downloaded';
+						} else if(available === null){
+							downloadBtn.dataset.visible = 'false';
 						}
 
 					})
