@@ -765,8 +765,16 @@ var __listen_to_the_ft = (function(){
 
 								makeRequest(el.dataset.audiourl, {Origin : window.location.host})
 									.then(function(res){
+										return res.clone().blob()
+											.then(function(){
+												return res;
+											})
+										;
+									})
+									.then(function(res){
 
 										if(res.status === 200){
+											console.log('File downloaded');
 											el.dataset.downloaded = 'true';
 											el.textContent = 'Downloaded';
 
@@ -788,6 +796,7 @@ var __listen_to_the_ft = (function(){
 
 									})
 									.catch(err => {
+										console.log('Download error:',  err);
 										this.dataset.downloading = 'false';	
 										this.dataset.downloaded = 'false';
 										this.textContent = 'Download';
