@@ -216,9 +216,15 @@ var __listen_to_the_ft = (function(){
 		
 		function showOverlay(){
 			overlayElement.dataset.visible = 'true';
+			Array.from(document.querySelectorAll('.view')).forEach(view => {
+				view.dataset.blurred = 'true';
+			});
 		}
 
 		function hideOverlay(){
+			Array.from(document.querySelectorAll('.view')).forEach(view => {
+				view.dataset.blurred = 'false';
+			});
 			overlayElement.dataset.visible = 'false';
 		}
 

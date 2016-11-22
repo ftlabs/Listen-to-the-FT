@@ -80,6 +80,10 @@ header{
   position: absolute;
 }
 
+.view[data-blurred="true"]{
+  filter: blur(5px);
+}
+
 .view[data-visible="true"]{
   /*transform: translateX(0);*/
 }
