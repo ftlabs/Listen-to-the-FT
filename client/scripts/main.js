@@ -739,6 +739,7 @@ var __listen_to_the_ft = (function(){
 
 					playBtn.addEventListener('click', function(e){
 						prevent(e);
+						document.title = item.title;
 						playAudio(this.dataset.audiourl, item.id);
 						container.dataset.played = 'true';
 						Array.from(document.querySelectorAll('.playing')).forEach(el => {
