@@ -723,7 +723,7 @@ var __listen_to_the_ft = (function(){
 
 						if(available === true){
 							downloadBtn.dataset.downloaded = 'true';
-							downloadBtn.textContent = 'Downloaded';
+							downloadBtn.textContent = 'Available Offline';
 							li.dataset.offline = 'true';
 
 						} else if(available === false){
@@ -776,7 +776,7 @@ var __listen_to_the_ft = (function(){
 										if(res.status === 200){
 											console.log('File downloaded');
 											el.dataset.downloaded = 'true';
-											el.textContent = 'Downloaded';
+											el.textContent = 'Available Offline';
 
 											return caches.open(CACHE_NAME)
 												.then(function(cache){
