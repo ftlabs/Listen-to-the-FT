@@ -278,7 +278,7 @@ body[data-offline="true"] .offline{
 }
 
 .view#audioItems li[data-expanded="true"]{
-  max-height: 30vh;
+  max-height: 50vh;
 }
 
 .view#audioItems li.playing{
@@ -329,6 +329,13 @@ body[data-offline="true"] .offline{
 
 .view#audioItems .textContainer a[data-downloading="true"], .view#audioItems .textContainer a[data-downloaded="true"]{
   color: #676767;
+}
+
+.view#audioItems li[data-offline="true"]{
+  background-image: url(/assets/images/available_offline.png);
+  background-size: 15px;
+  background-position: 0.5em 1.2em;
+  background-repeat: no-repeat;
 }
 
 body[data-offline="true"] .view#audioItems .textContainer a.download:not([data-downloaded="true"]){
