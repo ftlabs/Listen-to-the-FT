@@ -700,6 +700,10 @@ var __listen_to_the_ft = (function(){
 
 				playBtn.dataset.audiourl = item.audioUrl;
 				downloadBtn.dataset.audiourl = item.audioUrl;
+				
+				playBtn.classList.add('play');
+				readBtn.classList.add('read');
+				downloadBtn.classList.add('download');
 
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
@@ -751,14 +755,27 @@ var __listen_to_the_ft = (function(){
 
 							(function(el){
 
-								fetch(el.dataset.audiourl, {Origin : window.location.host})
+								makeRequest(el.dataset.audiourl, {Origin : window.location.host})
 									.then(function(res){
-										el.dataset.downloaded = 'true';
-										el.textContent = 'Downloaded';	
+
+										if(res.status === 200){
+											el.dataset.downloaded = 'true';
+											el.textContent = 'Downloaded';
+										} else {
+											overlay.set(
+												'Download Failed', 
+												'Sorry, we tried to download "' + item.title + '" but the request failed. You can tap the "Download" button to try again',
+												'OK'
+											);
+											overlay.show();
+											throw res;
+										}
+
 									})
 									.catch(err => {
-										this.dataset.downloading = 'false';										
+										this.dataset.downloading = 'false';	
 										this.dataset.downloaded = 'false';
+										this.textContent = 'Downloading';
 									})
 								;
 

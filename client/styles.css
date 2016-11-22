@@ -315,6 +315,10 @@ body[data-offline="true"] .offline{
   color: #676767;
 }
 
+body[data-offline="true"] .view#audioItems .textContainer a.download:not([data-downloaded="true"]){
+  display: none;
+}
+
 .view#audioItems .textContainer span{
   color: #d3d3d3;
   font-size: 14px;
