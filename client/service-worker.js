@@ -8,6 +8,7 @@ var itemsToCache = [
 	'/animate.css',
 	'/audio.css',
 	'/scripts/main.js',
+	'/assets/images/available_offline.png',
 	'https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch',
 	'https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Ahamburger?url=fticon%253Ahamburger&source=ftlabs-listen-to-the-ft&tint=%23505050&fit=cover&format=auto&quality=lowest',
 	'https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium',
