@@ -4,6 +4,7 @@ var __listen_to_the_ft = (function(){
 	'use strict';
 
 	var CACHE_NAME = 'FTLABS-LttFT-V2';
+	var originalTitle = document.title;
 	var localData = (function(){
 		
 		var storageKey = 'ftlabs-lttFT';
@@ -933,6 +934,7 @@ var __listen_to_the_ft = (function(){
 		components.player.addEventListener('ended', function(){
 			console.log('Audio finished');
 			this.dataset.active = 'false';
+			document.title = originalTitle;
 		}, false);
 
 		components.menu.addEventListener('click', function(){
