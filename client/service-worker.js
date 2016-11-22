@@ -34,7 +34,7 @@ self.addEventListener('install', function(event) {
 var routesToNotCache = ['/user/login', '/__reachable'];
 
 self.addEventListener('fetch', function(event) {
-
+	// console.log('Intercepted fetch:', event);
 	event.respondWith(
 		caches.open(CACHE_NAME).then(function(cache) {
 			return cache.match(event.request)
@@ -59,6 +59,7 @@ self.addEventListener('fetch', function(event) {
 								});
 
 								if(shouldCache){
+									// console.log('Decided to cache:', event.request.url);
 									cache.put(event.request, networkResponse.clone());
 								}
 

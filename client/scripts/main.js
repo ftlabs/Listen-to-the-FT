@@ -707,6 +707,10 @@ var __listen_to_the_ft = (function(){
 						if(available === true){
 							downloadBtn.dataset.downloaded = 'true';
 							downloadBtn.textContent = 'Downloaded';
+							li.dataset.offline = 'true';
+
+						} else if(available === false){
+							li.dataset.offline = 'false';
 						} else if(available === null){
 							downloadBtn.dataset.visible = 'false';
 						}
@@ -747,8 +751,8 @@ var __listen_to_the_ft = (function(){
 
 							(function(el){
 
-								fetch(el.dataset.audiourl, {mode : 'no-cors'})
-									.then(function(){
+								fetch(el.dataset.audiourl, {Origin : window.location.host})
+									.then(function(res){
 										el.dataset.downloaded = 'true';
 										el.textContent = 'Downloaded';	
 									})
