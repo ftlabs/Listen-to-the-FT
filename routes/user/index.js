@@ -47,7 +47,7 @@ router.use(validateSession);
 
 router.get('/topics', function(req, res) {
 
-	debug("Valid session for " + res.locals.userUUID);
+	debug(`Valid session for ${res.locals.userUUID}`);
 
 	myft.topics(res.locals.userUUID)
 		.then(result => {
