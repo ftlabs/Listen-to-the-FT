@@ -33,7 +33,12 @@ router.post('/login', function(req, res) {
 			res.cookie('ftlabsSession', membershipResponse.sessionToken, cookieOptions);
 			res.cookie('ftlabsSession_s', membershipResponse.secureSessionToken, cookieOptions);
 
-			res.send(membershipResponse);
+			return membership.validateSession(membershipResponse.secureSessionToken, true)
+				.then(uuid => {
+					membershipResponse.uuid = uuid;
+					res.send(membershipResponse);
+				})
+			;
 		})
 		.catch(err => {
 			debug(err);

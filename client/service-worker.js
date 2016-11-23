@@ -17,7 +17,7 @@ var itemsToCache = [
 	'https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft-masthead?url=fticon%253Abrand-ft-masthead&source=ftlabs-listen-to-the-ft&fit=cover&format=auto&quality=medium',
 	'https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft?url=fticon%253Abrand-ft&source=ftlabs-listen-to-the-ft&width=100&tint=white&fit=cover&format=auto&quality=medium',
 	'https://origami-build.ft.com/v2/bundles/css?modules=o-fonts@^2.1.3,o-forms@^3.2.2,o-buttons@^4.4.1,o-loading@^1.0.0-beta.1,o-header@^6.11.1',
-	'https://origami-build.ft.com/v2/bundles/js?modules=o-fonts@^2.1.3,o-forms@^3.2.2,o-buttons@^4.4.1,o-loading@^1.0.0-beta.1,o-header@^6.11.1'
+	'https://origami-build.ft.com/v2/bundles/js?modules=o-fonts@^2.1.3,o-forms@^3.2.2,o-buttons@^4.4.1,o-loading@^1.0.0-beta.1,o-header@^6.11.1,o-tracking@^1.1.15'
 ];
 
 self.addEventListener('install', function(event) {
