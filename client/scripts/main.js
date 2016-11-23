@@ -269,6 +269,8 @@ var __listen_to_the_ft = (function(){
 	};
 
 	function handleLogin(){
+
+		purgeUserSpecificCache();
 		components.loading.dataset.visible = "false";
 		components.menu.dataset.visible = 'false';
 		components.drawer.dataset.opened = 'false';
@@ -303,6 +305,25 @@ var __listen_to_the_ft = (function(){
 			'OK'
 		);
 		overlay.show();
+
+	}
+
+	function cacheItemsForApp(){
+		
+		if(navigator.serviceWorker){
+
+			if(navigator.serviceWorker.controller !== undefined){
+				try{
+					navigator.serviceWorker.controller.postMessage({
+						action : 'cacheItemsForApp'
+					});
+				} catch (err){
+					console.log('Failed to cache items for app', err);
+				}
+
+			}
+
+		}
 
 	}
 
@@ -857,7 +878,6 @@ var __listen_to_the_ft = (function(){
 	function login(creds){
 
 		components.loading.dataset.visible = 'true';
-		purgeUserSpecificCache();
 		return makeRequest('/user/login', {
 				body : JSON.stringify(creds),
 				method : 'POST',
@@ -899,6 +919,7 @@ var __listen_to_the_ft = (function(){
 				views.login.dataset.visible = 'false';
 				components.menu.dataset.visible = 'true';
 				generateFirstView();
+				cacheItemsForApp();
 			})
 			.catch(err => {
 				// console.error(err);
@@ -924,7 +945,6 @@ var __listen_to_the_ft = (function(){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
 		} else {
-			purgeUserSpecificCache();
 			components.loading.dataset.visible = 'false';
 			views.login.dataset.visible = 'true';
 		}
