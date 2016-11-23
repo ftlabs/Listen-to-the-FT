@@ -880,21 +880,22 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	const loginForm = views.login.querySelector('form');
 
-	views.login.querySelector('form').addEventListener('submit', function(e){
+	loginForm.addEventListener('submit', function(e){
 
 		prevent(e);
 
 		var loginBody = {};
 
-		Array.from(this.querySelectorAll('input:not([type="button"])')).forEach(element => {
+		Array.from(loginForm.querySelectorAll('input:not([type="button"])')).forEach(element => {
 			loginBody[element.name] = element.value;
 		});
 
 		loginBody.rememberMe = loginBody.rememberMe === 'on';
 
 		login(loginBody)
-			.then(result => {
+			.then(function(){
 				views.login.dataset.visible = 'false';
 				components.menu.dataset.visible = 'true';
 				generateFirstView();

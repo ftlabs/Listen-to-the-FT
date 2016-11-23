@@ -27,14 +27,6 @@ module.exports = function(req, res, next){
 		res.locals.userSession = ftlabsSessionToken;
 		res.locals.isSecure = false;
 	}
-	// else if(req.cookies['FTSession_s']){
-	// 	res.locals.userSession = req.cookies['FTSession_s'];
-	// 	res.locals.isSecure = true;
-	// }
-	// else if (req.cookies['FTSession']){
-	// 	res.locals.userSession = req.cookies['FTSession'];
-	// 	res.locals.isSecure = false;
-	// }
 	
 	debug(secureSessionToken, sessionToken, ftlabsSessionToken, ftlabsSecureSessionToken);
 	debug(res.locals.userSession, res.locals.isSecure);
