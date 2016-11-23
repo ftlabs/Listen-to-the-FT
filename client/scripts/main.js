@@ -269,6 +269,8 @@ var __listen_to_the_ft = (function(){
 	};
 
 	function handleLogin(){
+
+		purgeUserSpecificCache();
 		components.loading.dataset.visible = "false";
 		components.menu.dataset.visible = 'false';
 		components.drawer.dataset.opened = 'false';
@@ -857,7 +859,6 @@ var __listen_to_the_ft = (function(){
 	function login(creds){
 
 		components.loading.dataset.visible = 'true';
-		purgeUserSpecificCache();
 		return makeRequest('/user/login', {
 				body : JSON.stringify(creds),
 				method : 'POST',
@@ -924,7 +925,6 @@ var __listen_to_the_ft = (function(){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
 		} else {
-			purgeUserSpecificCache();
 			components.loading.dataset.visible = 'false';
 			views.login.dataset.visible = 'true';
 		}
