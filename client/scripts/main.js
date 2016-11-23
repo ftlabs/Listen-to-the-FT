@@ -308,6 +308,25 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	function cacheItemsForApp(){
+		
+		if(navigator.serviceWorker){
+
+			if(navigator.serviceWorker.controller !== undefined){
+				try{
+					navigator.serviceWorker.controller.postMessage({
+						action : 'cacheItemsForApp'
+					});
+				} catch (err){
+					console.log('Failed to cache items for app', err);
+				}
+
+			}
+
+		}
+
+	}
+
 	function purgeUserSpecificCache(){
 
 		localStorage.clear();
@@ -900,6 +919,7 @@ var __listen_to_the_ft = (function(){
 				views.login.dataset.visible = 'false';
 				components.menu.dataset.visible = 'true';
 				generateFirstView();
+				cacheItemsForApp();
 			})
 			.catch(err => {
 				// console.error(err);

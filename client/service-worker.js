@@ -23,13 +23,7 @@ var itemsToCache = [
 self.addEventListener('install', function(event) {
 
 	event.waitUntil( 
-		caches.open(CACHE_NAME)
-		.then(function(cache) {
-			console.log('Opened cache');
-			return cache.addAll(itemsToCache);
-
-		})
-		
+		cacheAppItems()	
 	);
 
 });
@@ -96,7 +90,9 @@ self.addEventListener('message', function(event){
 	if(event.data.action === 'purgeUserSpecificCache'){
 		console.log('Purging cache action recieved');
 		purgeURLs(event);
-	} 
+	} else if(event.data.action === 'cacheItemsForApp'){
+		cacheAppItems();
+	}
 
 });
 
@@ -116,4 +112,21 @@ function purgeURLs(event){
 
 	);
 
+}
+
+function cacheAppItems(){
+	console.log('Caching all app items')
+	return caches.open(CACHE_NAME)
+		.then(function(cache) {
+			console.log('Opened cache');
+			return cache.addAll(itemsToCache);
+
+		})
+		.then(function(){
+			console.log('cacheItemsForApp successful');
+		})
+		.catch(err => {
+			console.log('Failed to cache all items');
+		})
+	;
 }
