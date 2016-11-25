@@ -1038,7 +1038,8 @@ var __listen_to_the_ft = (function(){
 			trackEvent({
 				action : 'play',
 				category : 'media',
-				contentID : this.dataset.uuid
+				contentID : this.dataset.uuid,
+				position : this.currentTime
 			});
 		}, false);
 
@@ -1046,9 +1047,19 @@ var __listen_to_the_ft = (function(){
 			trackEvent({
 				action : 'pause',
 				category : 'media',
-				contentID : this.dataset.uuid
+				contentID : this.dataset.uuid,
+				position : this.currentTime
 			});
-		}, false);	
+		}, false);
+
+		components.player.addEventListener('seeked', function(){
+			trackEvent({
+				action : 'seeked',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
+		}, false);
 
 		components.menu.addEventListener('click', function(){
 
