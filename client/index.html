@@ -74,7 +74,6 @@
 		<div class="o-tracking o--if-no-js"></div>
 
 		<script>
-		// Send a custom event
 		function initLocalScript() {
 			oTracking.page({ detail: { url: document.URL }, bubbles: true});
 		}
@@ -106,15 +105,6 @@
 			} else {
 				__listen_to_the_ft.init();
 			}
-
-			/*document.body.dispatchEvent(new CustomEvent( 'oTracking.event', {
-				detail: {
-					category: 'element',
-					action: 'click',
-					form: 'submit'
-				},
-				bubbles: true
-			}));*/
 
 		</script>
 
