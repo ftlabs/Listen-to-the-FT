@@ -281,13 +281,6 @@ body[data-offline="true"] .offline{
   max-height: 50vh;
 }
 
-.view#audioItems li.playing{
-  background: url('/assets/images/playing.png');
-  background-size: 15px;
-  background-repeat: no-repeat;
-  background-position: 0.6em 1em;
-}
-
 .view#audioItems li[data-expanded="true"] span.dropDownArrow{
   background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');  
 }
@@ -336,6 +329,13 @@ body[data-offline="true"] .offline{
   background-size: 15px;
   background-position: 0.5em 1.2em;
   background-repeat: no-repeat;
+}
+
+.view#audioItems li.playing{
+  background: url('/assets/images/playing.png');
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 0.6em 1em;
 }
 
 body[data-offline="true"] .view#audioItems .textContainer a.download:not([data-downloaded="true"]){
