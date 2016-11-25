@@ -282,7 +282,7 @@ var __listen_to_the_ft = (function(){
 
 	function trackEvent(details){
 
-		details.userID = details.userID || localData.read('uuid');
+		details.userid = details.userid || localData.read('uuid');
 
 		document.body.dispatchEvent(new CustomEvent( 'oTracking.event', {
 			detail: details,
