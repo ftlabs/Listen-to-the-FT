@@ -61,11 +61,28 @@
 		</div>
 
 		<div class="component" id="drawer" data-opened="false"></div>
+		
+		<script type="application/json" data-o-tracking-config="">
+			{
+				"server": "https://spoor-api.ft.com/px.gif",
+				"context": {
+					"product": "ftlabs-LttFT"
+				}
+			}
+		</script>
 
-		<script src="//origami-build.ft.com/v2/bundles/js?modules=o-fonts@^2.1.3,o-forms@^3.2.2,o-buttons@^4.4.1,o-loading@^1.0.0-beta.1,o-header@^6.11.1" defer async></script>
+		<div class="o-tracking o--if-no-js"></div>
+
+		<script>
+		function initLocalScript() {
+			oTracking.page({ detail: { url: document.URL }, bubbles: true});
+		}
+		</script>
+
+		<script src="//origami-build.ft.com/v2/bundles/js?modules=o-fonts@^2.1.3,o-forms@^3.2.2,o-buttons@^4.4.1,o-loading@^1.0.0-beta.1,o-header@^6.11.1,o-tracking@^1.1.15"></script>
 		<script src="/scripts/main.js"></script>
 		<script>
-
+			
 			if ('serviceWorker' in navigator) {
 				
 				navigator.serviceWorker.addEventListener('message', function(event) {
@@ -88,7 +105,6 @@
 			} else {
 				__listen_to_the_ft.init();
 			}
-
 
 		</script>
 

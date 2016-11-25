@@ -65,11 +65,23 @@ var __listen_to_the_ft = (function(){
 			if(off === networkHistory.length){
 				connected = false;
 				document.body.dataset.offline = 'true';
+				trackEvent({
+					action : 'networkStatus',
+					category : 'connectivity',
+					status : 'offline',
+					time : Math.floor(new Date() / 1000)
+				});
 			}
 
 			if(connected === false && on === networkHistory.length ){
 				connected = true;
 				document.body.dataset.offline = 'false';
+				trackEvent({
+					action : 'networkStatus',
+					category : 'connectivity',
+					status : 'online',
+					time : Math.floor(new Date() / 1000)
+				});
 			}
 
 		}
@@ -267,6 +279,17 @@ var __listen_to_the_ft = (function(){
 		;
 
 	};
+
+	function trackEvent(details){
+
+		details.userID = details.userID || localData.read('uuid');
+
+		document.body.dispatchEvent(new CustomEvent( 'oTracking.event', {
+			detail: details,
+			bubbles: true
+		}));
+
+	}
 
 	function handleLogin(){
 
@@ -635,6 +658,11 @@ var __listen_to_the_ft = (function(){
 						}
 					})
 				;
+				trackEvent({
+					action : 'click',
+					category : 'menuSection',
+					sectionID : section.uuid
+				});
 			})
 
 			sectionOl.appendChild(sectionLi);
@@ -768,6 +796,11 @@ var __listen_to_the_ft = (function(){
 							el.classList.remove('playing');
 						});
 						container.classList.add('playing');
+						trackEvent({
+							action : 'listen',
+							category : 'media',
+							contentID : item.id
+						});
 					}, false);
 
 					downloadBtn.addEventListener('click', function(e){
@@ -785,6 +818,12 @@ var __listen_to_the_ft = (function(){
 						} else {
 
 							(function(el){
+
+								trackEvent({
+									action : 'download',
+									category : 'media',
+									contentID : item.id
+								});
 
 								makeRequest(el.dataset.audiourl, {Origin : window.location.host})
 									.then(function(res){
@@ -836,6 +875,16 @@ var __listen_to_the_ft = (function(){
 
 					}, false);
 
+					readBtn.addEventListener('click', function(){
+
+						trackEvent({
+							action : 'read',
+							category : 'media',
+							contentID : item.id
+						});
+
+					}, false);
+
 				})(item, li);
 
 				actionsContainer.appendChild(playBtn);
@@ -860,6 +909,11 @@ var __listen_to_the_ft = (function(){
 				li.addEventListener('click', function(){
 					components.player.setAttribute('title', item.title);
 					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
+					trackEvent({
+						action : 'click',
+						category : 'item',
+						expanded : this.dataset.expanded
+					});
 				}, false);
 
 				olEl.appendChild(li);
@@ -915,11 +969,17 @@ var __listen_to_the_ft = (function(){
 		loginBody.rememberMe = loginBody.rememberMe === 'on';
 
 		login(loginBody)
-			.then(function(){
+			.then(function(response){
+				localData.set('uuid', response.uuid);
 				views.login.dataset.visible = 'false';
 				components.menu.dataset.visible = 'true';
 				generateFirstView();
 				cacheItemsForApp();
+				trackEvent({
+					action : 'login',
+					category : 'app',
+					userID : localData.read('uuid')
+				});
 			})
 			.catch(err => {
 				// console.error(err);
@@ -941,6 +1001,16 @@ var __listen_to_the_ft = (function(){
 
 	function initialise(){
 		
+		document.body.dispatchEvent(new CustomEvent('oTracking.page', {
+			detail: {
+				url: document.URL,
+				action : 'pageLoaded',
+				uuid : localData.read('uuid')
+			},
+			bubbles: true
+		}));
+
+
 		if(checkLoginStatus()){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
@@ -957,14 +1027,56 @@ var __listen_to_the_ft = (function(){
 			console.log('Audio finished');
 			this.dataset.active = 'false';
 			document.title = originalTitle;
+			trackEvent({
+				action : 'finished',
+				category : 'media',
+				contentID : this.dataset.uuid
+			});
+		}, false);
+
+		components.player.addEventListener('play', function(){
+			trackEvent({
+				action : 'play',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
+		}, false);
+
+		components.player.addEventListener('pause', function(){
+			trackEvent({
+				action : 'pause',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
+		}, false);
+
+		components.player.addEventListener('seeked', function(){
+			trackEvent({
+				action : 'seeked',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
 		}, false);
 
 		components.menu.addEventListener('click', function(){
 
 			if(components.drawer.dataset.opened === 'false'){
 				components.drawer.dataset.opened = 'true';
+				trackEvent({
+					action : 'click',
+					category : 'menu',
+					type : 'opened'
+				});
 			} else {
 				components.drawer.dataset.opened = 'false';
+				trackEvent({
+					action : 'click',
+					category : 'menu',
+					type : 'closed'
+				});
 			}
 
 		}, false);
