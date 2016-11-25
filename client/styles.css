@@ -235,7 +235,7 @@ body[data-offline="true"] .offline{
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  padding-bottom: 30px;
+  padding-bottom: 45px;
 }
 
 .view ol li{

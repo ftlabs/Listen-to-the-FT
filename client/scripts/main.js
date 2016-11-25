@@ -268,6 +268,17 @@ var __listen_to_the_ft = (function(){
 
 	};
 
+	function trackEvent(details){
+
+		details.uuid = details.uuid || localData.read('uuid');
+
+		document.body.dispatchEvent(new CustomEvent( 'oTracking.event', {
+			detail: details,
+			bubbles: true
+		}));
+
+	}
+
 	function handleLogin(){
 
 		purgeUserSpecificCache();
@@ -915,11 +926,15 @@ var __listen_to_the_ft = (function(){
 		loginBody.rememberMe = loginBody.rememberMe === 'on';
 
 		login(loginBody)
-			.then(function(){
+			.then(function(response){
+				localData.set('uuid', response.uuid);
 				views.login.dataset.visible = 'false';
 				components.menu.dataset.visible = 'true';
 				generateFirstView();
 				cacheItemsForApp();
+				trackEvent({
+					action : 'login'
+				});
 			})
 			.catch(err => {
 				// console.error(err);
@@ -941,6 +956,16 @@ var __listen_to_the_ft = (function(){
 
 	function initialise(){
 		
+		document.body.dispatchEvent(new CustomEvent('oTracking.page', {
+			detail: {
+				url: document.URL,
+				action : 'pageLoaded',
+				uuid : localData.read('uuid')
+			},
+			bubbles: true
+		}));
+
+
 		if(checkLoginStatus()){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
