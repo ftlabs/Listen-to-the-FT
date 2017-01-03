@@ -5,30 +5,14 @@ module.exports = function(req, res, next){
 
 	debug('Validating session...');
 
-	const secureSessionToken = req.get('secureSessionToken');
-	const sessionToken = req.get('sessionToken')
+	const sessionToken = req.cookies['FTSession'];
 
-	const ftlabsSessionToken = req.cookies['ftlabsSession'];
-	const ftlabsSecureSessionToken = req.cookies['ftlabsSession_s'];
-
-	if(secureSessionToken){
-		res.locals.userSession = secureSessionToken;
-		res.locals.isSecure = true;
-	}
-	else if(sessionToken){
+	if(sessionToken){
 		res.locals.userSession = sessionToken;
 		res.locals.isSecure = false;
 	}
-	else if(ftlabsSecureSessionToken){
-		res.locals.userSession = ftlabsSecureSessionToken;
-		res.locals.isSecure = true;
-	}
-	else if(ftlabsSessionToken){
-		res.locals.userSession = ftlabsSessionToken;
-		res.locals.isSecure = false;
-	}
 	
-	debug(secureSessionToken, sessionToken, ftlabsSessionToken, ftlabsSecureSessionToken);
+	debug(sessionToken);
 	debug(res.locals.userSession, res.locals.isSecure);
 
 	if(res.locals.userSession === undefined){

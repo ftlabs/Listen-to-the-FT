@@ -14,31 +14,13 @@ router.get('/', function(req, res) {
   res.end();
 });
 
-router.post('/login', function(req, res) {
+router.use(validateSession);
 
-	debug(req.body);
+router.get('/uuid', function(req, res, next){
 
-	debug(req.cookies);
-	req.body.rememberMe = 'true';
-
-	res.clearCookie('ftlabsSession');
-	res.clearCookie('ftlabsSession_s');
-
-	membership.login(req.body, process.env.MEMBERSHIP_LOGIN_API_KEY)
-		.then(membershipResponse => {
-			debug(membershipResponse)
-						
-			const cookieOptions = { httpOnly : false, maxAge : 1000 * 60 * 60 * 24 * 7 };
-
-			res.cookie('ftlabsSession', membershipResponse.sessionToken, cookieOptions);
-			res.cookie('ftlabsSession_s', membershipResponse.secureSessionToken, cookieOptions);
-
-			return membership.validateSession(membershipResponse.secureSessionToken, true)
-				.then(uuid => {
-					membershipResponse.uuid = uuid;
-					res.send(membershipResponse);
-				})
-			;
+	membership.validateSession(req.cookies['FTSession'], false)
+		.then(uuid => {
+			res.json({uuid});
 		})
 		.catch(err => {
 			debug(err);
@@ -46,9 +28,8 @@ router.post('/login', function(req, res) {
 			res.end();
 		})
 	;
-});
 
-router.use(validateSession);
+});
 
 router.get('/topics', function(req, res) {
 
