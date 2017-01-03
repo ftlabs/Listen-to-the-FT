@@ -556,8 +556,8 @@ var __listen_to_the_ft = (function(){
 			var cookieSplit = cookie.split('=');
 			kvp[cookieSplit[0]] = cookieSplit[1];	
 		});
-		
-		return kvp.ftlabsSession || kvp.ftlabsSecureSession;
+
+		return kvp['FTSession'] || kvp['FTSession_S'];
 
 	}
 
@@ -717,7 +717,6 @@ var __listen_to_the_ft = (function(){
 			});
 
 		} else if(type === 'audioItems'){
-			// debugger;
 
 			if(listTitle){
 
@@ -929,75 +928,7 @@ var __listen_to_the_ft = (function(){
 
 	}
 
-	function login(creds){
-
-		components.loading.dataset.visible = 'true';
-		return makeRequest('/user/login', {
-				body : JSON.stringify(creds),
-				method : 'POST',
-				headers : {
-					'Content-Type' : 'application/json'
-				},
-				credentials : 'include'
-			})
-			.then(res => {
-				if(res.status !== 200){
-					components.loading.dataset.visible = 'false';
-					throw 'Login unsuccessful';
-				} else {
-					components.loading.dataset.visible = 'false';
-					return res;
-				}
-			})
-			.then(res => res.json())
-		;
-
-	}
-
 	const loginForm = views.login.querySelector('form');
-
-	loginForm.addEventListener('submit', function(e){
-
-		prevent(e);
-
-		var loginBody = {};
-
-		Array.from(loginForm.querySelectorAll('input:not([type="button"])')).forEach(element => {
-			loginBody[element.name] = element.value;
-		});
-
-		loginBody.rememberMe = loginBody.rememberMe === 'on';
-
-		login(loginBody)
-			.then(function(response){
-				localData.set('uuid', response.uuid);
-				views.login.dataset.visible = 'false';
-				components.menu.dataset.visible = 'true';
-				generateFirstView();
-				cacheItemsForApp();
-				trackEvent({
-					action : 'login',
-					category : 'app',
-					userID : localData.read('uuid')
-				});
-			})
-			.catch(err => {
-				// console.error(err);
-				if(err.timeout){
-					handleTimeout();
-				} else {
-					overlay.set(
-						'Login Failed', 
-						'The credentials passed were not valid.',
-						'OK'
-					);
-					overlay.show();
-				}
-
-			})
-		;
-
-	}, false);
 
 	function initialise(){
 		
@@ -1014,9 +945,35 @@ var __listen_to_the_ft = (function(){
 		if(checkLoginStatus()){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
+			if(localData.read('loggedin') === 'false'){
+				cacheItemsForApp();
+				makeRequest('/user/uuid', {credentials : 'include'})
+					.then(res => {
+						if(res.status !== 200){
+							throw res;
+						} else {
+							return res;
+						}
+					})
+					.then(res => res.json())
+					.then(data => {
+						localData.set('loggedin', 'true');
+						localData.set('uuid', data.uuid);
+						trackEvent({
+							action : 'login',
+							category : 'app',
+							userID : localData.read('uuid')
+						});
+					})
+					.catch(err => {
+						console.log(err);
+					})
+				;
+			}
 		} else {
 			components.loading.dataset.visible = 'false';
 			views.login.dataset.visible = 'true';
+			localData.set('loggedin', 'false');
 		}
 
 		components.back.addEventListener('click', function(){

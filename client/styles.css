@@ -15,6 +15,13 @@ body, html{
   -webkit-overflow-scrolling: touch; 
 }
 
+p a[href]{
+  color: #26747a;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px dotted #26747a;
+}
+
 header{
   background: #FFF1E0;
   position: fixed;
@@ -96,8 +103,17 @@ header{
 
 .view#login{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   transform: translateX(0);
+  justify-content: center;
+}
+
+.view#login p{
+  margin-top: 0;
+}
+
+.view#login a.o-buttons{
+  width: 100%;
 }
 
 form{
@@ -318,6 +334,7 @@ body[data-offline="true"] .offline{
   overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none;
+  cursor: default;
 }
 
 .view#audioItems .textContainer a[data-downloading="true"], .view#audioItems .textContainer a[data-downloaded="true"]{
@@ -359,4 +376,5 @@ body[data-offline="true"] .view#audioItems .textContainer a.download:not([data-d
 
 .view#audioItems .actionsContainer a{
   margin-right: 1em;
+  cursor: pointer;
 }
