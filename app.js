@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/__reachable', function(req, res){ res.end();});
+app.use('^/__reachable|/__gtg', function(req, res){ res.end();});
 app.use('/user', require('./routes/user'));
 app.use('/audio', require('./routes/audio'));
 
