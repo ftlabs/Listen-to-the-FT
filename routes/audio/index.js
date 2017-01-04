@@ -56,7 +56,8 @@ function getTopics(req, res){
 							
 							if(isValidTopic){
 								debug(content);
-								return Promise.resolve({
+
+								const information = {
 									id : content.id,
 									title : content.title,
 									standfirst : content.standfirst,
@@ -65,9 +66,29 @@ function getTopics(req, res){
 									audioUrl : generatePublicS3URL(content.id),
 									hasTopicIDs : validTopicIDs,
 									published : content.publishedDate
-								});
-							}
-							else{
+								};
+
+								return fetch(`${process.env.AUDIO_STATS_SERVICE}/check/${content.id}`)
+									.then(res => {
+										if(res.status !== 200){
+											throw res;
+										} else {
+											return res;
+										}
+									})
+									.then(res => res.json())
+									.then(data => {
+										information.size = data.size;
+										information.duration = data.duration;
+										return information;
+									})
+									.catch(err => {
+										debug(err);
+										return Promise.resolve(information);
+									})
+								;
+								
+							} else {
 								return Promise.resolve({});
 							}
 						})
@@ -85,7 +106,6 @@ function getTopics(req, res){
 							res.json(data);
 
 						})
-						.then(output => res.send(output))
 					;
 
 				})
