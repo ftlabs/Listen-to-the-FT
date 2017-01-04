@@ -743,15 +743,18 @@ var __listen_to_the_ft = (function(){
 				var readBtn = document.createElement('a');
 				var downloadBtn = document.createElement('a');
 
+				var duration = document.createElement('div');
 				var dropDownArrow = document.createElement('span');
 
 				textContainer.setAttribute('class', 'textContainer');
 				actionsContainer.setAttribute('class', 'actionsContainer');
+				duration.setAttribute('class', 'duration');
 				dropDownArrow.setAttribute('class', 'dropDownArrow');
 
 				headline.textContent = item.title;
 				byline.textContent = item.byline;
 				standfirst.textContent = item.standfirst;
+				duration.textContent = item.duration.humantime;
 
 				playBtn.textContent = 'Listen';
 				readBtn.textContent = 'Read';
@@ -766,6 +769,8 @@ var __listen_to_the_ft = (function(){
 
 				readBtn.setAttribute('href', 'https://ft.com/content/' + item.id);
 				readBtn.setAttribute('target', '_blank');
+
+				downloadBtn.dataset.size = `(${ (item.size / 1048576).toLocaleString('en', {maximumFractionDigits : 2}) } mb)`;
 
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
@@ -896,6 +901,7 @@ var __listen_to_the_ft = (function(){
 				textContainer.appendChild(actionsContainer);
 
 				li.appendChild(textContainer);
+				li.appendChild(duration);
 				li.appendChild(dropDownArrow);
 
 				li.dataset.uuid = item.id;
