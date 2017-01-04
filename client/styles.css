@@ -352,7 +352,7 @@ body[data-offline="true"] .offline{
 }
 
 .view#audioItems .textContainer a.download:not([data-downloaded="true"])::after{
-    content: attr(data-size);
+    content: attr(data-humansize);
     color: white;
     font-size: 0.8em;
     margin-left: 0.3em;
