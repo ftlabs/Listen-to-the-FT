@@ -103,9 +103,13 @@ header{
 
 .view#login{
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   transform: translateX(0);
   justify-content: center;
+}
+
+.view#login section.constraint{
+  max-width: 400px;
 }
 
 .view#login p{
