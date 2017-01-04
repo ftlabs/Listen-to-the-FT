@@ -307,7 +307,7 @@ body[data-offline="true"] .offline{
 
 .view#audioItems div.duration{
   font-weight: 600;
-  color: grey;
+  color: #d3d3d3;
   font-size: 0.9em;
   position: relative;
   margin-left: auto;
@@ -349,6 +349,13 @@ body[data-offline="true"] .offline{
   text-overflow: ellipsis;
   text-decoration: none;
   cursor: default;
+}
+
+.view#audioItems .textContainer a.download:not([data-downloaded="true"])::after{
+    content: attr(data-size);
+    color: white;
+    font-size: 0.8em;
+    margin-left: 0.3em;
 }
 
 .view#audioItems .textContainer a[data-downloading="true"], .view#audioItems .textContainer a[data-downloaded="true"]{

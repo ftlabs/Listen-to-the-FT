@@ -770,6 +770,8 @@ var __listen_to_the_ft = (function(){
 				readBtn.setAttribute('href', 'https://ft.com/content/' + item.id);
 				readBtn.setAttribute('target', '_blank');
 
+				downloadBtn.dataset.size = `(${ (item.size / 1048576).toLocaleString('en', {maximumFractionDigits : 2}) } mb)`;
+
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
 
