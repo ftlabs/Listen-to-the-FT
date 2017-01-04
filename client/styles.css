@@ -305,6 +305,16 @@ body[data-offline="true"] .offline{
   background-image: url('https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Aarrow-up?url=fticon%253Aarrow-up&source=ftlabs-listen-to-the-ft&tint=%23999999&fit=cover&format=auto&quality=medium');  
 }
 
+.view#audioItems div.duration{
+  font-weight: 600;
+  color: grey;
+  font-size: 0.9em;
+  position: relative;
+  margin-left: auto;
+  min-width: 40px;
+  text-align: center;
+}
+
 .view#audioItems span.dropDownArrow{
   width: 20px;
   height: 10px;
