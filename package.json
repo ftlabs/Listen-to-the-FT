@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "prestart" : "cp -a ./client ./public && rm ./public/scripts/main.js && gulp buildApp",
     "start": "node ./bin/www",
-    "postinstall": "cp -a ./client ./public && rm ./public/scripts/main.js && gulp buildApp",
     "clean" : "rm -rf ./public"
   },
   "dependencies": {
