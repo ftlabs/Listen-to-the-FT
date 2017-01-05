@@ -1,4 +1,4 @@
-/* global document localStorage window navigator*/
+/* global document localStorage window navigator URL*/
 var __listen_to_the_ft = (function(){
 
 	'use strict';
@@ -404,20 +404,45 @@ var __listen_to_the_ft = (function(){
 
 	}
 
-	function playAudio(src, uuid){
+	function playAudio(src, uuid, size){
 		console.log(src);
 		
-		components.player.src = src;
+		// components.player.volume = 0;
+		// components.player.src = src;
 		components.player.dataset.uuid = uuid;
 
 		components.player.dataset.active = 'true';
-		components.player.play();
+		// components.player.play();
 
 		if(uuid){
 			var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
 			playedItems.push(uuid);
 			localData.set('playedArticles', playedItems);
 		}
+
+		makeRequest(src, {
+				mode : 'cors',
+				"headers" : {
+					"Range" : `0-${size}`
+				}
+			})
+			.then(res => {
+				if(res.status !== 200){
+					throw res;
+				} else {
+					return res;
+				}
+			})
+			.then(res => res.blob())
+			.then(audio => {
+				console.log(audio)
+				components.player.src = URL.createObjectURL(audio);
+				components.player.play();
+			})
+			.catch(err => {
+				console.log('Media Error', err);
+			})
+		;	
 
 	}
 
@@ -795,7 +820,7 @@ var __listen_to_the_ft = (function(){
 					playBtn.addEventListener('click', function(e){
 						prevent(e);
 						document.title = item.title;
-						playAudio(this.dataset.audiourl, item.id);
+						playAudio(this.dataset.audiourl, item.id, item.size);
 						container.dataset.played = 'true';
 						Array.from(document.querySelectorAll('.playing')).forEach(el => {
 							el.classList.remove('playing');
@@ -1048,7 +1073,7 @@ var __listen_to_the_ft = (function(){
 		console.log('Script loaded');
 		components.loading.dataset.visible = 'false';
 
-		networkState.start();
+		// networkState.start();
 
 	}
 
