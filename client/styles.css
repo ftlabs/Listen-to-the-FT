@@ -369,6 +369,10 @@ body[data-offline="true"] .offline{
   background-repeat: no-repeat;
 }
 
+body[data-offline="true"] .view#audioItems li[data-offline="false"] .textContainer .actionsContainer a.play{
+  display: none;
+}
+
 .view#audioItems li.playing{
   background: url('/assets/images/playing.png');
   background-size: 15px;

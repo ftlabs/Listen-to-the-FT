@@ -36,6 +36,9 @@ self.addEventListener('fetch', function(event) {
 		caches.open(CACHE_NAME).then(function(cache) {
 			return cache.match(event.request)
 				.then(function(response) {
+
+					console.log(event.request.url, "Match?", response);
+
 					var fetchPromise = fetch(event.request)
 						.then(function(networkResponse) {
 
@@ -54,6 +57,15 @@ self.addEventListener('fetch', function(event) {
 									}
 
 								});
+
+								if(event.request.url.indexOf('.mp3') > -1){
+									if(event.request.headers.get('range') === 'bytes=0-'){
+										console.log('Not caching:', event.request.url);
+										shouldCache = false;
+									} else {
+										console.log("Caching Audio File", event.request.url);
+									}
+								}
 
 								if(shouldCache){
 									// console.log('Decided to cache:', event.request.url);
