@@ -46,7 +46,7 @@ self.addEventListener('fetch', function(event) {
 
 								var shouldCache = true;
 
-								routesToNotCache.forEach(route => {
+								routesToNotCache.forEach(function(route){
 
 									if(shouldCache){
 
@@ -137,7 +137,7 @@ function cacheAppItems(){
 		.then(function(){
 			console.log('cacheItemsForApp successful');
 		})
-		.catch(err => {
+		.catch(function(err){
 			console.log('Failed to cache all items');
 		})
 	;
