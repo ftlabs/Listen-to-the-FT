@@ -404,8 +404,28 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	function getAudio(src, size){
+
+		return makeRequest(src, {
+				mode : 'cors',
+				headers : {
+					'Range' : `0-${size}`
+				}
+			})
+			.then(res => {
+				if(res.status !== 200){
+					throw res;
+				} else {
+					return res;
+				}
+			})
+			.then(res => res.blob())
+		;
+
+	}
+
 	function playAudio(src, uuid){
-		console.log(src);
+		//console.log(src);
 		
 		components.player.src = src;
 		components.player.dataset.uuid = uuid;
@@ -423,7 +443,7 @@ var __listen_to_the_ft = (function(){
 
 	function getAudioForTopic(topicUUIDs, inBackground){
 
-		console.log(topicUUIDs);
+		// console.log(topicUUIDs);
 
 		if(!inBackground){
 			components.loading.dataset.visible = 'true';
@@ -459,7 +479,7 @@ var __listen_to_the_ft = (function(){
 			.then(res => {
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
-					console.log(res);
+					//console.log(res);
 
 					if(res.status === 403 || res.status === 401){
 						handleLogin();
@@ -493,7 +513,7 @@ var __listen_to_the_ft = (function(){
 
 		return getTopicsForUser()
 			.then(data => {
-				console.log(data);
+				//console.log(data);
 				const UUIDs = data.topics.map(topic => {return topic.uuid}).join();
 				return getAudioForTopic(UUIDs, inBackground)
 					.then(allAudio => {
@@ -566,7 +586,7 @@ var __listen_to_the_ft = (function(){
 		getAudioForTopic('8a086a54-ea48-3a52-bd3c-5821430c2132')
 			.then(items => generateListView( items, 'audioItems', 'Latest Audio Articles'))
 			.then(HTML => {
-				console.log(HTML);
+				//console.log(HTML);
 				components.menu.dataset.visible = 'true';
 				views.audioItems.innerHTML = '';
 				views.audioItems.appendChild(HTML);
@@ -611,7 +631,7 @@ var __listen_to_the_ft = (function(){
 
 	function generateMenu(sections){
 
-		console.log(sections);
+		//console.log(sections);
 
 		var sectionFrag = document.createDocumentFragment();
 		var titleEl = document.createElement('div');
@@ -677,7 +697,7 @@ var __listen_to_the_ft = (function(){
 
 	function generateListView(items, type, listTitle){
 
-		console.log(items);
+		//console.log(items);
 
 		var docFrag = document.createDocumentFragment();
 		const offlineEl = document.createElement('div');
@@ -695,7 +715,7 @@ var __listen_to_the_ft = (function(){
 		if(!type){
 
 			items.forEach(item => {
-				console.log(item);
+				//console.log(item);
 				var li = document.createElement('li');
 				li.textContent = item.name;
 				li.dataset.uuid = item.uuid;
@@ -818,6 +838,9 @@ var __listen_to_the_ft = (function(){
 								'OK'
 							);
 							overlay.show();
+							this.dataset.downloading = 'false';	
+							this.dataset.downloaded = 'false';
+							this.textContent = 'Download';
 						} else if(this.dataset.downloaded === 'true' || this.dataset.downloading === 'true'){
 							return;
 						} else {
@@ -830,41 +853,21 @@ var __listen_to_the_ft = (function(){
 									contentID : item.id
 								});
 
-								makeRequest(el.dataset.audiourl, {Origin : window.location.host})
-									.then(function(res){
-										return res.clone().blob()
-											.then(function(){
-												return res;
-											})
-										;
-									})
-									.then(function(res){
-
-										if(res.status === 200){
-											console.log('File downloaded');
-											el.dataset.downloaded = 'true';
-											el.textContent = 'Available Offline';
-
-											return caches.open(CACHE_NAME)
-												.then(function(cache){
-													container.dataset.offline = 'true';
-													cache.put(el.dataset.audiourl, res);
-												})
-											;
-
-										} else {
-											overlay.set(
-												'Download Failed', 
-												'Sorry, we tried to download "' + item.title + '" but the request failed. You can tap the "Download" button to try again',
-												'OK'
-											);
-											overlay.show();
-											throw res;
-										}
-
+								getAudio(el.dataset.audiourl, item.size)
+									.then(data => {
+										//console.log(data);
+										//console.log('File downloaded');
+										el.dataset.downloaded = 'true';
+										el.textContent = 'Available Offline';
 									})
 									.catch(err => {
 										console.log('Download error:',  err);
+										overlay.set(
+											'Download Failed', 
+											'Sorry, we tried to download "' + item.title + '" but the request failed. You can tap the "Download" button to try again',
+											'OK'
+										);
+										overlay.show();
 										this.dataset.downloading = 'false';	
 										this.dataset.downloaded = 'false';
 										this.textContent = 'Download';
@@ -988,7 +991,7 @@ var __listen_to_the_ft = (function(){
 		}, false);
 
 		components.player.addEventListener('ended', function(){
-			console.log('Audio finished');
+			//console.log('Audio finished');
 			this.dataset.active = 'false';
 			document.title = originalTitle;
 			trackEvent({
