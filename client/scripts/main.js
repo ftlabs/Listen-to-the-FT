@@ -833,7 +833,7 @@ var __listen_to_the_ft = (function(){
 				headline.textContent = item.title;
 				byline.textContent = item.byline;
 				standfirst.textContent = item.standfirst;
-				duration.textContent = item.duration.humantime;
+				duration.textContent = `${((item.duration.milliseconds / 1000) / 60) | 0} min`;
 
 				playBtn.textContent = 'Listen';
 				readBtn.textContent = 'Read';
