@@ -707,7 +707,7 @@ var __listen_to_the_ft = (function(){
 		offlineEl.textContent = 'Offline Mode';
 		offlineEl.classList.add('offline');
 
-		iconImg.setAttribute('src', 'https://www.ft.com/__origami/service/image/v2/images/raw/fticon%3Abrand-ft?url=fticon%253Abrand-ft&source=ftlabs-listen-to-the-ft&width=100&tint=white&fit=cover&format=auto&quality=medium');
+		iconImg.setAttribute('src', '/assets/images/ftlabs_logo_small.png');
 		iconImg.classList.add('iconImage');
 
 		docFrag.appendChild(offlineEl);
@@ -859,6 +859,7 @@ var __listen_to_the_ft = (function(){
 										//console.log('File downloaded');
 										el.dataset.downloaded = 'true';
 										el.textContent = 'Available Offline';
+										container.dataset.offline = 'true';
 									})
 									.catch(err => {
 										console.log('Download error:',  err);
