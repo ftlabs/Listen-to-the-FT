@@ -237,6 +237,10 @@ body[data-offline="true"] .offline{
   margin: 0;
 }
 
+.component#drawer ol.actions{
+  border-top: 8px solid #e9decf;
+}
+
 .component#drawer ol li{
   color: #333;
   font-size: 18px;

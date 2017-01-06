@@ -691,6 +691,32 @@ var __listen_to_the_ft = (function(){
 
 		sectionFrag.appendChild(sectionOl);
 
+		var actionsOl = document.createElement('ol');
+
+		var clearMediaFiles = document.createElement('li');
+		var aboutThis = document.createElement('li');
+		
+		actionsOl.setAttribute('class', 'actions');
+
+		clearMediaFiles.textContent = 'Clear downloaded items';
+		aboutThis.textContent = 'About this app';
+
+		aboutThis.addEventListener('click', function(){
+			components.drawer.dataset.opened = 'false';
+			overlay.set(
+				'Listen to the FT', 
+				'This app is an experiment by FT Labs to explore whether subscribers are interested in listening to good quality audio versions of FT articles.',
+				'OK'
+			);
+			overlay.show();
+
+		}, false);
+
+		actionsOl.appendChild(clearMediaFiles);
+		actionsOl.appendChild(aboutThis);
+
+		sectionFrag.appendChild(actionsOl);
+
 		return sectionFrag;
 
 	}
