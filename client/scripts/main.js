@@ -726,6 +726,10 @@ var __listen_to_the_ft = (function(){
 				.then(function(){
 					Array.from(document.querySelectorAll('li[data-offline="true"]')).forEach(li => {
 						li.dataset.offline = 'false';
+						const downloadBtn = li.querySelector('.actionsContainer a.download');
+						downloadBtn.textContent = 'Download';
+						downloadBtn.dataset.downloading = 'false';
+						downloadBtn.dataset.downloaded = 'false';
 					});
 				})
 			;			
@@ -850,7 +854,7 @@ var __listen_to_the_ft = (function(){
 				readBtn.setAttribute('target', '_blank');
 
 				downloadBtn.dataset.size = item.size;
-				downloadBtn.dataset.humansize = `(${ (item.size / 1048576).toLocaleString('en', {maximumFractionDigits : 2}) } mb)`;
+				downloadBtn.dataset.humansize = `(${ (item.size / 1048576).toLocaleString('en', {maximumFractionDigits : 2}) }MB)`;
 
 				checkFileAvailability(item.audioUrl)
 					.then(available => {
