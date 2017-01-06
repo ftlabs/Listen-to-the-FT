@@ -177,6 +177,13 @@ form label{
   transition: max-height 0.3s ease-in-out;
 }
 
+.iconImage{
+  position: fixed;
+  bottom: 0.5em;
+  opacity: 0.3;
+  width: 35px;
+}
+
 body[data-offline="true"] .offline{
   max-height: 30px;
 }
@@ -268,13 +275,13 @@ body[data-offline="true"] .offline{
 }
 
 .view ol .iconImage{
-  width: 35px;
+  position: static;
   margin-left: auto;
   margin-right: auto;
   display: block;
   margin-top: 0.5em;
-  opacity: 0.3;
   margin-bottom: 0.5em;
+  opacity: 0.3;
 }
 
 .view#audioItems {
