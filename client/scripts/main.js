@@ -370,6 +370,25 @@ var __listen_to_the_ft = (function(){
 
 	}
 
+	function clearMediaItemsInCache(){
+		
+		if(window.caches){
+			return caches.open(CACHE_NAME)
+				.then(cache => {
+					console.log('Cleared:', cache);
+					cache.keys().then(function(keys) {
+						keys.forEach(function(request, index, array) {
+							if(request.url.indexOf('.mp3') > -1){
+								cache.delete(request);
+							}
+						});
+					});
+				})
+			;
+		}
+
+	}
+
 	function checkFileAvailability(url){
 
 		if(window.caches){
@@ -411,7 +430,7 @@ var __listen_to_the_ft = (function(){
 				headers : {
 					'Range' : `0-${size}`
 				}
-			})
+			}, 120000)
 			.then(res => {
 				if(res.status !== 200){
 					throw res;
@@ -701,6 +720,17 @@ var __listen_to_the_ft = (function(){
 		clearMediaFiles.textContent = 'Clear downloaded items';
 		aboutThis.textContent = 'About this app';
 
+		clearMediaFiles.addEventListener('click', function(){
+			components.drawer.dataset.opened = 'false';
+			clearMediaItemsInCache()
+				.then(function(){
+					Array.from(document.querySelectorAll('li[data-offline="true"]')).forEach(li => {
+						li.dataset.offline = 'false';
+					});
+				})
+			;			
+		}, false);
+
 		aboutThis.addEventListener('click', function(){
 			components.drawer.dataset.opened = 'false';
 			overlay.set(
@@ -712,7 +742,10 @@ var __listen_to_the_ft = (function(){
 
 		}, false);
 
-		actionsOl.appendChild(clearMediaFiles);
+		if(window.caches){
+			actionsOl.appendChild(clearMediaFiles);
+		}
+
 		actionsOl.appendChild(aboutThis);
 
 		sectionFrag.appendChild(actionsOl);
@@ -895,9 +928,9 @@ var __listen_to_the_ft = (function(){
 											'OK'
 										);
 										overlay.show();
-										this.dataset.downloading = 'false';	
-										this.dataset.downloaded = 'false';
-										this.textContent = 'Download';
+										el.dataset.downloading = 'false';	
+										el.dataset.downloaded = 'false';
+										el.textContent = 'Download';
 									})
 								;
 
