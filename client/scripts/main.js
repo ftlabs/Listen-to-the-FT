@@ -243,6 +243,7 @@ var __listen_to_the_ft = (function(){
 
 		function hidePlayer(){
 			elements.container.dataset.active = 'false';
+			elements.container.dataset.showspeeds = 'false';
 			elements.container.dataset.uuid = '';
 			elements.audio.pause();
 			elements.audio.currentTime = 0;
