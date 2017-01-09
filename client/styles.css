@@ -54,7 +54,7 @@ header{
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0,0,0,.75);
+  background: rgba(0,0,0,0.85);
   width: 100%;
   height: 100%;
   z-index: 500;
@@ -63,6 +63,10 @@ header{
   justify-content: center;
   padding: 2em;
   box-sizing: border-box;
+}
+
+.component#popup #message{
+  max-width: 400px;
 }
 
 .component#popup button{
@@ -85,15 +89,6 @@ header{
   flex-direction: column;
   transform: translateX(100%);
   position: absolute;
-}
-
-.view[data-blurred="true"]{
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
-}
-
-.view[data-visible="true"]{
-  /*transform: translateX(0);*/
 }
 
 .view.full-width{
@@ -198,7 +193,7 @@ body[data-offline="true"] .offline{
   left: 0;
   z-index: 1000;
   display: flex;
-  background: rgba(0,0,0,.75);
+  background: rgba(0,0,0,0.85);
 }
 
 .component#menu{
