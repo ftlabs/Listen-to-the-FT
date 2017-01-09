@@ -1109,7 +1109,6 @@ var __listen_to_the_ft = (function(){
 			bubbles: true
 		}));
 
-
 		if(checkLoginStatus()){
 			generateFirstView();
 			views.login.dataset.visible = 'false';
@@ -1169,7 +1168,6 @@ var __listen_to_the_ft = (function(){
 		}, false);
 
 		console.log('Script loaded');
-		components.loading.dataset.visible = 'false';
 
 		networkState.start();
 
