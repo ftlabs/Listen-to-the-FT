@@ -195,6 +195,7 @@ form label{
 #player .speeds span[data-speed]{
   display: block;
   margin-top: 0.3em;
+  cursor: pointer;
 }
 
 #player .speeds span[data-selected="true"]:after{
