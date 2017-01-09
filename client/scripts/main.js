@@ -140,8 +140,40 @@ var __listen_to_the_ft = (function(){
 
 		const elements = {
 			container : document.querySelector('.component#player'),
-			audio : document.querySelector('.component#player audio')
+			audio : document.querySelector('.component#player audio'),
+			speedToggles : undefined
 		};
+
+		elements.speedToggles = Array.from(elements.container.querySelectorAll('.speeds span[data-speed]'));
+
+		const speed = (function(){
+
+			let playSpeed = setPlaySpeed(Number(localData.read('playbackSpeed')) || 1.0);
+
+			function setPlaySpeed(s){
+				elements.audio.playbackRate = s;
+				playSpeed = s;
+				localData.set('playbackSpeed', s);
+				elements.speedToggles.forEach(toggle => {
+					if( Number(toggle.dataset.speed) === s ){
+						toggle.dataset.selected = 'true';
+					} else {
+						toggle.dataset.selected = 'false';						
+					}
+				});
+				return s;
+			}
+
+			function getPlaySpeed(){
+				return playSpeed;
+			}
+
+			return {
+				set : setPlaySpeed,
+				get : getPlaySpeed
+			};
+
+		}());
 
 		elements.audio.addEventListener('ended', function(){
 			//console.log('Audio finished');
@@ -185,12 +217,9 @@ var __listen_to_the_ft = (function(){
 			elements.container.dataset.showspeeds = elements.container.dataset.showspeeds === "false" ? "true" : "false";
 		}, false);
 
-		Array.from(elements.container.querySelectorAll('.speeds span[data-speed]')).forEach(span => {
-			console.log(span);
+		elements.speedToggles.forEach(span => {
 			span.addEventListener('click', function(){
-				console.log('click');
-				console.log(Number(this.dataset.speed));
-				elements.audio.playbackRate = Number(this.dataset.speed);
+				speed.set(Number(this.dataset.speed));
 			}, false);
 		});
 
@@ -201,6 +230,7 @@ var __listen_to_the_ft = (function(){
 			elements.container.dataset.uuid = uuid;
 
 			elements.container.dataset.active = 'true';
+			elements.audio.playbackRate = speed.get();
 			elements.audio.play();
 
 			if(uuid){
