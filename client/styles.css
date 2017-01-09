@@ -149,11 +149,72 @@ form label{
   top: 100%;
   left: 0;
   padding-bottom: 1em;
-  width: 100%;
+  width: 200%;
   padding-top: 1em;
   background: #fff1e0;
   transition: transform 0.3s ease-in-out;
   transform: translateY(0%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+
+  align-items: center;
+  align-content: center;
+  justify-content: space-around;
+
+}
+
+#player audio{
+  width: 45%;
+}
+
+#player .toggleSlide{
+  width: 10%;
+  height: 30px;
+  /*background: red;*/
+  display: block;
+  background-image: url('/assets/images/speeds-toggle.png');
+  background-size: 30px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
+#player .speeds{
+  width: 45%;
+  font-size: 1.3em;
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  position: relative;
+  left: -10px;
+}
+
+#player .speeds span[data-speed]{
+  display: block;
+  margin-top: 0.3em;
+}
+
+#player .speeds span[data-selected="true"]:after{
+  width: 8px;
+  height: 8px;
+  display: block;
+  background-color: #333;
+  border-radius: 100%;
+  content: '';
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  top: 5px;
+}
+
+#player .speeds a{
+  font-weight: 100;
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
 }
 
 .offline{

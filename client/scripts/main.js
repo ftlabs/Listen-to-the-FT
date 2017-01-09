@@ -136,14 +136,136 @@ var __listen_to_the_ft = (function(){
 
 	})();
 
-	var views = {
+	const player = (function(){
+
+		const elements = {
+			container : document.querySelector('.component#player'),
+			audio : document.querySelector('.component#player audio'),
+			speedToggles : undefined
+		};
+
+		elements.speedToggles = Array.from(elements.container.querySelectorAll('.speeds span[data-speed]'));
+
+		const speed = (function(){
+
+			let playSpeed = setPlaySpeed(Number(localData.read('playbackSpeed')) || 1.0);
+
+			function setPlaySpeed(s){
+				elements.audio.playbackRate = s;
+				playSpeed = s;
+				localData.set('playbackSpeed', s);
+				elements.speedToggles.forEach(toggle => {
+					if( Number(toggle.dataset.speed) === s ){
+						toggle.dataset.selected = 'true';
+					} else {
+						toggle.dataset.selected = 'false';						
+					}
+				});
+				return s;
+			}
+
+			function getPlaySpeed(){
+				return playSpeed;
+			}
+
+			return {
+				set : setPlaySpeed,
+				get : getPlaySpeed
+			};
+
+		}());
+
+		elements.audio.addEventListener('ended', function(){
+			//console.log('Audio finished');
+			hidePlayer();
+			document.title = originalTitle;
+			trackEvent({
+				action : 'finished',
+				category : 'media',
+				contentID : this.dataset.uuid
+			});
+		}, false);
+
+		elements.audio.addEventListener('play', function(){
+			trackEvent({
+				action : 'play',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
+		}, false);
+
+		elements.audio.addEventListener('pause', function(){
+			trackEvent({
+				action : 'pause',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
+		}, false);
+
+		elements.audio.addEventListener('seeked', function(){
+			trackEvent({
+				action : 'seeked',
+				category : 'media',
+				contentID : this.dataset.uuid,
+				position : this.currentTime
+			});
+		}, false);
+
+		elements.container.querySelector('.toggleSlide').addEventListener('click', function(){
+			elements.container.dataset.showspeeds = elements.container.dataset.showspeeds === "false" ? "true" : "false";
+		}, false);
+
+		elements.speedToggles.forEach(span => {
+			span.addEventListener('click', function(){
+				speed.set(Number(this.dataset.speed));
+			}, false);
+		});
+
+		function playAudio(src, uuid){
+		//console.log(src);
+		
+			elements.audio.src = src;
+			elements.container.dataset.uuid = uuid;
+
+			elements.container.dataset.active = 'true';
+			elements.audio.playbackRate = speed.get();
+			elements.audio.play();
+
+			if(uuid){
+				var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
+				playedItems.push(uuid);
+				localData.set('playedArticles', playedItems);
+			}
+
+		}
+
+		function hidePlayer(){
+			elements.container.dataset.active = 'false';
+			elements.container.dataset.showspeeds = 'false';
+			elements.container.dataset.uuid = '';
+			elements.audio.pause();
+			elements.audio.currentTime = 0;
+			elements.audio.src = '';
+		}
+
+		return {
+			elements : elements,
+			play : playAudio,
+			hide : hidePlayer
+		};
+
+	})();
+
+	const views = {
 		login : document.querySelector('.view#login'),
 		topics : document.querySelector('.view#topics'),
 		audioItems : document.querySelector('.view#audioItems')
 	};
 
-	var components = {
-		player : document.querySelector('.component#player'),
+	const components = {
+		player : player,
 		loading : document.querySelector('.component#loading'),
 		back : document.querySelector('.component#back'),
 		overlay : document.querySelector('.component#popup'),
@@ -294,11 +416,7 @@ var __listen_to_the_ft = (function(){
 		viewstack.clear();
 		views.login.dataset.visible = 'true';
 
-		components.player.dataset.active = 'false';
-		components.player.dataset.uuid = '';
-		components.player.pause();
-		components.player.currentTime = 0;
-		components.player.src = '';
+		player.hide();
 
 	}
 
@@ -437,23 +555,6 @@ var __listen_to_the_ft = (function(){
 
 	}
 
-	function playAudio(src, uuid){
-		//console.log(src);
-		
-		components.player.src = src;
-		components.player.dataset.uuid = uuid;
-
-		components.player.dataset.active = 'true';
-		components.player.play();
-
-		if(uuid){
-			var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
-			playedItems.push(uuid);
-			localData.set('playedArticles', playedItems);
-		}
-
-	}
-
 	function getAudioForTopic(topicUUIDs, inBackground){
 
 		// console.log(topicUUIDs);
@@ -510,9 +611,9 @@ var __listen_to_the_ft = (function(){
 			})
 			.then(res => res.json())
 			.catch(err => {
+				console.log(err.message);
 				if(err.timeout){
 					handleTimeout();
-					console.log(err.message);
 				}
 			})
 		;
@@ -559,7 +660,7 @@ var __listen_to_the_ft = (function(){
 				;
 			})
 			.catch(err => {
-				
+				console.log(err);
 				if(err.statCode){
 
 					if(err.statCode === 401 || err.statCode === 403){
@@ -606,7 +707,7 @@ var __listen_to_the_ft = (function(){
 				viewstack.push(views.audioItems);
 			})
 			.catch(err => {
-
+				console.log(err);
 				if(err.timeout){
 					handleTimeout();
 				} else {
@@ -630,7 +731,7 @@ var __listen_to_the_ft = (function(){
 
 			})
 			.catch(err => {
-
+				console.log(err);
 				if(err.timeout){
 					handleTimeout();
 				} else {
@@ -675,6 +776,7 @@ var __listen_to_the_ft = (function(){
 						views.audioItems.appendChild(HTML);
 					})
 					.catch(err => {
+						console.log(err);
 						if(err.statCode){
 
 							if(err.statCode === 401 || err.statCode === 403){
@@ -872,7 +974,7 @@ var __listen_to_the_ft = (function(){
 					playBtn.addEventListener('click', function(e){
 						prevent(e);
 						document.title = item.title;
-						playAudio(this.dataset.audiourl, item.id);
+						components.player.play(this.dataset.audiourl, item.id);
 						container.dataset.played = 'true';
 						Array.from(document.querySelectorAll('.playing')).forEach(el => {
 							el.classList.remove('playing');
@@ -969,12 +1071,12 @@ var __listen_to_the_ft = (function(){
 				li.dataset.uuid = item.id;
 				li.dataset.played = wasListenedToBefore;
 
-				if(components.player.dataset.uuid === item.id){
+				if(components.player.elements.container.dataset.uuid === item.id){
 					li.classList.add('playing');
 				}
 
 				li.addEventListener('click', function(){
-					components.player.setAttribute('title', item.title);
+					components.player.elements.audio.setAttribute('title', item.title);
 					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
 					trackEvent({
 						action : 'click',
@@ -996,8 +1098,6 @@ var __listen_to_the_ft = (function(){
 
 	}
 
-	const loginForm = views.login.querySelector('form');
-
 	function initialise(){
 		
 		document.body.dispatchEvent(new CustomEvent('oTracking.page', {
@@ -1008,7 +1108,6 @@ var __listen_to_the_ft = (function(){
 			},
 			bubbles: true
 		}));
-
 
 		if(checkLoginStatus()){
 			generateFirstView();
@@ -1048,44 +1147,6 @@ var __listen_to_the_ft = (function(){
 			viewstack.pop();
 		}, false);
 
-		components.player.addEventListener('ended', function(){
-			//console.log('Audio finished');
-			this.dataset.active = 'false';
-			document.title = originalTitle;
-			trackEvent({
-				action : 'finished',
-				category : 'media',
-				contentID : this.dataset.uuid
-			});
-		}, false);
-
-		components.player.addEventListener('play', function(){
-			trackEvent({
-				action : 'play',
-				category : 'media',
-				contentID : this.dataset.uuid,
-				position : this.currentTime
-			});
-		}, false);
-
-		components.player.addEventListener('pause', function(){
-			trackEvent({
-				action : 'pause',
-				category : 'media',
-				contentID : this.dataset.uuid,
-				position : this.currentTime
-			});
-		}, false);
-
-		components.player.addEventListener('seeked', function(){
-			trackEvent({
-				action : 'seeked',
-				category : 'media',
-				contentID : this.dataset.uuid,
-				position : this.currentTime
-			});
-		}, false);
-
 		components.menu.addEventListener('click', function(){
 
 			if(components.drawer.dataset.opened === 'false'){
@@ -1107,7 +1168,6 @@ var __listen_to_the_ft = (function(){
 		}, false);
 
 		console.log('Script loaded');
-		components.loading.dataset.visible = 'false';
 
 		networkState.start();
 
