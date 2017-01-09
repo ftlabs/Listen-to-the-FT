@@ -44,7 +44,17 @@
 
 		</div>
 
-		<audio controls id="player" class="component" data-active="false" preload="auto"></audio>
+		<div id="player" class="component" data-active="false" data-showspeeds="false">
+			<audio controls preload="auto"></audio>
+			<div class="toggleSlide" data-view="player"></div>
+			<div class="speeds">
+				<a>Speed:</a>
+				<span data-speed="1.0">1x</span>
+				<span data-speed="1.25">1.25x</span>
+				<span data-speed="1.50">1.5x</span>
+				<span data-speed="2.0">2x</span>
+			</div>
+		</div>
 
 		<div id="popup" class="component" data-visible="false">
 			<div id="message">

@@ -136,14 +136,17 @@ var __listen_to_the_ft = (function(){
 
 	})();
 
-	var views = {
+	const views = {
 		login : document.querySelector('.view#login'),
 		topics : document.querySelector('.view#topics'),
 		audioItems : document.querySelector('.view#audioItems')
 	};
 
-	var components = {
-		player : document.querySelector('.component#player'),
+	const components = {
+		player : {
+			el : document.querySelector('.component#player'),
+			audio : document.querySelector('.component#player audio')
+		},
 		loading : document.querySelector('.component#loading'),
 		back : document.querySelector('.component#back'),
 		overlay : document.querySelector('.component#popup'),
@@ -294,11 +297,11 @@ var __listen_to_the_ft = (function(){
 		viewstack.clear();
 		views.login.dataset.visible = 'true';
 
-		components.player.dataset.active = 'false';
-		components.player.dataset.uuid = '';
-		components.player.pause();
-		components.player.currentTime = 0;
-		components.player.src = '';
+		components.player.el.dataset.active = 'false';
+		components.player.el.dataset.uuid = '';
+		components.player.audio.pause();
+		components.player.audio.currentTime = 0;
+		components.player.audio.src = '';
 
 	}
 
@@ -440,11 +443,11 @@ var __listen_to_the_ft = (function(){
 	function playAudio(src, uuid){
 		//console.log(src);
 		
-		components.player.src = src;
-		components.player.dataset.uuid = uuid;
+		components.player.audio.src = src;
+		components.player.el.dataset.uuid = uuid;
 
-		components.player.dataset.active = 'true';
-		components.player.play();
+		components.player.el.dataset.active = 'true';
+		components.player.audio.play();
 
 		if(uuid){
 			var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
@@ -969,12 +972,12 @@ var __listen_to_the_ft = (function(){
 				li.dataset.uuid = item.id;
 				li.dataset.played = wasListenedToBefore;
 
-				if(components.player.dataset.uuid === item.id){
+				if(components.player.el.dataset.uuid === item.id){
 					li.classList.add('playing');
 				}
 
 				li.addEventListener('click', function(){
-					components.player.setAttribute('title', item.title);
+					components.player.audio.setAttribute('title', item.title);
 					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
 					trackEvent({
 						action : 'click',
@@ -995,8 +998,6 @@ var __listen_to_the_ft = (function(){
 		return docFrag;
 
 	}
-
-	const loginForm = views.login.querySelector('form');
 
 	function initialise(){
 		
@@ -1048,7 +1049,7 @@ var __listen_to_the_ft = (function(){
 			viewstack.pop();
 		}, false);
 
-		components.player.addEventListener('ended', function(){
+		components.player.audio.addEventListener('ended', function(){
 			//console.log('Audio finished');
 			this.dataset.active = 'false';
 			document.title = originalTitle;
@@ -1059,7 +1060,7 @@ var __listen_to_the_ft = (function(){
 			});
 		}, false);
 
-		components.player.addEventListener('play', function(){
+		components.player.audio.addEventListener('play', function(){
 			trackEvent({
 				action : 'play',
 				category : 'media',
@@ -1068,7 +1069,7 @@ var __listen_to_the_ft = (function(){
 			});
 		}, false);
 
-		components.player.addEventListener('pause', function(){
+		components.player.audio.addEventListener('pause', function(){
 			trackEvent({
 				action : 'pause',
 				category : 'media',
@@ -1077,7 +1078,7 @@ var __listen_to_the_ft = (function(){
 			});
 		}, false);
 
-		components.player.addEventListener('seeked', function(){
+		components.player.audio.addEventListener('seeked', function(){
 			trackEvent({
 				action : 'seeked',
 				category : 'media',
@@ -1085,6 +1086,19 @@ var __listen_to_the_ft = (function(){
 				position : this.currentTime
 			});
 		}, false);
+
+		components.player.el.querySelector('.toggleSlide').addEventListener('click', function(){
+			components.player.el.dataset.showspeeds = components.player.el.dataset.showspeeds === "false" ? "true" : "false";
+		}, false);
+
+		Array.from(components.player.el.querySelectorAll('.speeds span[data-speed]')).forEach(span => {
+			console.log(span);
+			span.addEventListener('click', function(){
+				console.log('click');
+				console.log(Number(this.dataset.speed));
+				components.player.audio.playbackRate = Number(this.dataset.speed);
+			}, false);
+		})
 
 		components.menu.addEventListener('click', function(){
 

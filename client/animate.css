@@ -33,3 +33,7 @@
 #player[data-active="true"]{
 	transform: translateY(-100%);
 }
+
+#player[data-showspeeds="true"]{
+  transform: translateY(-100%) translateX(-50%);
+}
