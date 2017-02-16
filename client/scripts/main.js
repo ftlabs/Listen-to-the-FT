@@ -223,7 +223,7 @@ var __listen_to_the_ft = (function(){
 			}, false);
 		});
 
-		function playAudio(src, uuid){
+		function playAudio(src, uuid, title, byline){
 		//console.log(src);
 		
 			elements.audio.src = src;
@@ -237,6 +237,15 @@ var __listen_to_the_ft = (function(){
 				var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
 				playedItems.push(uuid);
 				localData.set('playedArticles', playedItems);
+			}
+
+			if ('mediaSession' in navigator) {
+
+				navigator.mediaSession.metadata = new MediaMetadata({
+					title: title,
+					artist: byline,
+					album: 'Listen to the FT'
+				});
 			}
 
 		}
@@ -974,7 +983,7 @@ var __listen_to_the_ft = (function(){
 					playBtn.addEventListener('click', function(e){
 						prevent(e);
 						document.title = item.title;
-						components.player.play(this.dataset.audiourl, item.id);
+						components.player.play(this.dataset.audiourl, item.id, item.title, item.byline);
 						container.dataset.played = 'true';
 						Array.from(document.querySelectorAll('.playing')).forEach(el => {
 							el.classList.remove('playing');
