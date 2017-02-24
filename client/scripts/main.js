@@ -1133,6 +1133,7 @@ var __listen_to_the_ft = (function(){
 
 		if(checkLoginStatus()){
 			generateFirstView();
+			networkState.start(3000);
 			views.login.dataset.visible = 'false';
 			if(localData.read('loggedin') === 'false'){
 				cacheItemsForApp();
@@ -1190,8 +1191,6 @@ var __listen_to_the_ft = (function(){
 		}, false);
 
 		console.log('Script loaded');
-
-		networkState.start();
 
 	}
 
