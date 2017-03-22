@@ -146,19 +146,6 @@ var __listen_to_the_ft = (function(){
 
 		elements.speedToggles = Array.from(elements.container.querySelectorAll('.speeds span[data-speed]'));
 
-		if ('mediaSession' in navigator){
-			let skipTime = 5;
-
-			navigator.mediaSession.setActionHandler('seekbackward', function() {
-				elements.audio.currentTime = Math.max(elements.audio.currentTime - skipTime, 0);
-			});
-
-			navigator.mediaSession.setActionHandler('seekforward', function() {
-				elements.audio.currentTime = Math.min(elements.audio.currentTime + skipTime, elements.audio.duration);
-			});
-			
-		}
-
 		const speed = (function(){
 
 			let playSpeed = setPlaySpeed(Number(localData.read('playbackSpeed')) || 1.0);
@@ -250,15 +237,6 @@ var __listen_to_the_ft = (function(){
 				var playedItems = localData.read('playedArticles') === undefined ? [] : localData.read('playedArticles');
 				playedItems.push(uuid);
 				localData.set('playedArticles', playedItems);
-			}
-
-			if ('mediaSession' in navigator) {
-
-				navigator.mediaSession.metadata = new MediaMetadata({
-					title: title,
-					artist: byline,
-					album: 'Listen to the FT'
-				});
 			}
 
 		}
