@@ -11,7 +11,11 @@ var __listen_to_the_ft = (function(){
 		var stored = localStorage.getItem(storageKey);
 		
 		function save(){
-			localStorage.setItem(storageKey, JSON.stringify( stored ) );
+			try{
+				localStorage.setItem(storageKey, JSON.stringify( stored ) );
+			} catch(err){
+				console.log('Error trying to save state', err);
+			}
 		}
 
 		function addItemForStorage(key, value){
