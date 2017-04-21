@@ -78,9 +78,16 @@ function getTopics(req, res){
 									})
 									.then(res => res.json())
 									.then(data => {
-										information.size = data.size;
-										information.duration = data.duration;
-										return information;
+
+										if(data.haveFile === false){
+											return false;
+										} else {
+											information.size = data.size;
+											information.duration = data.duration;
+											information.haveFile = data.haveFile;
+											return information;
+										}
+
 									})
 									.catch(err => {
 										debug(err);
@@ -98,7 +105,18 @@ function getTopics(req, res){
 						.then(data => {
 							data = data.filter(datum => {
 								return datum.id !== undefined;
-							})
+							}).filter(datum => {
+
+								if(datum === false){
+									return false;
+								}
+
+								if(datum.haveFile === true){
+									return true;
+								}
+
+								return datum !== false;
+							});
 
 							if(data.length === 0){
 								res.status(404);
