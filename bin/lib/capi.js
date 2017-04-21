@@ -21,11 +21,12 @@ function getContentFromUUID(articleUUID){
 	const addr = `${process.env.UPP_COCO}/enrichedcontent/${articleUUID}`;
 
 	return fetch(addr)
-	.then(res => res.json())
-	.catch(err => {
-		debug('enrichedContent error', err);
-		throw err;
-	})
+		.then(res => res.json())
+		.catch(err => {
+			debug('enrichedContent error', err);
+			throw err;
+		})
+	;
 }
 
 module.exports = {
