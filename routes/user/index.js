@@ -42,7 +42,7 @@ router.get('/topics', function(req, res) {
 
 				return concordence.tmeToUUID(item.uuid)
 					.then(uuid => {
-						debug(uuid);
+						debug('TME -> UUID', item.uuid, '->', uuid);
 						item.uuid = uuid;
 						return item;
 					})
@@ -60,6 +60,9 @@ router.get('/topics', function(req, res) {
 					return results.filter(result => { return result.uuid; });
 				})
 				.then(topicsWithUUIDs => {
+
+					debug('topicsWithUUIDs', topicsWithUUIDs);
+
 					fetch(`${process.env.FT_API_URL}/things/8a086a54-ea48-3a52-bd3c-5821430c2132`,{
 							headers : {
 								'X-API-KEY' : process.env.CAPI_KEY
@@ -77,9 +80,9 @@ router.get('/topics', function(req, res) {
 						.then(res => res.json())
 						.then(data => {
 
-							debug(data);
+							debug(`Response for ${process.env.FT_API_URL}/things/8a086a54-ea48-3a52-bd3c-5821430c2132:`, data);
 
-							if( !topicsWithUUIDs.some(topic => { return topic.uuid == '8a086a54-ea48-3a52-bd3c-5821430c2132'})  ){
+							if( !topicsWithUUIDs.some(topic => { return topic.uuid == '8a086a54-ea48-3a52-bd3c-5821430c2132'}) ){
 
 								topicsWithUUIDs.push({
 									name : data.prefLabel,
@@ -88,6 +91,7 @@ router.get('/topics', function(req, res) {
 
 							}
 
+							debug('topicsWithUUIDs', topicsWithUUIDs );
 							
 							res.json({
 								topics : topicsWithUUIDs
