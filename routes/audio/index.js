@@ -113,6 +113,8 @@ function getTopics(req, res){
 
 								if(datum.haveFile === true){
 									return true;
+								} else {
+									return false;
 								}
 
 								return datum !== false;
