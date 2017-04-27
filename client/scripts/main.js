@@ -381,7 +381,7 @@ var __listen_to_the_ft = (function(){
 		timeout = timeout || 5000;
 		var success = false;
 		var tO = new Promise(function(resolve, reject){
-				setTimeout(function(){ if(!success){reject('Request timed out.');} else {resolve()} }, timeout);
+			setTimeout(function(){ if(!success){reject('Request timed out.');} else {resolve()} }, timeout);
 		});
 
 		return Promise.race( [ tO, fetch(url, options) ] )
@@ -920,6 +920,7 @@ var __listen_to_the_ft = (function(){
 				var headline = document.createElement('a');
 				var byline = document.createElement('span');
 				var standfirst = document.createElement('p');
+				var robotWarning = document.createElement('em');
 				
 				var actionsContainer = document.createElement('div');
 				var playBtn = document.createElement('a');
@@ -937,6 +938,7 @@ var __listen_to_the_ft = (function(){
 				headline.textContent = item.title;
 				byline.textContent = item.byline;
 				standfirst.textContent = item.standfirst;
+				robotWarning.textContent = 'This article is read by a computer generated voice.';
 				duration.textContent = `${((item.duration.milliseconds / 1000) / 60) | 0} min`;
 
 				playBtn.textContent = 'Listen';
@@ -1066,6 +1068,7 @@ var __listen_to_the_ft = (function(){
 				textContainer.appendChild(headline);
 				textContainer.appendChild(byline);
 				textContainer.appendChild(standfirst);
+				textContainer.appendChild(robotWarning);
 				textContainer.appendChild(actionsContainer);
 
 				li.appendChild(textContainer);
@@ -1074,6 +1077,7 @@ var __listen_to_the_ft = (function(){
 
 				li.dataset.uuid = item.id;
 				li.dataset.played = wasListenedToBefore;
+				li.dataset.human = item.ishuman;
 
 				if(components.player.elements.container.dataset.uuid === item.id){
 					li.classList.add('playing');
