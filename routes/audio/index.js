@@ -4,7 +4,6 @@ const debug = require('debug')('listen-to-the-FT:routes:audio');
 
 const capi = require('../../bin/lib/capi');
 const extractUUID = require('../../bin/lib/extract-uuid');
-const generatePublicS3URL = require('../../bin/lib/get-s3-public-url');
 const validateSession = require('../../bin/lib/validate-session');
 
 router.use(validateSession);
@@ -63,12 +62,11 @@ function getTopics(req, res){
 									standfirst : content.standfirst,
 									byline : content.byline,
 									webUrl : content.webUrl,
-									audioUrl : generatePublicS3URL(content.id),
 									hasTopicIDs : validTopicIDs,
 									published : content.publishedDate
 								};
 
-								return fetch(`${process.env.AUDIO_STATS_SERVICE}/check/${content.id}`)
+								return fetch(`${process.env.AUDIO_AVAILABLE_SERVICE}/check/${content.id}`)
 									.then(res => {
 										if(res.status !== 200){
 											throw res;
@@ -82,9 +80,13 @@ function getTopics(req, res){
 										if(data.haveFile === false){
 											return false;
 										} else {
+											
+											information.audioUrl = data.url;
 											information.size = data.size;
 											information.duration = data.duration;
 											information.haveFile = data.haveFile;
+											information.ishuman = data.ishuman;
+
 											return information;
 										}
 

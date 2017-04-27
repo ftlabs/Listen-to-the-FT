@@ -245,6 +245,10 @@ body[data-offline="true"] .offline{
   max-height: 30px;
 }
 
+body[data-hidehuman="true"] li[data-human="true"]{
+  display: none;
+}
+
 .component#loading{
   width: 100%;
   height: 100%;
@@ -436,6 +440,19 @@ body[data-offline="true"] .offline{
   background-position: 0.5em 1.2em;
   background-repeat: no-repeat;
 }
+
+.view#audioItems li[data-human="true"] em{
+  display: none;
+}
+
+.textContainer em{
+  font-size: 14px;
+  color: white;
+  border-left: 3px solid #942f4d;
+  margin-bottom: 1em;
+  padding-left: 0.5em;
+}
+
 
 body[data-offline="true"] .view#audioItems li[data-offline="false"] .textContainer .actionsContainer a.play{
   display: none;
