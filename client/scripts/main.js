@@ -371,6 +371,28 @@ var __listen_to_the_ft = (function(){
 
 	}());
 
+	function getQueryParameters(parameter){
+
+		const queryString = window.location.search.replace('?', '');
+		var values = {};
+
+		var pairs = queryString.split('&');
+
+		pairs.forEach(pair => {
+
+			const split = pair.split('=');
+			values[split[0]] = split[1];
+
+		});
+
+		if(parameter === undefined){
+			return values;
+		} else {
+			return values[parameter];
+		}
+
+	}
+
 	function prevent(e){
 		e.stopImmediatePropagation();
 		e.preventDefault();
@@ -701,14 +723,34 @@ var __listen_to_the_ft = (function(){
 
 	function generateFirstView(){
 
+		var audioItems = undefined;
+
 		getAudioForTopic('8a086a54-ea48-3a52-bd3c-5821430c2132')
-			.then(items => generateListView( items, 'audioItems', 'Latest Audio Articles'))
+			.then(items => generateListView( items, 'audioItems', 'Latest Audio Articles') )
 			.then(HTML => {
 				//console.log(HTML);
 				components.menu.dataset.visible = 'true';
 				views.audioItems.innerHTML = '';
 				views.audioItems.appendChild(HTML);
 				viewstack.push(views.audioItems);
+
+				var intent = getQueryParameters('play');
+
+				if(intent){
+					var item = document.body.querySelector(`li[data-uuid="${intent}"]`)
+					if(item !== null){
+						var src = item.querySelector('a[data-audiourl]').dataset.audiourl;
+						var title = item.querySelector('.textContainer a').textContent;
+						var byline = item.querySelector('.textContainer span').textContent;
+						components.player.play(src, intent, title, byline);
+
+						if(window.history){
+							history.pushState({}, '', window.location.origin);
+						}
+
+					}
+				}
+
 			})
 			.catch(err => {
 				console.log(err);
