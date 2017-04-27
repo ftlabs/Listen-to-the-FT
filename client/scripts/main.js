@@ -880,6 +880,12 @@ var __listen_to_the_ft = (function(){
 
 		docFrag.appendChild(offlineEl);
 
+		olEl.addEventListener('click', function(){
+			if(components.drawer.dataset.opened === 'true'){
+				components.drawer.dataset.opened = 'false';
+			}
+		}, false);
+
 		if(!type){
 
 			items.forEach(item => {
