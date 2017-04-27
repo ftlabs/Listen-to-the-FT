@@ -631,7 +631,7 @@ var __listen_to_the_ft = (function(){
 
 		return getTopicsForUser()
 			.then(data => {
-				//console.log(data);
+				// console.log(data);
 				const UUIDs = data.topics.map(topic => {return topic.uuid}).join();
 				return getAudioForTopic(UUIDs, inBackground)
 					.then(allAudio => {
@@ -772,7 +772,12 @@ var __listen_to_the_ft = (function(){
 
 			sectionLi.addEventListener('click', function(e){
 				prevent(e);
-				getAudioForTopic(this.dataset.uuid)
+
+				const onlyArtificialVoices = section.name === 'Artificial Voices';
+
+				document.body.dataset.hidehuman = onlyArtificialVoices;
+
+				getAudioForTopic(this.dataset.uuid, false, onlyArtificialVoices)
 					.then(items => generateListView(items, 'audioItems', this.dataset.topic))
 					.then(HTML => {
 						components.drawer.dataset.opened = 'false';

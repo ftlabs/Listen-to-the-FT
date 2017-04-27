@@ -245,6 +245,10 @@ body[data-offline="true"] .offline{
   max-height: 30px;
 }
 
+body[data-hidehuman="true"] li[data-human="true"]{
+  display: none;
+}
+
 .component#loading{
   width: 100%;
   height: 100%;

@@ -88,6 +88,10 @@ router.get('/topics', function(req, res) {
 
 							}
 
+							topicsWithUUIDs.push({
+								name : 'Artificial Voices',
+								uuid : '8a086a54-ea48-3a52-bd3c-5821430c2132'
+							});
 							
 							res.json({
 								topics : topicsWithUUIDs
