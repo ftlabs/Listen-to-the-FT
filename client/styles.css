@@ -451,6 +451,7 @@ body[data-hidehuman="true"] li[data-human="true"]{
   border-left: 3px solid #942f4d;
   margin-bottom: 1em;
   padding-left: 0.5em;
+  margin-top: 0.5em;
 }
 
 
