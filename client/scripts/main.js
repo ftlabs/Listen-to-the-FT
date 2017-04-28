@@ -744,6 +744,9 @@ var __listen_to_the_ft = (function(){
 						var byline = item.querySelector('.textContainer span').textContent;
 						components.player.play(src, intent, title, byline);
 
+						item.scrollIntoView();
+						item.dataset.expanded = 'true';
+
 						if(window.history){
 							history.pushState({}, '', window.location.origin);
 						}
