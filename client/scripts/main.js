@@ -5,6 +5,7 @@ var __listen_to_the_ft = (function(){
 
 	var CACHE_NAME = 'FTLABS-LttFT-V2';
 	var originalTitle = document.title;
+	var canScroll = true;
 	var localData = (function(){
 		
 		var storageKey = 'ftlabs-lttFT';
@@ -967,7 +968,9 @@ var __listen_to_the_ft = (function(){
 
 			}
 
-			items.forEach(item => {
+			var scrollTO = undefined;
+
+			items.forEach( (item, idx) => {
 
 				var li = document.createElement('li');
 				var wasListenedToBefore = hasAudioBeenPlayed(item.id);
@@ -1141,7 +1144,32 @@ var __listen_to_the_ft = (function(){
 
 				li.addEventListener('click', function(){
 					components.player.elements.audio.setAttribute('title', item.title);
-					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
+
+					const shouldExpand = this.dataset.expanded !== 'true';
+					
+					if(shouldExpand){
+						const allLis = olEl.querySelectorAll('li');
+
+						canScroll = false;
+						clearInterval(scrollTO);
+
+						for(let x = idx + 10; x < allLis.length; x += 1){
+							allLis[x].dataset.visible = 'false';
+
+							setTimeout(function(){
+								allLis[x].dataset.visible = 'true';
+							}.bind(this), 400);
+
+						}
+
+						scrollTO = setTimeout(function(){
+							canScroll = true;
+						}.bind(this), 400);
+
+					}
+
+					this.dataset.expanded = shouldExpand;
+
 					trackEvent({
 						action : 'click',
 						category : 'item',
@@ -1155,20 +1183,11 @@ var __listen_to_the_ft = (function(){
 
 		}
 
-		const allLis = olEl.querySelectorAll('li');
-
-		olEl.addEventListener('scroll', function(){
-
-			allLis.forEach( (li, idx) => {
-				if(idx > 15){
-					if(li.getBoundingClientRect().top > window.innerHeight + 150){
-						li.dataset.visible = 'false';
-					} else if(li.dataset.visible === 'false'){
-						li.dataset.visible = 'true';
-					}
-				}
-			});
-
+		olEl.addEventListener('scroll', function(e){
+			console.log(canScroll);
+			if(!canScroll){
+				prevent(e);
+			}
 		}, false);
 
 		olEl.appendChild(iconImg);
