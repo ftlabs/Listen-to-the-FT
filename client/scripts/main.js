@@ -968,6 +968,7 @@ var __listen_to_the_ft = (function(){
 			}
 
 			var scrollTO = undefined;
+			const scrollDelayDuration = 350;
 
 			items.forEach( (item, idx) => {
 
@@ -1156,13 +1157,13 @@ var __listen_to_the_ft = (function(){
 
 						setTimeout(function(){
 							allLis[x].dataset.visible = 'true';
-						}.bind(this), 400);
+						}.bind(this), scrollDelayDuration);
 
 					}
 
 					scrollTO = setTimeout(function(){
 						olEl.dataset.scrollable = 'true';
-					}.bind(this), 400);
+					}.bind(this), scrollDelayDuration);
 
 					trackEvent({
 						action : 'click',
