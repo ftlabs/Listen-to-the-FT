@@ -2,8 +2,8 @@ const myftClient = require('next-myft-client');
 const debug = require('debug')('listen-to-the-FT:bin:lib:myft');
 
 function getUserTopics(userId){
-    debug("Topics for " + userId)
-    return myftClient
+	debug("Topics for " + userId)
+	return myftClient
 		.getAllRelationship('user', userId, 'followed', 'concept')
 		.then(res => {
 			return res.items
