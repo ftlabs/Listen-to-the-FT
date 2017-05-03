@@ -1155,6 +1155,22 @@ var __listen_to_the_ft = (function(){
 
 		}
 
+		const allLis = olEl.querySelectorAll('li');
+
+		olEl.addEventListener('scroll', function(){
+
+			allLis.forEach( (li, idx) => {
+				if(idx > 15){
+					if(li.getBoundingClientRect().top > window.innerHeight + 150){
+						li.dataset.visible = 'false';
+					} else if(li.dataset.visible === 'false'){
+						li.dataset.visible = 'true';
+					}
+				}
+			});
+
+		}, false);
+
 		olEl.appendChild(iconImg);
 		docFrag.appendChild(olEl);
 
