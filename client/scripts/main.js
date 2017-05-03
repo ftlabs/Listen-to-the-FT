@@ -615,7 +615,7 @@ var __listen_to_the_ft = (function(){
 
 	function getTopicsForUser(){
 		components.loading.dataset.visible = 'true';
-		return makeRequest('/user/topics', {credentials : 'include'})
+		return makeRequest('/user/topics', {credentials : 'include', headers : { 'Cache-Control': 'private' } })
 			.then(res => {
 				components.loading.dataset.visible = 'false';
 				if(res.status !== 200){
