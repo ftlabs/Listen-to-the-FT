@@ -968,7 +968,7 @@ var __listen_to_the_ft = (function(){
 			}
 
 			var scrollTO = undefined;
-			const scrollDelayDuration = 350;
+			const scrollDelayDuration = 400;
 
 			items.forEach( (item, idx) => {
 
