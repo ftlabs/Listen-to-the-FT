@@ -329,6 +329,10 @@ body[data-hidehuman="true"] li[data-human="true"]{
   overflow-x: hidden;
 }
 
+.view ol[data-scrollable="false"]{
+  overflow-y: hidden;
+}
+
 .view ol li{
   min-height: 60px;
   display: flex;

@@ -967,7 +967,10 @@ var __listen_to_the_ft = (function(){
 
 			}
 
-			items.forEach(item => {
+			var scrollTO = undefined;
+			const scrollDelayDuration = 400;
+
+			items.forEach( (item, idx) => {
 
 				var li = document.createElement('li');
 				var wasListenedToBefore = hasAudioBeenPlayed(item.id);
@@ -1141,7 +1144,27 @@ var __listen_to_the_ft = (function(){
 
 				li.addEventListener('click', function(){
 					components.player.elements.audio.setAttribute('title', item.title);
-					this.dataset.expanded === 'true' ? this.dataset.expanded = 'false' : this.dataset.expanded = 'true';
+
+					this.dataset.expanded = this.dataset.expanded !== 'true';
+					
+					const allLis = olEl.querySelectorAll('li');
+
+					olEl.dataset.scrollable = 'false';
+					clearInterval(scrollTO);
+
+					for(let x = idx + 10; x < allLis.length; x += 1){
+						allLis[x].dataset.visible = 'false';
+
+						setTimeout(function(){
+							allLis[x].dataset.visible = 'true';
+						}.bind(this), scrollDelayDuration);
+
+					}
+
+					scrollTO = setTimeout(function(){
+						olEl.dataset.scrollable = 'true';
+					}.bind(this), scrollDelayDuration);
+
 					trackEvent({
 						action : 'click',
 						category : 'item',
