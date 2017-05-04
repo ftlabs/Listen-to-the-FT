@@ -13,7 +13,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use( express.static( path.join( __dirname, 'public' ), { maxAge : 87400 * 1000 } ) );
 
 app.use('^/__reachable|/__gtg', function(req, res){ res.end();});
 app.use('/user', require('./routes/user'));
