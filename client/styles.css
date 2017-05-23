@@ -480,6 +480,7 @@ body[data-offline="true"] .view#audioItems .textContainer a.download:not([data-d
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-height: 1em;
 }
 
 .view#audioItems .textContainer p{
