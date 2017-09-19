@@ -136,7 +136,7 @@ function getTopics(req, res){
 					res.status(502);
 					res.send({
 						error : 502,
-						message : `Unable to retrieve content from CAPI ${err.message}`
+						message : `Unable to retrieve content from CAPI.`
 					})
 				})
 			;

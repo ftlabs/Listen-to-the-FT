@@ -3,7 +3,7 @@ An offline-enabled progressive web app for listening to the FT
 
 [Use it](https://listen.ft.com)
 
-[Read the blog about it](http://labs.ft.com/2017/02/listen-to-the-ft/)
+[Read the blog about it](http://labs.ft.com/2017/02/listen-to-the-ft)
 
 # Summary
 
