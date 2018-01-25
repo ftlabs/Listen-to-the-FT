@@ -25,13 +25,14 @@
 			<div class="component" id="back" data-visible="false"></div>
 			<div class="component" id="menu" data-visible="false" href="#o-header-drawer"></div>
 		</header>
-		
+
 		<div class="view" id="login">
 			<section class="constraint">
 				<p>Welcome to listen.ft.com.</p>
-				<p>This app is an experiment by <a href="http://labs.ft.com">FT Labs</a> to explore whether subscribers are interested in listening to good quality audio versions of FT articles.</p>
-				<p>To use this service, please login with your FT.com credentials.</p>
-				<a type="submit" href="https://accounts.ft.com/login?location=https://listen.ft.com" class="o-buttons o-buttons--standout o-buttons--big">Login</a>
+				<p>This app <span style="text-decoration: line-through;">is</span> was an experiment by <a href="http://labs.ft.com">FT Labs</a> to explore whether subscribers are interested in listening to good quality audio versions of FT articles.</p>
+				<p>We hope this will return as an official part of <a href="http://labs.ft.com">ft.com</a> in the not-too-distant future. There is a <a href="https://labs.ft.com/2017/02/listen-to-the-ft">writeup</a> of this experimental app.</p>
+				<!-- <p>To use this service, please login with your FT.com credentials.</p>
+				<a type="submit" href="https://accounts.ft.com/login?location=https://listen.ft.com" class="o-buttons o-buttons--standout o-buttons--big">Login</a> -->
 			</section>
 			<img src="/assets/images/ftlabs_logo_small.png" class="iconImage" />
 		</div>
@@ -69,7 +70,7 @@
 		</div>
 
 		<div class="component" id="drawer" data-opened="false"></div>
-		
+
 		<script type="application/json" data-o-tracking-config="">
 			{
 				"server": "https://spoor-api.ft.com/px.gif",
@@ -90,13 +91,13 @@
 		<script src="//origami-build.ft.com/v2/bundles/js?modules=o-fonts@^2.1.3,o-forms@^3.2.2,o-buttons@^4.4.1,o-loading@^1.0.0-beta.1,o-header@^6.11.1,o-tracking@^1.1.15"></script>
 		<script src="/scripts/main.js"></script>
 		<script>
-			
+
 			if ('serviceWorker' in navigator) {
-				
+
 				navigator.serviceWorker.addEventListener('message', function(event) {
 					console.log(event);
 				});
-				
+
 				navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
 					console.log('ServiceWorker registration successful with scope: ', registration.scope);
 				})
@@ -105,11 +106,11 @@
 					return navigator.serviceWorker.ready;
 				})
 				.catch(function(err) {
-					__listen_to_the_ft.init();					
+					__listen_to_the_ft.init();
 					console.log('ServiceWorker registration failed: ', err);
 				});
 
-				// __listen_to_the_ft.init();				
+				// __listen_to_the_ft.init();
 
 
 			} else {

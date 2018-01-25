@@ -11,7 +11,7 @@ We were asked to explore whether or not FT subscribers would listen to FT conten
 
 ![start](https://cloud.githubusercontent.com/assets/913687/23973963/9c003a3e-09d0-11e7-9998-edbea4c71e83.gif)
 
-# Features 
+# Features
 
 ### Offline-enabled
 
@@ -36,3 +36,40 @@ The inclusion of a service worker also allowed us to to download content ahead o
 Utilizing the newly available [media session APIs](https://developers.google.com/web/updates/2017/02/media-session), we were also able to offer more powerful media controls from the lock screen of Android devices.
 
 ![controls](https://cloud.githubusercontent.com/assets/913687/23974321/90c6ce10-09d2-11e7-8414-a567e566e94e.png)
+
+## Build locally
+
+### install
+
+```sh
+npm install
+npm update
+```
+
+### configure
+
+Set these env vars in the shell or in a .env file
+
+* AUDIO_ARTICLES_THING_ID=...
+* AUDIO_AVAILABLE_SERVICE=...
+* AUDIO_STATS_SERVICE=...
+* AWS_AUDIO_BUCKET=...
+* AWS_REGION=...
+* CAPI_KEY=...
+* DEBUG=*
+* FT_API_URL=...
+* MEMBERSHIP_LOGIN_API_KEY=...
+* MEMBERSHIP_SESSION_API_KEY=...
+* MYFT_API_KEY=...
+* MYFT_API_URL=...
+* RECORDED_MEDIA_FORMAT=mp3
+* UPP_COCO=...
+
+### run
+
+```sh
+npm run prestart
+npm run start
+```
+
+and look for http://localhost:3000/
