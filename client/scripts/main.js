@@ -6,10 +6,10 @@ var __listen_to_the_ft = (function(){
 	var CACHE_NAME = 'FTLABS-LttFT-V2';
 	var originalTitle = document.title;
 	var localData = (function(){
-		
+
 		var storageKey = 'ftlabs-lttFT';
 		var stored = localStorage.getItem(storageKey);
-		
+
 		function save(){
 			try{
 				localStorage.setItem(storageKey, JSON.stringify( stored ) );
@@ -162,7 +162,7 @@ var __listen_to_the_ft = (function(){
 					if( Number(toggle.dataset.speed) === s ){
 						toggle.dataset.selected = 'true';
 					} else {
-						toggle.dataset.selected = 'false';						
+						toggle.dataset.selected = 'false';
 					}
 				});
 				return s;
@@ -229,7 +229,7 @@ var __listen_to_the_ft = (function(){
 
 		function playAudio(src, uuid, title, byline){
 		//console.log(src);
-		
+
 			elements.audio.src = src;
 			elements.container.dataset.uuid = uuid;
 
@@ -300,11 +300,11 @@ var __listen_to_the_ft = (function(){
 		function removeLastViewFromStack(){
 			if(stack.length > 1){
 				var lastView = stack.pop();
-				
+
 
 				lastView.dataset.animate = 'out-right';
 				if(stack.length > 0){
-					var incomingView = stack[ stack.length - 1 ]; 
+					var incomingView = stack[ stack.length - 1 ];
 					incomingView.dataset.visible = 'true';
 					incomingView.dataset.animate = 'in-left';
 				}
@@ -338,7 +338,7 @@ var __listen_to_the_ft = (function(){
 		var overlayElement = components.overlay;
 
 		function setOverlayMessage(title, message, buttonText){
-			
+
 			if(title){
 				overlayElement.querySelector('h3').textContent = title;
 			}
@@ -352,7 +352,7 @@ var __listen_to_the_ft = (function(){
 			}
 
 		}
-		
+
 		function showOverlay(){
 			overlayElement.dataset.visible = 'true';
 		}
@@ -450,7 +450,7 @@ var __listen_to_the_ft = (function(){
 
 		components.loading.dataset.visible = 'false';
 		overlay.set(
-			'Request timeout', 
+			'Request timeout',
 			'The request to the server took too long, and has timed out. Please reload the app.',
 			'OK'
 		);
@@ -460,9 +460,14 @@ var __listen_to_the_ft = (function(){
 
 	function unknownErrorHandler(){
 
+		// overlay.set(
+		// 	'Something went wrong', 
+		// 	'We\'re not too sure what\'s happened. You can try again, or contact FT Labs for help.',
+		// 	'OK'
+		// );
 		overlay.set(
-			'Something went wrong', 
-			'We\'re not too sure what\'s happened. You can try again, or contact FT Labs for help.',
+			'And so, the experiment comes to an end',
+			'Thank you for your interest. Hopefully, this lovely bit of webbiness will be back in the not-too-distant future, as an official part of FT.com.',
 			'OK'
 		);
 		overlay.show();
@@ -470,7 +475,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function cacheItemsForApp(){
-		
+
 		if(navigator.serviceWorker){
 
 			if(navigator.serviceWorker.controller !== undefined){
@@ -509,7 +514,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function clearMediaItemsInCache(){
-		
+
 		if(window.caches){
 			return caches.open(CACHE_NAME)
 				.then(cache => {
@@ -530,7 +535,7 @@ var __listen_to_the_ft = (function(){
 	function checkFileAvailability(url){
 
 		if(window.caches){
-		
+
 			return caches.open(CACHE_NAME)
 				.then(function(cache){
 
@@ -541,7 +546,7 @@ var __listen_to_the_ft = (function(){
 					return result !== undefined;
 				})
 			;
-		
+
 		} else {
 			return Promise.resolve(null);
 		}
@@ -600,7 +605,7 @@ var __listen_to_the_ft = (function(){
 							message : 'Session has expired',
 							statCode : res.status
 						};
-							
+
 					} else {
 						throw `Could not get items for topic ${topicUUIDs}`;
 					}
@@ -627,7 +632,7 @@ var __listen_to_the_ft = (function(){
 							message : 'Session has expired',
 							statCode : res.status
 						};
-							
+
 					} else {
 						throw 'Could not get user topics';
 					}
@@ -671,7 +676,7 @@ var __listen_to_the_ft = (function(){
 									const topicUUID = a.hasTopicIDs[uuidIdx];
 									topic.articles.push(a);
 								}
-	
+
 							});
 
 						});
@@ -692,7 +697,7 @@ var __listen_to_the_ft = (function(){
 					if(err.statCode === 401 || err.statCode === 403){
 						handleLogin()
 						overlay.set(
-							'Session has expired', 
+							'Session has expired',
 							'Please login to continue using this app.',
 							'OK'
 						);
@@ -714,7 +719,7 @@ var __listen_to_the_ft = (function(){
 		var kvp = {};
 		cookies.forEach(cookie => {
 			var cookieSplit = cookie.split('=');
-			kvp[cookieSplit[0]] = cookieSplit[1];	
+			kvp[cookieSplit[0]] = cookieSplit[1];
 		});
 
 		return kvp['FTSession'] || kvp['FTSession_S'];
@@ -836,7 +841,7 @@ var __listen_to_the_ft = (function(){
 							if(err.statCode === 401 || err.statCode === 403){
 								handleLogin();
 								overlay.set(
-									'Session has expired', 
+									'Session has expired',
 									'Please login to continue using this app.',
 									'OK'
 								);
@@ -864,7 +869,7 @@ var __listen_to_the_ft = (function(){
 
 		var clearMediaFiles = document.createElement('li');
 		var aboutThis = document.createElement('li');
-		
+
 		actionsOl.setAttribute('class', 'actions');
 
 		clearMediaFiles.textContent = 'Clear downloaded items';
@@ -882,13 +887,13 @@ var __listen_to_the_ft = (function(){
 						downloadBtn.dataset.downloaded = 'false';
 					});
 				})
-			;			
+			;
 		}, false);
 
 		aboutThis.addEventListener('click', function(){
 			components.drawer.dataset.opened = 'false';
 			overlay.set(
-				'Listen to the FT', 
+				'Listen to the FT',
 				'This app is an experiment by FT Labs to explore whether subscribers are interested in listening to good quality audio versions of FT articles.',
 				'OK'
 			);
@@ -938,7 +943,7 @@ var __listen_to_the_ft = (function(){
 				var li = document.createElement('li');
 				li.textContent = item.name;
 				li.dataset.uuid = item.uuid;
-				li.dataset.topic = item.name; 
+				li.dataset.topic = item.name;
 
 				li.addEventListener('click', function(){
 					getAudioForTopic(this.dataset.uuid)
@@ -980,7 +985,7 @@ var __listen_to_the_ft = (function(){
 				var byline = document.createElement('span');
 				var standfirst = document.createElement('p');
 				var robotWarning = document.createElement('em');
-				
+
 				var actionsContainer = document.createElement('div');
 				var playBtn = document.createElement('a');
 				var readBtn = document.createElement('a');
@@ -1006,7 +1011,7 @@ var __listen_to_the_ft = (function(){
 
 				playBtn.dataset.audiourl = item.audioUrl;
 				downloadBtn.dataset.audiourl = item.audioUrl;
-				
+
 				playBtn.classList.add('play');
 				readBtn.classList.add('read');
 				downloadBtn.classList.add('download');
@@ -1057,12 +1062,12 @@ var __listen_to_the_ft = (function(){
 
 						if(!networkState.get()){
 							overlay.set(
-								'No network connection', 
+								'No network connection',
 								'Sorry, we\'re unable to download this file without an internet connection.',
 								'OK'
 							);
 							overlay.show();
-							this.dataset.downloading = 'false';	
+							this.dataset.downloading = 'false';
 							this.dataset.downloaded = 'false';
 							this.textContent = 'Download';
 						} else if(this.dataset.downloaded === 'true' || this.dataset.downloading === 'true'){
@@ -1088,12 +1093,12 @@ var __listen_to_the_ft = (function(){
 									.catch(err => {
 										console.log('Download error:',  err);
 										overlay.set(
-											'Download Failed', 
+											'Download Failed',
 											'Sorry, we tried to download "' + item.title + '" but the request failed. You can tap the "Download" button to try again',
 											'OK'
 										);
 										overlay.show();
-										el.dataset.downloading = 'false';	
+										el.dataset.downloading = 'false';
 										el.dataset.downloaded = 'false';
 										el.textContent = 'Download';
 									})
@@ -1103,7 +1108,7 @@ var __listen_to_the_ft = (function(){
 
 							this.dataset.downloading = 'true';
 							this.textContent = 'Downloading...';
-						
+
 					}
 
 					}, false);
@@ -1146,7 +1151,7 @@ var __listen_to_the_ft = (function(){
 					components.player.elements.audio.setAttribute('title', item.title);
 
 					this.dataset.expanded = this.dataset.expanded !== 'true';
-					
+
 					const allLis = olEl.querySelectorAll('li');
 
 					olEl.dataset.scrollable = 'false';
@@ -1186,7 +1191,7 @@ var __listen_to_the_ft = (function(){
 	}
 
 	function initialise(){
-		
+
 		document.body.dispatchEvent(new CustomEvent('oTracking.page', {
 			detail: {
 				url: document.URL,
