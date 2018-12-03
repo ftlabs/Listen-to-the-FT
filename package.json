@@ -4,26 +4,30 @@
   "private": true,
   "scripts": {
     "prestart": "rm -rf ./public && cp -a ./client ./public && rm ./public/scripts/main.js && gulp buildApp",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "babel-preset-es2015": "^6.18.0",
-    "body-parser": "~1.15.1",
+    "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.2.0",
+    "debug": "~2.6.9",
     "dotenv": "^2.0.0",
-    "express": "~4.13.4",
-    "gulp": "^3.9.1",
+    "express": "~4.16.0",
+    "gulp": "^4.0.0",
     "gulp-babel": "^6.1.2",
     "hbs": "~4.0.0",
     "is-uuid": "^1.0.2",
     "isomorphic-fetch": "^2.2.1",
-    "morgan": "~1.7.0",
+    "morgan": "~1.9.1",
     "next-myft-client": "^6.9.5",
     "node-fetch": "^1.6.3",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.4.5",
+    "snyk": "^1.113.0"
   },
   "engines": {
     "node": ">6.11.0 < 7.0.0"
-  }
+  },
+  "snyk": true
 }
