@@ -1,9 +1,9 @@
 # Listen to the FT
 An offline-enabled progressive web app for listening to the FT
 
-[Use it](https://listen.ft.com)
+As of 25 Jan 2018 this app has been switched off. It was rather nice though. Hopefully it will return.
 
-[Read the blog about it](http://labs.ft.com/2017/02/listen-to-the-ft)
+[Read the blog about the app](http://labs.ft.com/2017/02/listen-to-the-ft)
 
 # Summary
 
