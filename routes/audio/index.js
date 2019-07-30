@@ -39,7 +39,7 @@ function getTopics(req, res){
 							content.id = content.id.replace('http://www.ft.com/thing/','');
 
 							const isValidTopic = annotations.some(annotation => {
-								return topicUUIDs.indexOf(annotation.id.replace('http://api.ft.com/things/','')) > -1;
+								return topicUUIDs.indexOf(annotation.id.replace('https://api.ft.com/things/','')) > -1;
 							});
 
 							const validTopicIDs = [];

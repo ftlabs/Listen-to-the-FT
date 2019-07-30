@@ -4,7 +4,7 @@ const canonicalAPIRoot = process.env.CANONICAL_API_URL || `https://api.ft.com/co
 
 function convertTMEIDToCanonicalUUID(TME){
 
-	const reqURL = `${canonicalAPIRoot}?authority=http://api.ft.com/system/FT-TME&identifierValue=${TME}&apiKey=${process.env.CAPI_KEY}`;
+	const reqURL = `${canonicalAPIRoot}?authority=https://api.ft.com/system/FT-TME&identifierValue=${TME}&apiKey=${process.env.CAPI_KEY}`;
 
 	debug(reqURL);
 

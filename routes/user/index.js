@@ -83,7 +83,7 @@ router.get('/topics', function(req, res) {
 
 								topicsWithUUIDs.push({
 									name : data.prefLabel,
-									uuid : data.id.replace('http://api.ft.com/things/', '')
+									uuid : data.id.replace('https://api.ft.com/things/', '')
 								});
 
 							}
